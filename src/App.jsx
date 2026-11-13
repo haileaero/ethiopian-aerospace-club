@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
-import { Routes, Route, Link, NavLink } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Routes, Route, Link, NavLink, useLocation } from 'react-router-dom';
 import {
-  Menu, X, ArrowRight, ArrowUpRight, Plane, Orbit, Satellite, Rocket, ChevronDown,
+  Menu, X, ArrowRight, ArrowUpRight, Plane, Orbit, Satellite, Rocket,
   BookOpen, Users, FlaskConical, Lightbulb, CalendarDays, GraduationCap,
   Mail, MapPin, Linkedin, Youtube, Send, ChevronRight, Wind, Wrench,
   Cpu, ShieldCheck, Globe2, ExternalLink, CheckCircle2, Factory, Code2,
@@ -116,32 +116,93 @@ function Brand({ light = false }) {
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const location = useLocation();
+
   const links = [
     ['Home','/'],
-    ['About','/about', ['About EAC','/about'], ['Vision & Mission','/about'], ['Leadership & Committee','/about']],
-    ['Academics','/divisions', ['Technical Divisions','/divisions'], ['UAV Laboratory','/uav-lab'], ['Training Programme','/uav-lab']],
-    ['Research','/projects', ['Projects & Research','/projects'], ['Research Areas','/divisions']],
-    ['News & Events','/news', ['News & Announcements','/news'], ['Events','/news']],
+    ['About','/about', [['About EAC','/about'], ['Vision & Mission','/about'], ['Leadership & Committee','/about']]],
+    ['Academics','/divisions', [['Technical Divisions','/divisions'], ['UAV Laboratory','/uav-lab'], ['Training Programme','/uav-lab']]],
+    ['Research','/projects', [['Projects & Research','/projects'], ['Research Areas','/divisions']]],
+    ['News & Events','/news', [['News & Announcements','/news'], ['Events','/news']]],
     ['Opportunities','/opportunities'],
     ['Membership','/membership'],
     ['Contact','/contact']
   ];
+
   const [query,setQuery]=useState('');
   const searchable=[['About EAC','/about'],['Technical Divisions','/divisions'],['UAV Laboratory','/uav-lab'],['Projects & Research','/projects'],['Opportunities','/opportunities'],['News & Events','/news'],['Membership','/membership'],['Contact','/contact']];
   const results=searchable.filter(([t])=>t.toLowerCase().includes(query.toLowerCase()));
+
+  useEffect(()=>{
+    setOpenDropdown(null);
+    setOpen(false);
+    setSearchOpen(false);
+  },[location.pathname]);
+
+  const toggleDropdown = (label) => {
+    setOpenDropdown(current => current === label ? null : label);
+  };
+
   return <>
     <header className="site-header institutional-header">
-      <div className="institutional-top"><div className="container institutional-top-inner"><div className="top-affiliation"><span>ETHIOPIAN DEFENCE UNIVERSITY</span><i></i><span>COLLEGE OF ENGINEERING</span><i></i><span>AEROSPACE ENGINEERING DEPARTMENT</span></div><div className="top-links"><Link to="/about">About EAC</Link><Link to="/contact">Contact</Link><Link to="/admin">Admin</Link></div></div></div>
+      <div className="institutional-top">
+        <div className="container institutional-top-inner">
+          <div className="top-affiliation">
+            <span>ETHIOPIAN DEFENCE UNIVERSITY</span><i></i>
+            <span>COLLEGE OF ENGINEERING</span><i></i>
+            <span>AEROSPACE ENGINEERING DEPARTMENT</span>
+          </div>
+          <div className="top-links">
+            <Link to="/about">About EAC</Link><Link to="/contact">Contact</Link><Link to="/admin">Admin</Link>
+          </div>
+        </div>
+      </div>
+
       <div className="container nav institutional-brand-row">
         <Brand/>
         <div className="institutional-search-wrap">
-          <button className="search-trigger" onClick={()=>setSearchOpen(!searchOpen)} aria-label="Search website"><Search size={19}/><span>Search everything...</span></button>
-          {searchOpen && <div className="search-panel"><input autoFocus value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search EAC..."/><div>{results.map(([t,to])=><Link key={to} to={to} onClick={()=>setSearchOpen(false)}>{t}<ArrowUpRight size={14}/></Link>)}{results.length===0&&<p>No matching page found.</p>}</div></div>}
+          <button className="search-trigger" onClick={()=>setSearchOpen(!searchOpen)} aria-label="Search website">
+            <Search size={19}/><span>Search everything...</span>
+          </button>
+          {searchOpen && <div className="search-panel">
+            <input autoFocus value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search EAC..."/>
+            <div>{results.map(([t,to])=><Link key={`${t}-${to}`} to={to}>{t}<ArrowUpRight size={14}/></Link>)}
+              {results.length===0&&<p>No matching page found.</p>}
+            </div>
+          </div>}
         </div>
         <button className="menu-btn" onClick={()=>setOpen(!open)} aria-label="Toggle menu">{open?<X/>:<Menu/>}</button>
       </div>
-      <div className="institutional-nav-bar"><div className="container nav nav-main"><nav className={open ? 'open' : ''}>{links.map(([label,to,...drop],i)=>drop.length ? <div className="nav-dropdown" key={to}><NavLink to={to} end={to==='/' } onClick={()=>setOpen(false)}>{label}<ChevronDown size={15}/></NavLink><div className="dropdown-menu">{drop.map(([dl,dt])=><Link key={dt} to={dt} onClick={()=>setOpen(false)}>{dl}<ChevronRight size={14}/></Link>)}</div></div> : <NavLink key={to} to={to} end={to==='/' } onClick={()=>setOpen(false)}>{label}</NavLink>)}</nav><Link className="nav-cta" to="/membership" onClick={()=>setOpen(false)}>Join EAC <ArrowUpRight size={15}/></Link></div></div>
+
+      <div className="institutional-nav-bar">
+        <div className="container nav nav-main">
+          <nav className={open ? 'open' : ''}>
+            {links.map(([label,to,drop]) => {
+              if (drop) {
+                const isOpen = openDropdown === label;
+                const isParentActive = location.pathname === to || drop.some(([,dt]) => location.pathname === dt);
+                return <div className={`nav-dropdown ${isOpen ? 'is-open' : ''}`} key={to}>
+                  <button
+                    type="button"
+                    className={`nav-parent ${isParentActive ? 'active' : ''}`}
+                    aria-expanded={isOpen}
+                    onClick={()=>toggleDropdown(label)}
+                  >
+                    {label}
+                  </button>
+                  <div className="dropdown-menu" aria-hidden={!isOpen}>
+                    {drop.map(([dl,dt])=><Link key={`${dl}-${dt}`} to={dt}>{dl}<ChevronRight size={14}/></Link>)}
+                  </div>
+                </div>;
+              }
+              return <NavLink key={to} to={to} end={to==='/' }>{label}</NavLink>;
+            })}
+          </nav>
+          <Link className="nav-cta" to="/membership">Join EAC <ArrowUpRight size={15}/></Link>
+        </div>
+      </div>
     </header>
   </>;
 }
@@ -168,7 +229,6 @@ function Home(){
       <div className="hero-overlay"><div className="container hero-content"><div className="hero-slide-copy"><div className="institution-chip"><span></span>{active.label}</div><h1>{active.title}</h1><p>{active.text}</p><div className="hero-actions"><Link className="button button-gold" to="/about">Discover EAC <ArrowRight size={17}/></Link><Link className="button button-light" to="/projects">Explore research <ArrowRight size={17}/></Link></div></div></div></div>
       <div className="hero-controls"><button onClick={()=>setSlide((slide-1+slides.length)%slides.length)} aria-label="Previous slide">‹</button><div className="hero-dots">{slides.map((_,i)=><button key={i} className={i===slide?'active':''} onClick={()=>setSlide(i)} aria-label={`Slide ${i+1}`}></button>)}</div><button onClick={()=>setSlide((slide+1)%slides.length)} aria-label="Next slide">›</button></div>
       <div className="hero-counter"><span>{String(slide+1).padStart(2,'0')}</span> / {String(slides.length).padStart(2,'0')}</div>
-      {!active.image&&<div className="hero-empty-note">Hero image can be uploaded from Admin Dashboard</div>}
     </section>
     <section className="institution-strip"><div className="container"><div><span>PROPOSED LEADING BODY</span><strong>Aerospace Engineering Department</strong></div><ChevronRight/><div><span>COLLEGE</span><strong>College of Engineering</strong></div><ChevronRight/><div><span>UNIVERSITY</span><strong>Ethiopian Defence University</strong></div></div></section>
     <section className="quick-links"><div className="container"><div className="quick-link-title"><span>QUICK LINKS</span><strong>EAC at a glance</strong></div><Link to="/about"><BookOpen/>About EAC<ArrowUpRight/></Link><Link to="/uav-lab"><Plane/>UAV Laboratory<ArrowUpRight/></Link><Link to="/projects"><Microscope/>Research & Projects<ArrowUpRight/></Link><Link to="/news"><CalendarDays/>News & Events<ArrowUpRight/></Link></div></section>
