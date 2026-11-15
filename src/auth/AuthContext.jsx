@@ -1,5 +1,14 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { supabase, supabaseConfigured } from '../lib/supabase';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  supabase,
+  supabaseConfigured,
+} from '../lib/supabase';
 
 const AuthContext = createContext(null);
 
@@ -10,108 +19,135 @@ export function AuthProvider({ children }) {
   const [profileLoading, setProfileLoading] = useState(false);
 
   const loadProfile = async (user) => {
-    if (!user) { setProfile(null); return null; }
-    setProfileLoading(true);
-    const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
-    setProfileLoading(false);
-    if (error) {
-      console.error('Profile load error:', error);
+    if (!user) {
       setProfile(null);
       return null;
     }
-    setProfile(data);
-    return data;
+
+    setProfileLoading(true);
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Profile load error:', error);
+        setProfile(null);
+        return null;
+      }
+
+      console.log('PROFILE FROM SUPABASE:', data);
+      console.log('PROFILE ROLE:', data?.role);
+
+      setProfile(data);
+
+      return data;
+    } finally {
+      setProfileLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (!supabaseConfigured) { setLoading(false); return undefined; }
+    if (!supabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
-    supabase.auth.getSession().then(async ({ data: { session: current } }) => {
+
+    const initialize = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       if (!mounted) return;
-      setSession(current);
-      if (current?.user) await loadProfile(current.user);
+
+      setSession(session);
+
+      if (session?.user) {
+        await loadProfile(session.user);
+      } else {
+        setProfile(null);
+      }
+
+      if (mounted) {
+        setLoading(false);
+      }
+    };
+
+    initialize();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!mounted) return;
+
+      setSession(session);
+
+      if (session?.user) {
+        await loadProfile(session.user);
+      } else {
+        setProfile(null);
+      }
+
       setLoading(false);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, current) => {
-      setSession(current);
-      if (current?.user) await loadProfile(current.user);
-      else setProfile(null);
-      setLoading(false);
-    });
-    return () => { mounted = false; subscription.unsubscribe(); };
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
-
-  const signUp = async ({ email, password, fullName, membershipType, affiliation, department, year, profession, interests, preferredContribution, phone, username }) => {
-    if (!supabaseConfigured) throw new Error('Authentication is not configured yet. Add the Supabase values to .env.local.');
-    const redirectTo = `${window.location.origin}/auth/callback`;
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectTo,
-        data: { full_name: fullName, membership_type: membershipType, affiliation, department, year, profession, interests: interests.join(', '), preferred_contribution: preferredContribution, phone, username },
-      },
-    });
-    if (error) throw error;
-    return data;
-  };
-
-  const signIn = async ({ email, password }) => {
-    if (!supabaseConfigured) throw new Error('Authentication is not configured yet. Add the Supabase values to .env.local.');
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    return data;
-  };
 
   const signOut = async () => {
     await supabase.auth.signOut();
-  };
-
-  const resetPasswordRequest = async (email) => {
-    if (!supabaseConfigured) throw new Error('Authentication is not configured yet.');
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    if (error) throw error;
+    setSession(null);
+    setProfile(null);
   };
 
   const updatePassword = async (password) => {
-    const { data, error } = await supabase.auth.updateUser({ password });
-    if (error) throw error;
-    return data;
+    const { error } = await supabase.auth.updateUser({
+      password,
+    });
+
+    if (error) {
+      throw error;
+    }
   };
 
   const updateEmail = async (email) => {
-    const { data, error } = await supabase.auth.updateUser({
+    const { error } = await supabase.auth.updateUser({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
-    if (error) throw error;
-    return data;
+
+    if (error) {
+      throw error;
+    }
   };
 
-  const value = useMemo(() => ({
+  const value = {
     session,
     user: session?.user || null,
     profile,
     loading,
     profileLoading,
-    isConfigured: supabaseConfigured,
-    isAdmin: profile?.role === 'admin',
-    signUp,
-    signIn,
     signOut,
-    resetPasswordRequest,
     updatePassword,
     updateEmail,
-    refreshProfile: () => loadProfile(session?.user),
-  }), [session, profile, loading, profileLoading]);
+    refreshProfile: () =>
+      session?.user ? loadProfile(session.user) : null,
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const value = useContext(AuthContext);
-  if (!value) throw new Error('useAuth must be used inside AuthProvider');
-  return value;
+  return useContext(AuthContext);
 }
