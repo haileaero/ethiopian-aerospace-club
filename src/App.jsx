@@ -132,8 +132,11 @@ function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+
   const location = useLocation();
   const headerRef = useRef(null);
+
+  const { user } = useAuth();
 
   const links = [
     ['Home','/'],
@@ -158,9 +161,15 @@ function Header() {
     ['Opportunities','/opportunities'],
     ['Membership','/membership'],
     ['Committee','/committee'],
-    ['Members','/members'],
-    ['Contact','/contact']
+    ['Members','/members']
   ];
+
+  // Show My Profile only when a user is logged in.
+  if (user) {
+    links.push(['My Profile','/dashboard']);
+  }
+
+  links.push(['Contact','/contact']);
 
   const searchable = [
     ['About EAC','/about'],
@@ -175,23 +184,32 @@ function Header() {
     ['Contact','/contact']
   ];
 
+  if (user) {
+    searchable.push(['My Profile','/dashboard']);
+  }
+
   const results = searchable.filter(([t]) =>
     t.toLowerCase().includes(query.toLowerCase())
   );
 
-  /* Reset menus when changing pages */
   useEffect(() => {
     setOpenDropdown(null);
     setOpen(false);
     setSearchOpen(false);
     setQuery('');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }, [location.pathname]);
 
-  /* Close menus when clicking outside or pressing Escape */
   useEffect(() => {
     const handlePointerDown = (event) => {
-      if (headerRef.current && !headerRef.current.contains(event.target)) {
+      if (
+        headerRef.current &&
+        !headerRef.current.contains(event.target)
+      ) {
         setOpenDropdown(null);
         setSearchOpen(false);
         setOpen(false);
@@ -215,25 +233,27 @@ function Header() {
     };
   }, []);
 
-  /* Detect page scrolling */
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 80);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50);
     };
 
-    handleScroll();
+    window.addEventListener('scroll', onScroll, {
+      passive: true
+    });
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    onScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
-  /* Prevent page scrolling when mobile menu is open */
   useEffect(() => {
     document.body.style.overflow =
-      open && window.innerWidth <= 760 ? 'hidden' : '';
+      open && window.innerWidth <= 760
+        ? 'hidden'
+        : '';
 
     return () => {
       document.body.style.overflow = '';
@@ -248,151 +268,96 @@ function Header() {
 
   const toggleDropdown = (label) => {
     setSearchOpen(false);
-    setOpenDropdown(current =>
+
+    setOpenDropdown((current) =>
       current === label ? null : label
     );
   };
 
   const toggleSearch = () => {
     setOpenDropdown(null);
-    setSearchOpen(current => !current);
+    setSearchOpen((current) => !current);
     setOpen(false);
   };
 
   return (
     <>
       <style>{`
-
-        /* =========================================================
-           EAC HEADER
-        ========================================================= */
-
         .institutional-header {
           position: sticky;
           top: 0;
           z-index: 1000;
-          width: 100%;
         }
 
-        /*
-         * The large top sections smoothly disappear when scrolling.
-         */
         .institutional-header .institutional-top,
         .institutional-header .institutional-brand-row {
           transition:
-            max-height 0.3s ease,
-            opacity 0.25s ease,
-            padding 0.3s ease,
-            margin 0.3s ease,
-            visibility 0.3s ease;
+            max-height .28s ease,
+            opacity .22s ease,
+            padding .28s ease,
+            margin .28s ease;
         }
 
-        /*
-         * Normal state — full header.
-         */
         .institutional-header .institutional-top {
-          max-height: 100px;
+          max-height: 80px;
           opacity: 1;
-          visibility: visible;
         }
 
         .institutional-header .institutional-brand-row {
-          max-height: 220px;
+          max-height: 190px;
           opacity: 1;
-          visibility: visible;
         }
 
-        /*
-         * =========================================================
-         * SCROLLED STATE
-         * =========================================================
-         *
-         * Only the main navigation remains visible.
-         */
-        .institutional-header.header-scrolled {
-          height: 58px !important;
-          min-height: 58px !important;
-        }
-
-        .institutional-header.header-scrolled .institutional-top,
-        .institutional-header.header-scrolled .institutional-brand-row {
+        /* Hide the large institutional header after scrolling */
+        .institutional-header.header-scrolled
+          .institutional-top,
+        .institutional-header.header-scrolled
+          .institutional-brand-row {
           display: none !important;
-          height: 0 !important;
-          max-height: 0 !important;
-          min-height: 0 !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          opacity: 0 !important;
-          visibility: hidden !important;
-          overflow: hidden !important;
         }
 
-        /*
-         * Compact navigation.
-         */
-        .institutional-header.header-scrolled .institutional-nav-bar {
-          position: fixed !important;
-          top: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-          width: 100% !important;
-          z-index: 9999 !important;
-
-          box-shadow:
-            0 6px 20px rgba(0, 0, 0, 0.18);
+        /* Compact sticky navigation while scrolling */
+        .institutional-header.header-scrolled
+          .institutional-nav-bar {
+          box-shadow: 0 8px 24px rgba(0,0,0,.16);
         }
 
-        .institutional-header.header-scrolled .nav-main {
+        .institutional-header.header-scrolled
+          .nav-main {
           min-height: 58px !important;
           height: 58px !important;
         }
 
-        .institutional-header.header-scrolled .nav-main nav a,
-        .institutional-header.header-scrolled .nav-main nav .nav-parent {
+        .institutional-header.header-scrolled
+          .nav-main nav a,
+        .institutional-header.header-scrolled
+          .nav-main nav .nav-parent {
           padding-top: 17px !important;
           padding-bottom: 17px !important;
         }
 
-        .institutional-header.header-scrolled .nav-cta {
+        .institutional-header.header-scrolled
+          .nav-cta {
           padding-top: 10px !important;
           padding-bottom: 10px !important;
         }
 
-        /*
-         * =========================================================
-         * MOBILE
-         * =========================================================
-         */
         @media (max-width: 760px) {
-
-          .institutional-header.header-scrolled {
-            height: 56px !important;
-            min-height: 56px !important;
-          }
-
           .institutional-header.header-scrolled
-          .institutional-top,
+            .institutional-top,
           .institutional-header.header-scrolled
-          .institutional-brand-row {
+            .institutional-brand-row {
             display: none !important;
           }
 
           .institutional-header.header-scrolled
-          .institutional-nav-bar {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100% !important;
-          }
-
+            .institutional-nav-bar,
           .institutional-header.header-scrolled
-          .nav-main {
-            height: 56px !important;
+            .nav-main {
             min-height: 56px !important;
+            height: 56px !important;
           }
         }
-
       `}</style>
 
       <header
@@ -402,11 +367,8 @@ function Header() {
         }`}
       >
 
-        {/* =====================================================
-            TOP INSTITUTIONAL BAR
-        ===================================================== */}
+        {/* TOP INSTITUTIONAL BAR */}
         <div className="institutional-top">
-
           <div className="container institutional-top-inner">
 
             <div className="top-affiliation">
@@ -426,12 +388,9 @@ function Header() {
             </div>
 
           </div>
-
         </div>
 
-        {/* =====================================================
-            LOGO + SEARCH ROW
-        ===================================================== */}
+        {/* LOGO + SEARCH AREA */}
         <div className="container nav institutional-brand-row">
 
           <Brand />
@@ -453,7 +412,7 @@ function Header() {
                 <input
                   autoFocus
                   value={query}
-                  onChange={e => setQuery(e.target.value)}
+                  onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search EAC..."
                 />
 
@@ -489,9 +448,7 @@ function Header() {
 
         </div>
 
-        {/* =====================================================
-            MAIN NAVIGATION
-        ===================================================== */}
+        {/* MAIN NAVIGATION */}
         <div className="institutional-nav-bar">
 
           <div className="container nav nav-main">
@@ -503,7 +460,7 @@ function Header() {
 
                 <input
                   value={query}
-                  onChange={e => setQuery(e.target.value)}
+                  onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search EAC..."
                   aria-label="Search EAC"
                 />
@@ -518,8 +475,9 @@ function Header() {
 
                   const isParentActive =
                     location.pathname === to ||
-                    drop.some(([, dt]) =>
-                      location.pathname === dt
+                    drop.some(
+                      ([, dt]) =>
+                        location.pathname === dt
                     );
 
                   return (
@@ -527,7 +485,7 @@ function Header() {
                       className={`nav-dropdown ${
                         isOpen ? 'is-open' : ''
                       }`}
-                      key={to}
+                      key={label}
                     >
 
                       <button
@@ -547,6 +505,7 @@ function Header() {
                         className="dropdown-menu"
                         aria-hidden={!isOpen}
                       >
+
                         {drop.map(([dl, dt]) => (
                           <Link
                             key={`${dl}-${dt}`}
@@ -557,6 +516,7 @@ function Header() {
                             <ChevronRight size={14} />
                           </Link>
                         ))}
+
                       </div>
 
                     </div>
@@ -573,7 +533,6 @@ function Header() {
                     {label}
                   </NavLink>
                 );
-
               })}
 
             </nav>
@@ -595,7 +554,6 @@ function Header() {
     </>
   );
 }
-
 function BackToTop(){
   const [visible,setVisible]=useState(false);
   useEffect(()=>{
