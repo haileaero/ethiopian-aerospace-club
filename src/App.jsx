@@ -139,59 +139,61 @@ function Header() {
   const { user } = useAuth();
 
   const links = [
-    ['Home','/'],
-    ['About','/about', [
-      ['About EAC','/about'],
-      ['Vision & Mission','/about'],
-      ['Leadership & Committee','/about']
+    ['Home', '/'],
+
+    ['About', '/about', [
+      ['About EAC', '/about'],
+      ['Vision & Mission', '/about'],
+      ['Leadership & Committee', '/about']
     ]],
-    ['Academics','/divisions', [
-      ['Technical Divisions','/divisions'],
-      ['UAV Laboratory','/uav-lab'],
-      ['Training Programme','/uav-lab']
+
+    ['Academics', '/divisions', [
+      ['Technical Divisions', '/divisions'],
+      ['UAV Laboratory', '/uav-lab'],
+      ['Training Programme', '/uav-lab']
     ]],
-    ['Research','/projects', [
-      ['Projects & Research','/projects'],
-      ['Research Areas','/divisions']
+
+    ['Research', '/projects', [
+      ['Projects & Research', '/projects'],
+      ['Research Areas', '/divisions']
     ]],
-    ['News & Events','/news', [
-      ['News & Announcements','/news'],
-      ['Events','/news']
+
+    ['News & Events', '/news', [
+      ['News & Announcements', '/news'],
+      ['Events', '/news']
     ]],
-    ['Opportunities','/opportunities'],
-    ['Membership','/membership'],
-    ['Committee','/committee'],
-    ['Members','/members']
+
+    ['Opportunities', '/opportunities'],
+    ['Membership', '/membership'],
+    ['Committee', '/committee'],
+    ['Members', '/members']
   ];
 
-  /*
-   * Show My Profile only when a user is logged in.
-   */
   if (user) {
-    links.push(['My Profile','/dashboard']);
+    links.push(['My Profile', '/dashboard']);
   }
 
-  links.push(['Contact','/contact']);
+  links.push(['Contact', '/contact']);
 
   const searchable = [
-    ['About EAC','/about'],
-    ['Technical Divisions','/divisions'],
-    ['UAV Laboratory','/uav-lab'],
-    ['Projects & Research','/projects'],
-    ['Opportunities','/opportunities'],
-    ['News & Events','/news'],
-    ['Committee','/committee'],
-    ['Members','/members'],
-    ['Membership','/membership'],
-    ['Contact','/contact']
+    ['About EAC', '/about'],
+    ['Technical Divisions', '/divisions'],
+    ['UAV Laboratory', '/uav-lab'],
+    ['Projects & Research', '/projects'],
+    ['Opportunities', '/opportunities'],
+    ['News & Events', '/news'],
+    ['Committee', '/committee'],
+    ['Members', '/members'],
+    ['Membership', '/membership'],
+    ['Contact', '/contact']
   ];
 
   if (user) {
-    searchable.push(['My Profile','/dashboard']);
+    searchable.push(['My Profile', '/dashboard']);
   }
 
-  const results = searchable.filter(([t]) =>
-    t.toLowerCase().includes(query.toLowerCase())
+  const results = searchable.filter(([text]) =>
+    text.toLowerCase().includes(query.toLowerCase())
   );
 
   /*
@@ -210,7 +212,7 @@ function Header() {
   }, [location.pathname]);
 
   /*
-   * Close menus when clicking outside the header.
+   * Close menus when clicking outside.
    */
   useEffect(() => {
     const handlePointerDown = (event) => {
@@ -242,23 +244,23 @@ function Header() {
   }, []);
 
   /*
-   * Detect scrolling.
+   * Scroll detection.
    *
-   * requestAnimationFrame prevents the state from being updated
-   * excessively during rapid scrolling.
+   * We use 80px instead of 50px so the header does not
+   * rapidly switch state near the top of the page.
    */
   useEffect(() => {
     let ticking = false;
 
     const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 80);
-          ticking = false;
-        });
+      if (ticking) return;
 
-        ticking = true;
-      }
+      ticking = true;
+
+      window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 80);
+        ticking = false;
+      });
     };
 
     window.addEventListener('scroll', onScroll, {
@@ -273,13 +275,14 @@ function Header() {
   }, []);
 
   /*
-   * Prevent background scrolling when mobile menu is open.
+   * Lock page scrolling when the mobile menu is open.
    */
   useEffect(() => {
-    document.body.style.overflow =
-      open && window.innerWidth <= 760
-        ? 'hidden'
-        : '';
+    if (open && window.innerWidth <= 760) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
 
     return () => {
       document.body.style.overflow = '';
@@ -311,78 +314,87 @@ function Header() {
       <style>{`
 
         /*
-         * =========================================================
-         * EAC HEADER
-         * =========================================================
-         *
-         * IMPORTANT:
-         *
-         * The complete header is NOT sticky.
-         *
-         * Only the MAIN NAVIGATION is sticky.
-         *
-         * This means the institutional bar and logo/search section
-         * naturally scroll away with the page, while the navigation
-         * stays at the top.
-         *
-         * This also prevents the page-height changes that caused
-         * the previous vibration/jumping problem.
+         * ========================================================
+         * EAC HEADER - CLEAN RESPONSIVE VERSION
+         * ========================================================
          */
 
+        /*
+         * IMPORTANT:
+         * The complete header is NOT sticky.
+         */
         .institutional-header {
-          position: relative;
+          position: relative !important;
           z-index: 1000;
         }
 
-        /*
-         * Top institutional bar
-         */
-        .institutional-header .institutional-top {
-          position: relative;
-          z-index: 1002;
-        }
 
         /*
-         * Logo + search row
+         * ========================================================
+         * DESKTOP
+         * ========================================================
          */
-        .institutional-header .institutional-brand-row {
+
+        .institutional-top {
+          position: relative;
+          z-index: 1001;
+        }
+
+        .institutional-brand-row {
           position: relative;
           z-index: 1001;
         }
 
         /*
-         * =========================================================
-         * MAIN NAVIGATION
-         * =========================================================
-         *
-         * This is the ONLY sticky element.
+         * Normal navigation.
          */
-        .institutional-header .institutional-nav-bar {
-          position: sticky;
-          top: 0;
-          z-index: 1003;
+        .institutional-nav-bar {
+          position: relative;
           width: 100%;
-          transition:
-            box-shadow .2s ease;
+          z-index: 1002;
         }
 
         /*
-         * Normal navigation height
+         * When scrolled:
+         *
+         * The navigation is taken completely out of the
+         * document flow and attached to the top of the screen.
          */
-        .institutional-header .nav-main {
-          min-height: 72px;
+        .institutional-header.header-scrolled
+          .institutional-nav-bar {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          z-index: 5000 !important;
+
+          background: #123a64;
+
+          box-shadow:
+            0 8px 25px rgba(7,26,43,.20);
         }
 
         /*
-         * =========================================================
-         * SCROLLED / COMPACT NAVIGATION
-         * =========================================================
+         * Hide only the large upper areas after scrolling.
          */
+        .institutional-header.header-scrolled
+          .institutional-top {
+          display: none !important;
+        }
 
         .institutional-header.header-scrolled
+          .institutional-brand-row {
+          display: none !important;
+        }
+
+        /*
+         * Compact desktop navigation.
+         */
+        .institutional-header.header-scrolled
           .nav-main {
-          min-height: 58px !important;
           height: 58px !important;
+          min-height: 58px !important;
         }
 
         .institutional-header.header-scrolled
@@ -399,42 +411,550 @@ function Header() {
           padding-bottom: 10px !important;
         }
 
-        /*
-         * Add a subtle shadow after scrolling.
-         */
-        .institutional-header.header-scrolled
-          .institutional-nav-bar {
-          box-shadow: 0 8px 24px rgba(0,0,0,.16);
-        }
 
         /*
-         * =========================================================
+         * ========================================================
          * MOBILE
-         * =========================================================
+         * ========================================================
          */
 
         @media (max-width: 760px) {
 
-          .institutional-header .nav-main {
-            min-height: 64px;
+          /*
+           * Mobile header is always compact.
+           */
+          .institutional-header {
+            position: relative !important;
           }
 
-          .institutional-header.header-scrolled
-            .institutional-nav-bar,
-          .institutional-header.header-scrolled
+          /*
+           * Hide the university affiliation strip.
+           */
+          .institutional-top {
+            display: none !important;
+          }
+
+          /*
+           * Compact EAC logo row.
+           */
+          .institutional-brand-row {
+            height: 64px !important;
+            min-height: 64px !important;
+            padding: 0 15px !important;
+
+            display: flex !important;
+            align-items: center !important;
+
+            background: #fff;
+          }
+
+          /*
+           * Mobile logo.
+           */
+          .institutional-brand-row .brand-logo {
+            width: 43px !important;
+            height: 43px !important;
+          }
+
+          /*
+           * EAC text.
+           */
+          .institutional-brand-row .brand span strong {
+            font-size: 8px !important;
+            letter-spacing: 1.2px !important;
+          }
+
+          .institutional-brand-row .brand span b {
+            font-size: 12px !important;
+            letter-spacing: 1px !important;
+          }
+
+          .institutional-brand-row .brand span small {
+            font-size: 7px !important;
+          }
+
+          /*
+           * Desktop search is hidden.
+           */
+          .institutional-search-wrap {
+            display: none !important;
+          }
+
+          /*
+           * Hamburger.
+           */
+          .institutional-brand-row .menu-btn {
+            display: grid !important;
+            place-items: center;
+
+            width: 42px !important;
+            height: 42px !important;
+
+            margin-left: auto;
+          }
+
+
+          /*
+           * The navigation itself does NOT occupy height
+           * when the mobile menu is closed.
+           */
+          .institutional-nav-bar {
+            position: relative !important;
+            height: 0 !important;
+            min-height: 0 !important;
+
+            background: transparent !important;
+          }
+
+          .institutional-nav-bar
             .nav-main {
-            min-height: 56px !important;
-            height: 56px !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+
+            position: relative !important;
           }
 
-          .institutional-header.header-scrolled
-            .nav-main nav a,
-          .institutional-header.header-scrolled
-            .nav-main nav .nav-parent {
-            padding-top: 16px !important;
-            padding-bottom: 16px !important;
+
+          /*
+           * MOBILE MENU
+           *
+           * This is a fixed overlay.
+           * It does not make the page longer.
+           */
+          .institutional-nav-bar
+            .nav-main nav {
+            display: none !important;
+
+            position: fixed !important;
+
+            top: 64px !important;
+            left: 10px !important;
+            right: 10px !important;
+
+            max-height:
+              calc(100vh - 76px) !important;
+
+            overflow-y: auto !important;
+
+            flex-direction: column !important;
+            align-items: stretch !important;
+
+            padding: 12px !important;
+
+            background: #fff !important;
+
+            border:
+              1px solid #dce5ea !important;
+
+            border-top: 0 !important;
+
+            border-radius:
+              0 0 12px 12px !important;
+
+            box-shadow:
+              0 20px 55px rgba(7,26,43,.22) !important;
+
+            z-index: 6000 !important;
           }
 
+          /*
+           * OPEN MENU
+           */
+          .institutional-nav-bar
+            .nav-main nav.open {
+            display: flex !important;
+          }
+
+
+          /*
+           * MOBILE SEARCH
+           */
+          .mobile-menu-search {
+            display: flex !important;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding:
+              10px 12px;
+
+            margin-bottom: 7px;
+
+            background: #f5f8fa;
+
+            border:
+              1px solid #dce5ea;
+
+            border-radius: 8px;
+          }
+
+          .mobile-menu-search svg {
+            color: #173f69;
+            flex: 0 0 auto;
+          }
+
+          .mobile-menu-search input {
+            width: 100%;
+            min-width: 0;
+
+            border: 0;
+            outline: 0;
+
+            background: transparent;
+
+            color: #173f69;
+
+            font-size: 12px;
+          }
+
+
+          /*
+           * MOBILE LINKS
+           */
+          .institutional-nav-bar
+            .nav-main nav > a,
+          .institutional-nav-bar
+            .nav-main
+            .nav-dropdown
+            .nav-parent {
+
+            width: 100% !important;
+
+            min-height: 42px !important;
+            height: 42px !important;
+
+            display: flex !important;
+
+            align-items: center !important;
+            justify-content: space-between !important;
+
+            padding:
+              0 12px !important;
+
+            color: #173f69 !important;
+
+            background: #fff !important;
+
+            border: 0 !important;
+
+            border-bottom:
+              1px solid #eef2f4 !important;
+
+            font-size: 11px !important;
+
+            font-weight: 700 !important;
+          }
+
+
+          /*
+           * Active page.
+           */
+          .institutional-nav-bar
+            .nav-main nav > a.active,
+          .institutional-nav-bar
+            .nav-main
+            .nav-dropdown
+            .nav-parent.active {
+
+            background: #f3f7f9 !important;
+
+            color: #0b2239 !important;
+          }
+
+
+          /*
+           * MOBILE DROPDOWNS
+           */
+          .institutional-nav-bar
+            .nav-main
+            .nav-dropdown {
+            height: auto !important;
+          }
+
+          .institutional-nav-bar
+            .nav-main
+            .dropdown-menu {
+
+            position: static !important;
+
+            display: none;
+
+            opacity: 1 !important;
+            visibility: visible !important;
+
+            transform: none !important;
+
+            box-shadow: none !important;
+
+            border: 0 !important;
+
+            border-left:
+              2px solid #d7ad63 !important;
+
+            background: #f8fafb !important;
+
+            margin:
+              0 0 4px !important;
+
+            padding: 0 !important;
+          }
+
+          .institutional-nav-bar
+            .nav-main
+            .nav-dropdown.is-open
+            .dropdown-menu {
+            display: block !important;
+          }
+
+          .institutional-nav-bar
+            .nav-main
+            .dropdown-menu a {
+
+            height: 36px !important;
+            min-height: 36px !important;
+
+            padding:
+              0 14px 0 17px !important;
+
+            font-size: 10px !important;
+          }
+
+          .institutional-nav-bar
+            .nav-main
+            .dropdown-menu a svg {
+            display: none !important;
+          }
+
+
+          /*
+           * Hide Join EAC inside the mobile menu.
+           * The membership page remains accessible through
+           * the Membership navigation item.
+           */
+          .institutional-nav-bar
+            .nav-cta {
+            display: none !important;
+          }
+
+
+          /*
+           * ======================================================
+           * MOBILE PAGE HEIGHT / SPACING
+           * ======================================================
+           */
+
+          /*
+           * Shorter hero.
+           */
+          .institutional-hero,
+          .hero-overlay {
+            height: 470px !important;
+            min-height: 470px !important;
+          }
+
+          .hero-slide-copy {
+            padding:
+              42px 15px 65px !important;
+          }
+
+          .hero-slide-copy h1 {
+            font-size:
+              clamp(34px, 10vw, 45px) !important;
+
+            line-height: .97 !important;
+
+            letter-spacing:
+              -1.8px !important;
+
+            margin:
+              12px 0 15px !important;
+
+            max-width:
+              100% !important;
+          }
+
+          .hero-slide-copy p {
+            font-size: 10px !important;
+            line-height: 1.55 !important;
+          }
+
+          .hero-actions {
+            display: flex !important;
+
+            flex-wrap: nowrap !important;
+
+            gap: 8px !important;
+
+            margin-top: 20px !important;
+          }
+
+          .hero-actions .button {
+            min-height: 42px !important;
+
+            padding:
+              10px 12px !important;
+
+            font-size: 8px !important;
+
+            white-space: nowrap !important;
+          }
+
+          .hero-controls {
+            right: 14px !important;
+            bottom: 17px !important;
+          }
+
+          .hero-counter {
+            left: 14px !important;
+            bottom: 20px !important;
+          }
+
+
+          /*
+           * Smaller section spacing.
+           */
+          .section {
+            padding:
+              48px 0 !important;
+          }
+
+          .section-heading {
+            margin-bottom:
+              24px !important;
+          }
+
+          .section-heading h2 {
+            font-size: 28px !important;
+            line-height: 1.08 !important;
+          }
+
+          .section-heading p {
+            font-size: 10px !important;
+            line-height: 1.7 !important;
+          }
+
+
+          /*
+           * Page introduction.
+           */
+          .page-intro {
+            padding:
+              42px 0 36px !important;
+          }
+
+          .page-intro h1 {
+            font-size:
+              35px !important;
+
+            line-height:
+              1 !important;
+
+            letter-spacing:
+              -1.5px !important;
+          }
+
+          .page-intro p {
+            font-size:
+              10px !important;
+
+            line-height:
+              1.7 !important;
+          }
+
+
+          /*
+           * Cards.
+           */
+          .project-art {
+            height:
+              160px !important;
+          }
+
+          .news-art {
+            height:
+              140px !important;
+          }
+
+          .project-body,
+          .news-body,
+          .opportunity-card {
+            padding:
+              17px !important;
+          }
+
+
+          /*
+           * CTA.
+           */
+          .cta-band {
+            padding:
+              42px 0 !important;
+          }
+
+          .cta-inner h2 {
+            font-size:
+              27px !important;
+          }
+
+
+          /*
+           * Footer.
+           */
+          .footer-main {
+            padding:
+              40px 0 !important;
+          }
+
+        }
+
+
+        /*
+         * EXTRA SMALL PHONES
+         */
+        @media (max-width: 430px) {
+
+          .institutional-brand-row {
+            height: 60px !important;
+            min-height: 60px !important;
+          }
+
+          .institutional-brand-row
+            .brand-logo {
+            width: 39px !important;
+            height: 39px !important;
+          }
+
+          .institutional-brand-row
+            .brand span b {
+            font-size: 11px !important;
+          }
+
+          .institutional-nav-bar
+            .nav-main nav {
+            top: 60px !important;
+          }
+
+          .institutional-hero,
+          .hero-overlay {
+            height: 450px !important;
+            min-height: 450px !important;
+          }
+
+          .hero-slide-copy h1 {
+            font-size: 33px !important;
+          }
+
+          .section {
+            padding:
+              42px 0 !important;
+          }
+
+          .page-intro h1 {
+            font-size:
+              32px !important;
+          }
         }
 
       `}</style>
@@ -446,9 +966,9 @@ function Header() {
         }`}
       >
 
-        {/* =====================================================
+        {/* ======================================================
             TOP INSTITUTIONAL BAR
-            ===================================================== */}
+            ====================================================== */}
 
         <div className="institutional-top">
 
@@ -456,13 +976,21 @@ function Header() {
 
             <div className="top-affiliation">
 
-              <span>ETHIOPIAN DEFENCE UNIVERSITY</span>
+              <span>
+                ETHIOPIAN DEFENCE UNIVERSITY
+              </span>
+
               <i></i>
 
-              <span>COLLEGE OF ENGINEERING</span>
+              <span>
+                COLLEGE OF ENGINEERING
+              </span>
+
               <i></i>
 
-              <span>AEROSPACE ENGINEERING DEPARTMENT</span>
+              <span>
+                AEROSPACE ENGINEERING DEPARTMENT
+              </span>
 
             </div>
 
@@ -485,9 +1013,9 @@ function Header() {
         </div>
 
 
-        {/* =====================================================
+        {/* ======================================================
             LOGO + SEARCH
-            ===================================================== */}
+            ====================================================== */}
 
         <div className="container nav institutional-brand-row">
 
@@ -500,8 +1028,13 @@ function Header() {
               onClick={toggleSearch}
               aria-label="Search website"
             >
+
               <Search size={19} />
-              <span>Search everything...</span>
+
+              <span>
+                Search everything...
+              </span>
+
             </button>
 
             {searchOpen && (
@@ -511,20 +1044,22 @@ function Header() {
                 <input
                   autoFocus
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) =>
+                    setQuery(e.target.value)
+                  }
                   placeholder="Search EAC..."
                 />
 
                 <div>
 
-                  {results.map(([t, to]) => (
+                  {results.map(([text, to]) => (
 
                     <Link
-                      key={`${t}-${to}`}
+                      key={`${text}-${to}`}
                       to={to}
                       onClick={closeMenus}
                     >
-                      {t}
+                      {text}
                       <ArrowUpRight size={14} />
                     </Link>
 
@@ -544,6 +1079,9 @@ function Header() {
 
           </div>
 
+
+          {/* MOBILE MENU BUTTON */}
+
           <button
             className="menu-btn"
             onClick={() => setOpen(!open)}
@@ -555,9 +1093,9 @@ function Header() {
         </div>
 
 
-        {/* =====================================================
+        {/* ======================================================
             MAIN NAVIGATION
-            ===================================================== */}
+            ====================================================== */}
 
         <div className="institutional-nav-bar">
 
@@ -573,7 +1111,9 @@ function Header() {
 
                 <input
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) =>
+                    setQuery(e.target.value)
+                  }
                   placeholder="Search EAC..."
                   aria-label="Search EAC"
                 />
@@ -581,12 +1121,12 @@ function Header() {
               </div>
 
 
-              {/* NAVIGATION LINKS */}
+              {/* NAVIGATION */}
 
               {links.map(([label, to, drop]) => {
 
                 /*
-                 * Dropdown navigation
+                 * Dropdown item
                  */
                 if (drop) {
 
@@ -612,7 +1152,9 @@ function Header() {
                       <button
                         type="button"
                         className={`nav-parent ${
-                          isParentActive ? 'active' : ''
+                          isParentActive
+                            ? 'active'
+                            : ''
                         }`}
                         aria-expanded={isOpen}
                         onClick={() =>
@@ -635,7 +1177,9 @@ function Header() {
                             onClick={closeMenus}
                           >
                             {dl}
-                            <ChevronRight size={14} />
+                            <ChevronRight
+                              size={14}
+                            />
                           </Link>
 
                         ))}
@@ -647,8 +1191,9 @@ function Header() {
                   );
                 }
 
+
                 /*
-                 * Normal navigation link
+                 * Normal link
                  */
                 return (
 
