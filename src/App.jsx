@@ -233,8 +233,17 @@ function Header() {
   }, []);
 
   useEffect(() => {
+    let ticking = false;
+
     const onScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 80);
+          ticking = false;
+        });
+
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', onScroll, {
@@ -282,11 +291,11 @@ function Header() {
   return (
     <>
       <style>{`
+
         /*
-         * IMPORTANT:
-         * The navigation remains in the normal document flow.
-         * We do NOT switch it to position: fixed while scrolling.
-         * This prevents the page-position jump/vibration.
+         * =========================================================
+         * EAC HEADER
+         * =========================================================
          */
 
         .institutional-header {
@@ -295,70 +304,70 @@ function Header() {
           z-index: 1000;
         }
 
+        /*
+         * IMPORTANT:
+         * The top institutional bar and logo/search row are visually
+         * moved upward when scrolling.
+         *
+         * We do NOT animate max-height.
+         * We do NOT change their height.
+         *
+         * This prevents scroll-position recalculation and removes
+         * the vibration/jumping effect.
+         */
+
         .institutional-header .institutional-top,
         .institutional-header .institutional-brand-row {
           transition:
-            opacity .18s ease,
-            max-height .22s ease,
-            padding .22s ease,
-            margin .22s ease;
+            transform .28s ease,
+            opacity .22s ease;
         }
 
-        /* Normal state */
+        /*
+         * Normal position
+         */
         .institutional-header .institutional-top {
-          max-height: 80px;
+          transform: translateY(0);
           opacity: 1;
         }
 
         .institutional-header .institutional-brand-row {
-          max-height: 190px;
+          transform: translateY(0);
           opacity: 1;
         }
 
         /*
-         * Scrolled state.
-         * Keep these rows in the layout transition rather than
-         * suddenly removing them with display:none.
+         * =========================================================
+         * SCROLLED STATE
+         * =========================================================
          */
+
         .institutional-header.header-scrolled
           .institutional-top {
-          max-height: 0 !important;
-          opacity: 0 !important;
-          overflow: hidden !important;
-          padding-top: 0 !important;
-          padding-bottom: 0 !important;
-          margin-top: 0 !important;
-          margin-bottom: 0 !important;
-          pointer-events: none !important;
+          transform: translateY(-100%);
+          opacity: 0;
+          pointer-events: none;
         }
 
         .institutional-header.header-scrolled
           .institutional-brand-row {
-          max-height: 0 !important;
-          opacity: 0 !important;
-          overflow: hidden !important;
-          padding-top: 0 !important;
-          padding-bottom: 0 !important;
-          margin-top: 0 !important;
-          margin-bottom: 0 !important;
-          pointer-events: none !important;
+          transform: translateY(-100%);
+          opacity: 0;
+          pointer-events: none;
         }
 
         /*
-         * Keep the navigation in normal document flow.
-         * This is the key fix for the vibration.
+         * Keep navigation in normal flow.
+         * DO NOT make this fixed.
          */
         .institutional-header .institutional-nav-bar {
           position: relative;
           width: 100%;
         }
 
-        .institutional-header.header-scrolled
-          .institutional-nav-bar {
-          box-shadow: 0 8px 24px rgba(0,0,0,.16);
-        }
-
-        /* Compact navigation */
+        /*
+         * Compact navigation when scrolling.
+         */
         .institutional-header.header-scrolled
           .nav-main {
           min-height: 58px !important;
@@ -379,13 +388,21 @@ function Header() {
           padding-bottom: 10px !important;
         }
 
+        /*
+         * Slight shadow when compact.
+         */
+        .institutional-header.header-scrolled
+          .institutional-nav-bar {
+          box-shadow: 0 8px 24px rgba(0,0,0,.16);
+        }
+
+        /*
+         * =========================================================
+         * MOBILE
+         * =========================================================
+         */
+
         @media (max-width: 760px) {
-          .institutional-header.header-scrolled
-            .institutional-top,
-          .institutional-header.header-scrolled
-            .institutional-brand-row {
-            max-height: 0 !important;
-          }
 
           .institutional-header.header-scrolled
             .institutional-nav-bar,
@@ -394,7 +411,17 @@ function Header() {
             min-height: 56px !important;
             height: 56px !important;
           }
+
+          .institutional-header.header-scrolled
+            .nav-main nav a,
+          .institutional-header.header-scrolled
+            .nav-main nav .nav-parent {
+            padding-top: 16px !important;
+            padding-bottom: 16px !important;
+          }
+
         }
+
       `}</style>
 
       <header
@@ -405,6 +432,7 @@ function Header() {
       >
 
         {/* TOP INSTITUTIONAL BAR */}
+
         <div className="institutional-top">
           <div className="container institutional-top-inner">
 
@@ -428,6 +456,7 @@ function Header() {
         </div>
 
         {/* LOGO + SEARCH */}
+
         <div className="container nav institutional-brand-row">
 
           <Brand />
@@ -486,6 +515,7 @@ function Header() {
         </div>
 
         {/* MAIN NAVIGATION */}
+
         <div className="institutional-nav-bar">
 
           <div className="container nav nav-main">
