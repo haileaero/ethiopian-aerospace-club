@@ -169,9 +169,15 @@ export default function MemberDashboard(){
             <p>Your private EAC space for account information, activities and member services.</p>
           </div>
 
-          <button className="button button-light" onClick={logout}>
-            <LogOut size={16}/> Sign out
-          </button>
+          <div style={{display:'flex',gap:'10px',alignItems:'center',flexWrap:'wrap',justifyContent:'flex-end'}}>
+            <Link className="button button-light" to="/">
+              <ArrowRight size={16} style={{transform:'rotate(180deg)'}}/> Back to EAC website
+            </Link>
+
+            <button className="button button-light" onClick={logout}>
+              <LogOut size={16}/> Sign out
+            </button>
+          </div>
         </div>
 
         <div className="dashboard-grid">
