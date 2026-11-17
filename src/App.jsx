@@ -164,6 +164,9 @@ function Header() {
     ['Members','/members']
   ];
 
+  /*
+   * Show My Profile only when a user is logged in.
+   */
   if (user) {
     links.push(['My Profile','/dashboard']);
   }
@@ -191,6 +194,9 @@ function Header() {
     t.toLowerCase().includes(query.toLowerCase())
   );
 
+  /*
+   * Reset menus when changing page.
+   */
   useEffect(() => {
     setOpenDropdown(null);
     setOpen(false);
@@ -203,6 +209,9 @@ function Header() {
     });
   }, [location.pathname]);
 
+  /*
+   * Close menus when clicking outside the header.
+   */
   useEffect(() => {
     const handlePointerDown = (event) => {
       if (
@@ -232,6 +241,12 @@ function Header() {
     };
   }, []);
 
+  /*
+   * Detect scrolling.
+   *
+   * requestAnimationFrame prevents the state from being updated
+   * excessively during rapid scrolling.
+   */
   useEffect(() => {
     let ticking = false;
 
@@ -257,6 +272,9 @@ function Header() {
     };
   }, []);
 
+  /*
+   * Prevent background scrolling when mobile menu is open.
+   */
   useEffect(() => {
     document.body.style.overflow =
       open && window.innerWidth <= 760
@@ -296,78 +314,71 @@ function Header() {
          * =========================================================
          * EAC HEADER
          * =========================================================
+         *
+         * IMPORTANT:
+         *
+         * The complete header is NOT sticky.
+         *
+         * Only the MAIN NAVIGATION is sticky.
+         *
+         * This means the institutional bar and logo/search section
+         * naturally scroll away with the page, while the navigation
+         * stays at the top.
+         *
+         * This also prevents the page-height changes that caused
+         * the previous vibration/jumping problem.
          */
 
         .institutional-header {
-          position: sticky;
-          top: 0;
+          position: relative;
           z-index: 1000;
         }
 
         /*
-         * IMPORTANT:
-         * The top institutional bar and logo/search row are visually
-         * moved upward when scrolling.
-         *
-         * We do NOT animate max-height.
-         * We do NOT change their height.
-         *
-         * This prevents scroll-position recalculation and removes
-         * the vibration/jumping effect.
-         */
-
-        .institutional-header .institutional-top,
-        .institutional-header .institutional-brand-row {
-          transition:
-            transform .28s ease,
-            opacity .22s ease;
-        }
-
-        /*
-         * Normal position
+         * Top institutional bar
          */
         .institutional-header .institutional-top {
-          transform: translateY(0);
-          opacity: 1;
-        }
-
-        .institutional-header .institutional-brand-row {
-          transform: translateY(0);
-          opacity: 1;
+          position: relative;
+          z-index: 1002;
         }
 
         /*
-         * =========================================================
-         * SCROLLED STATE
-         * =========================================================
+         * Logo + search row
          */
-
-        .institutional-header.header-scrolled
-          .institutional-top {
-          transform: translateY(-100%);
-          opacity: 0;
-          pointer-events: none;
-        }
-
-        .institutional-header.header-scrolled
-          .institutional-brand-row {
-          transform: translateY(-100%);
-          opacity: 0;
-          pointer-events: none;
+        .institutional-header .institutional-brand-row {
+          position: relative;
+          z-index: 1001;
         }
 
         /*
-         * Keep navigation in normal flow.
-         * DO NOT make this fixed.
+         * =========================================================
+         * MAIN NAVIGATION
+         * =========================================================
+         *
+         * This is the ONLY sticky element.
          */
         .institutional-header .institutional-nav-bar {
-          position: relative;
+          position: sticky;
+          top: 0;
+          z-index: 1003;
           width: 100%;
+          transition:
+            box-shadow .2s ease;
         }
 
         /*
-         * Compact navigation when scrolling.
+         * Normal navigation height
          */
+        .institutional-header .nav-main {
+          min-height: 72px;
+        }
+
+        /*
+         * =========================================================
+         * SCROLLED / COMPACT NAVIGATION
+         * =========================================================
+         */
+
         .institutional-header.header-scrolled
           .nav-main {
           min-height: 58px !important;
@@ -389,7 +400,7 @@ function Header() {
         }
 
         /*
-         * Slight shadow when compact.
+         * Add a subtle shadow after scrolling.
          */
         .institutional-header.header-scrolled
           .institutional-nav-bar {
@@ -403,6 +414,10 @@ function Header() {
          */
 
         @media (max-width: 760px) {
+
+          .institutional-header .nav-main {
+            min-height: 64px;
+          }
 
           .institutional-header.header-scrolled
             .institutional-nav-bar,
@@ -431,12 +446,16 @@ function Header() {
         }`}
       >
 
-        {/* TOP INSTITUTIONAL BAR */}
+        {/* =====================================================
+            TOP INSTITUTIONAL BAR
+            ===================================================== */}
 
         <div className="institutional-top">
+
           <div className="container institutional-top-inner">
 
             <div className="top-affiliation">
+
               <span>ETHIOPIAN DEFENCE UNIVERSITY</span>
               <i></i>
 
@@ -444,18 +463,31 @@ function Header() {
               <i></i>
 
               <span>AEROSPACE ENGINEERING DEPARTMENT</span>
+
             </div>
 
             <div className="top-links">
-              <Link to="/about">About EAC</Link>
-              <Link to="/contact">Contact</Link>
+
+              <Link to="/about">
+                About EAC
+              </Link>
+
+              <Link to="/contact">
+                Contact
+              </Link>
+
               <AccountNav />
+
             </div>
 
           </div>
+
         </div>
 
-        {/* LOGO + SEARCH */}
+
+        {/* =====================================================
+            LOGO + SEARCH
+            ===================================================== */}
 
         <div className="container nav institutional-brand-row">
 
@@ -473,6 +505,7 @@ function Header() {
             </button>
 
             {searchOpen && (
+
               <div className="search-panel">
 
                 <input
@@ -483,7 +516,9 @@ function Header() {
                 />
 
                 <div>
+
                   {results.map(([t, to]) => (
+
                     <Link
                       key={`${t}-${to}`}
                       to={to}
@@ -492,14 +527,19 @@ function Header() {
                       {t}
                       <ArrowUpRight size={14} />
                     </Link>
+
                   ))}
 
                   {results.length === 0 && (
-                    <p>No matching page found.</p>
+                    <p>
+                      No matching page found.
+                    </p>
                   )}
+
                 </div>
 
               </div>
+
             )}
 
           </div>
@@ -514,7 +554,10 @@ function Header() {
 
         </div>
 
-        {/* MAIN NAVIGATION */}
+
+        {/* =====================================================
+            MAIN NAVIGATION
+            ===================================================== */}
 
         <div className="institutional-nav-bar">
 
@@ -522,7 +565,10 @@ function Header() {
 
             <nav className={open ? 'open' : ''}>
 
+              {/* MOBILE SEARCH */}
+
               <div className="mobile-menu-search">
+
                 <Search size={16} />
 
                 <input
@@ -531,10 +577,17 @@ function Header() {
                   placeholder="Search EAC..."
                   aria-label="Search EAC"
                 />
+
               </div>
+
+
+              {/* NAVIGATION LINKS */}
 
               {links.map(([label, to, drop]) => {
 
+                /*
+                 * Dropdown navigation
+                 */
                 if (drop) {
 
                   const isOpen =
@@ -548,6 +601,7 @@ function Header() {
                     );
 
                   return (
+
                     <div
                       className={`nav-dropdown ${
                         isOpen ? 'is-open' : ''
@@ -574,6 +628,7 @@ function Header() {
                       >
 
                         {drop.map(([dl, dt]) => (
+
                           <Link
                             key={`${dl}-${dt}`}
                             to={dt}
@@ -582,15 +637,21 @@ function Header() {
                             {dl}
                             <ChevronRight size={14} />
                           </Link>
+
                         ))}
 
                       </div>
 
                     </div>
+
                   );
                 }
 
+                /*
+                 * Normal navigation link
+                 */
                 return (
+
                   <NavLink
                     key={to}
                     to={to}
@@ -599,10 +660,15 @@ function Header() {
                   >
                     {label}
                   </NavLink>
+
                 );
+
               })}
 
             </nav>
+
+
+            {/* JOIN EAC */}
 
             <Link
               className="nav-cta"
