@@ -183,7 +183,7 @@ function Header() {
   },[]);
 
   useEffect(()=>{
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
@@ -210,16 +210,46 @@ function Header() {
       .institutional-header { position: sticky; top: 0; z-index: 1000; }
       .institutional-header .institutional-top,
       .institutional-header .institutional-brand-row { transition: max-height .28s ease, opacity .22s ease, padding .28s ease, margin .28s ease; }
-      .institutional-header.header-scrolled .institutional-top { max-height: 0; opacity: 0; overflow: hidden; padding-top: 0; padding-bottom: 0; margin: 0; }
-      .institutional-header.header-scrolled .institutional-brand-row { max-height: 0; opacity: 0; overflow: hidden; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }
-      .institutional-header.header-scrolled .institutional-nav-bar { box-shadow: 0 8px 24px rgba(0,0,0,.12); }
-      .institutional-header.header-scrolled .nav-main { min-height: 58px; }
+
+      /* At the top of the page the complete EAC header is visible. */
+      .institutional-header .institutional-top { max-height: 80px; opacity: 1; }
+      .institutional-header .institutional-brand-row { max-height: 190px; opacity: 1; }
+
+      /* Once the visitor scrolls, remove the two large header rows completely.
+         display:none is intentional here so their height cannot remain in the layout. */
+      .institutional-header.header-scrolled .institutional-top,
+      .institutional-header.header-scrolled .institutional-brand-row {
+        display: none !important;
+      }
+
+      /* Keep only a compact navigation bar visible while scrolling. */
+      .institutional-header.header-scrolled .institutional-nav-bar {
+        box-shadow: 0 8px 24px rgba(0,0,0,.16);
+      }
+      .institutional-header.header-scrolled .nav-main {
+        min-height: 58px !important;
+        height: 58px !important;
+      }
       .institutional-header.header-scrolled .nav-main nav a,
-      .institutional-header.header-scrolled .nav-main nav .nav-parent { padding-top: 17px; padding-bottom: 17px; }
+      .institutional-header.header-scrolled .nav-main nav .nav-parent {
+        padding-top: 17px !important;
+        padding-bottom: 17px !important;
+      }
+      .institutional-header.header-scrolled .nav-cta {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+      }
+
       @media (max-width: 760px) {
-        .institutional-header.header-scrolled .institutional-top { display: none; }
-        .institutional-header.header-scrolled .institutional-brand-row { display: none; }
-        .institutional-header.header-scrolled .institutional-nav-bar { min-height: 56px; }
+        .institutional-header.header-scrolled .institutional-top,
+        .institutional-header.header-scrolled .institutional-brand-row {
+          display: none !important;
+        }
+        .institutional-header.header-scrolled .institutional-nav-bar,
+        .institutional-header.header-scrolled .nav-main {
+          min-height: 56px !important;
+          height: 56px !important;
+        }
       }
     `}</style>
     <header ref={headerRef} className={`site-header institutional-header ${scrolled ? 'header-scrolled' : ''}`}>
