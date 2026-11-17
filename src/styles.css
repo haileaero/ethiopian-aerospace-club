@@ -1998,3 +1998,106 @@ body {
     scroll-behavior: auto !important;
   }
 }
+/* =========================================================
+   MOBILE: KEEP NAVIGATION AVAILABLE WHILE SCROLLING
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  /* Keep the mobile brand/header visible */
+  .institutional-header.header-scrolled {
+    position: sticky !important;
+    top: 0 !important;
+  }
+
+  .institutional-header.header-scrolled
+    .institutional-brand-row {
+    display: flex !important;
+
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+
+    opacity: 1 !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Keep the navigation container alive */
+  .institutional-header.header-scrolled
+    .institutional-nav-bar {
+    display: block !important;
+
+    height: 0 !important;
+    min-height: 0 !important;
+
+    position: relative !important;
+
+    overflow: visible !important;
+  }
+
+  .institutional-header.header-scrolled
+    .institutional-nav-bar
+    .nav-main {
+    display: block !important;
+
+    height: 0 !important;
+    min-height: 0 !important;
+  }
+
+  /*
+   * The navigation is hidden only when the menu is closed.
+   * When nav.open is present, it must remain visible.
+   */
+  .institutional-header.header-scrolled
+    .institutional-nav-bar
+    .nav-main
+    nav.open {
+    display: flex !important;
+
+    position: fixed !important;
+
+    top: 64px !important;
+    left: 10px !important;
+    right: 10px !important;
+
+    width: auto !important;
+
+    max-height: calc(100vh - 76px) !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    flex-direction: column !important;
+
+    z-index: 6000 !important;
+  }
+}
+
+
+/* Small phones */
+@media (max-width: 480px) {
+
+  .institutional-header.header-scrolled
+    .institutional-brand-row {
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+  }
+
+  .institutional-header.header-scrolled
+    .institutional-nav-bar
+    .nav-main
+    nav.open {
+    top: 60px !important;
+
+    left: 7px !important;
+    right: 7px !important;
+
+    max-height: calc(100vh - 70px) !important;
+  }
+}
