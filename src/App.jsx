@@ -553,8 +553,34 @@ function Equipment(){
 
 function PublicCommittee(){
   const [items,setItems]=useState([]);
+  const [page,setPage]=useState(1);
+  const pageSize=8;
   useEffect(()=>{supabase.from('committee_members').select('id,name,member_type,position,photo_url,sort_order').eq('published',true).order('sort_order',{ascending:true}).order('name',{ascending:true}).then(({data,error})=>{if(!error)setItems(data||[])})},[]);
-  return <><PageIntro eyebrow="EAC COMMITTEE" title="Meet the Ethiopian Aerospace Club committee." text="The EAC leadership and committee members responsible for guiding the club's activities."/><section className="section"><div className="container"><div className="public-people-grid">{items.length?items.map(x=><article className="public-person-card" key={x.id}><div className="public-person-photo">{x.photo_url?<img src={x.photo_url} alt={x.name||'EAC committee member'}/>:<span>{(x.name||'EAC').split(' ').map(v=>v[0]).slice(0,2).join('').toUpperCase()}</span>}</div><div className="public-person-info"><h3>{x.name}</h3><p>{x.position||x.member_type||'EAC Committee Member'}</p></div></article>):<div className="empty-state compact"><Users size={36}/><h2>Committee profiles will appear here.</h2><p>Approved committee members will be published by the EAC.</p></div>}</div></div></section><CTA/></>;
+  const totalPages=Math.max(1,Math.ceil(items.length/pageSize));
+  const safePage=Math.min(page,totalPages);
+  const start=(safePage-1)*pageSize;
+  const visible=items.slice(start,start+pageSize);
+  useEffect(()=>{if(page>totalPages)setPage(totalPages)},[page,totalPages]);
+  return <><PageIntro eyebrow="EAC COMMITTEE" title="Meet the Ethiopian Aerospace Club committee." text="The EAC leadership and committee members responsible for guiding the club's activities."/><section className="section"><div className="container"><div className="public-directory-count"><div><div className="eyebrow">COMMITTEE DIRECTORY</div><h2>{items.length} committee member{items.length===1?'':'s'}</h2></div></div>{items.length?<><div className="public-people-grid">{visible.map((x,index)=><article className="public-person-card public-committee-card" key={x.id}><div className="public-person-photo">{x.photo_url?<img src={x.photo_url} alt={x.name||'EAC committee member'}/>:<span>{(x.name||'EAC').split(' ').map(v=>v[0]).slice(0,2).join('').toUpperCase()}</span>}</div><div className="public-person-info"><div className="public-person-number">{start+index+1}</div><h3>{x.name}</h3><p>{x.position||x.member_type||'EAC Committee Member'}</p></div></article>)}</div><DirectoryPagination page={safePage} totalPages={totalPages} onPageChange={setPage}/></>:<div className="empty-state compact"><Users size={36}/><h2>Committee profiles will appear here.</h2><p>Approved committee members will be published by the EAC.</p></div>}</div></section><CTA/></>;
+}
+
+function PublicMembers(){
+  const [items,setItems]=useState([]); const [query,setQuery]=useState(''); const [page,setPage]=useState(1);
+  const pageSize=12;
+  useEffect(()=>{supabase.from('public_member_profiles').select('id,full_name,username,membership_type,photo_url,created_at').order('full_name',{ascending:true}).then(({data,error})=>{if(!error)setItems(data||[])})},[]);
+  const filtered=items.filter(x=>`${x.full_name||''} ${x.username||''} ${x.membership_type||''}`.toLowerCase().includes(query.toLowerCase()));
+  const totalPages=Math.max(1,Math.ceil(filtered.length/pageSize));
+  const safePage=Math.min(page,totalPages);
+  const start=(safePage-1)*pageSize;
+  const visible=filtered.slice(start,start+pageSize);
+  useEffect(()=>{setPage(1)},[query]);
+  useEffect(()=>{if(page>totalPages)setPage(totalPages)},[page,totalPages]);
+  return <><PageIntro eyebrow="EAC MEMBERS" title="EAC member directory." text="Meet members of the Ethiopian Aerospace Club. Public profiles show only information approved for publication."/><section className="section"><div className="container"><div className="public-members-toolbar"><div><div className="eyebrow">MEMBER DIRECTORY</div><h2>{filtered.length} member{filtered.length===1?'':'s'}</h2></div><label className="public-member-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search members..."/></label></div>{filtered.length?<><div className="public-people-grid">{visible.map((x,index)=><Link className="public-person-card public-member-card" to={`/members/${x.id}`} key={x.id}><div className="public-person-photo">{x.photo_url?<img src={x.photo_url} alt={x.full_name||'EAC member'}/>:<span>{(x.full_name||'EAC').split(' ').map(v=>v[0]).slice(0,2).join('').toUpperCase()}</span>}</div><div className="public-person-info"><div className="public-person-number">{start+index+1}</div><h3>{x.full_name||'EAC Member'}</h3><p>{x.membership_type||'Member'}</p></div></Link>)}</div><DirectoryPagination page={safePage} totalPages={totalPages} onPageChange={setPage}/></>:<div className="empty-state compact"><Users size={36}/><h2>No members found.</h2><p>Try another name or search term.</p></div>}</div></section><CTA/></>;
+}
+
+function DirectoryPagination({page,totalPages,onPageChange}){
+  if(totalPages<=1)return null;
+  return <div className="directory-pagination" aria-label="Directory pagination"><button className="directory-page-arrow" disabled={page===1} onClick={()=>onPageChange(page-1)} aria-label="Previous page">←</button>{Array.from({length:totalPages},(_,i)=><button key={i+1} className={`directory-page-number ${page===i+1?'active':''}`} onClick={()=>onPageChange(i+1)}>{i+1}</button>)}<button className="directory-page-arrow" disabled={page===totalPages} onClick={()=>onPageChange(page+1)} aria-label="Next page">→</button></div>;
 }
 
 function PublicMembers(){
@@ -573,20 +599,27 @@ function PublicMemberProfile(){
 }
 
 <style>{`
-    .public-people-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+    .public-people-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
     .public-person-card{display:block;background:#fff;border:1px solid #dfe7ee;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px rgba(15,47,73,.06);text-decoration:none;color:inherit;transition:transform .2s ease,box-shadow .2s ease}
     .public-person-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(15,47,73,.12)}
-    .public-person-photo{height:260px;background:#edf3f7;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .public-person-photo{height:185px;background:#edf3f7;display:flex;align-items:center;justify-content:center;overflow:hidden}
     .public-person-photo img{width:100%;height:100%;object-fit:cover;display:block}
-    .public-person-photo span{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#123f69;color:#fff;font-size:1.6rem;font-weight:800}
-    .public-person-info{padding:18px 18px 20px}
-    .public-person-info h3{margin:0 0 7px;font-size:1.08rem}
-    .public-person-info p{margin:0;color:#657687;font-weight:600}
+    .public-person-photo span{width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#123f69;color:#fff;font-size:1.4rem;font-weight:800}
+    .public-person-info{padding:13px 15px 15px}
+    .public-person-info h3{margin:0 0 5px;font-size:1rem;line-height:1.25}
+    .public-person-info p{margin:0;color:#657687;font-weight:600;font-size:.92rem}
+    .public-person-number{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:25px;padding:0 7px;border-radius:999px;background:#123f69;color:#fff;font-size:.76rem;font-weight:800;margin-bottom:8px}
+    .public-committee-card .public-person-photo{height:190px}
     .public-member-card{cursor:pointer}
-    .public-members-toolbar{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:28px}
-    .public-members-toolbar h2{margin:5px 0 0}
+    .public-members-toolbar,.public-directory-count{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:24px}
+    .public-members-toolbar h2,.public-directory-count h2{margin:5px 0 0}
     .public-member-search{display:flex;align-items:center;gap:9px;border:1px solid #d7e0e8;border-radius:10px;background:#fff;padding:0 13px;min-width:280px}
     .public-member-search input{border:0;outline:0;padding:12px 4px;width:100%;background:transparent}
+    .directory-pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:34px}
+    .directory-page-arrow,.directory-page-number{border:1px solid #d7e0e8;background:#fff;color:#123f69;min-width:38px;height:38px;border-radius:8px;font-weight:800;cursor:pointer}
+    .directory-page-arrow:hover,.directory-page-number:hover{border-color:#123f69}
+    .directory-page-number.active{background:#123f69;color:#fff;border-color:#123f69}
+    .directory-page-arrow:disabled{opacity:.4;cursor:not-allowed}
     .public-profile-card{display:grid;grid-template-columns:320px 1fr;gap:34px;background:#fff;border:1px solid #dfe7ee;border-radius:18px;padding:28px;box-shadow:0 10px 34px rgba(15,47,73,.07)}
     .public-profile-photo{height:360px;border-radius:14px;overflow:hidden;background:#edf3f7;display:flex;align-items:center;justify-content:center}
     .public-profile-photo img{width:100%;height:100%;object-fit:cover}
@@ -594,8 +627,8 @@ function PublicMemberProfile(){
     .public-profile-body h2{margin:6px 0 6px}
     .public-profile-body>p{color:#657687;margin-top:0}
     @media(max-width:1000px){.public-people-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.public-profile-card{grid-template-columns:260px 1fr}}
-    @media(max-width:760px){.public-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.public-members-toolbar{align-items:stretch;flex-direction:column}.public-member-search{min-width:0}.public-profile-card{grid-template-columns:1fr;padding:20px}.public-profile-photo{height:300px}}
-    @media(max-width:500px){.public-people-grid{grid-template-columns:1fr}.public-person-photo{height:280px}}
+    @media(max-width:760px){.public-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.public-members-toolbar,.public-directory-count{align-items:stretch;flex-direction:column}.public-member-search{min-width:0}.public-profile-card{grid-template-columns:1fr;padding:20px}.public-profile-photo{height:300px}}
+    @media(max-width:500px){.public-people-grid{grid-template-columns:1fr}.public-person-photo,.public-committee-card .public-person-photo{height:260px}}
   `}</style>
 function NotFound(){return <PageIntro eyebrow="404" title="This page is out of orbit." text="The page you are looking for may have moved. Return to the EAC homepage to continue exploring."/>}
 
