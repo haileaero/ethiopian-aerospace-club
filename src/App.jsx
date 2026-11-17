@@ -875,12 +875,7 @@ function DirectoryPagination({page,totalPages,onPageChange}){
   return <div className="directory-pagination" aria-label="Directory pagination"><button className="directory-page-arrow" disabled={page===1} onClick={()=>onPageChange(page-1)} aria-label="Previous page">←</button>{Array.from({length:totalPages},(_,i)=><button key={i+1} className={`directory-page-number ${page===i+1?'active':''}`} onClick={()=>onPageChange(i+1)}>{i+1}</button>)}<button className="directory-page-arrow" disabled={page===totalPages} onClick={()=>onPageChange(page+1)} aria-label="Next page">→</button></div>;
 }
 
-function PublicMembers(){
-  const [items,setItems]=useState([]); const [query,setQuery]=useState('');
-  useEffect(()=>{supabase.from('public_member_profiles').select('id,full_name,username,membership_type,photo_url,created_at').order('full_name',{ascending:true}).then(({data,error})=>{if(!error)setItems(data||[])})},[]);
-  const filtered=items.filter(x=>`${x.full_name||''} ${x.username||''} ${x.membership_type||''}`.toLowerCase().includes(query.toLowerCase()));
-  return <><PageIntro eyebrow="EAC MEMBERS" title="EAC member directory." text="Meet members of the Ethiopian Aerospace Club. Public profiles show only information approved for publication."/><section className="section"><div className="container"><div className="public-members-toolbar"><div><div className="eyebrow">MEMBER DIRECTORY</div><h2>{items.length} member{items.length===1?'':'s'}</h2></div><label className="public-member-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search members..."/></label></div>{filtered.length?<div className="public-people-grid">{filtered.map(x=><Link className="public-person-card public-member-card" to={`/members/${x.id}`} key={x.id}><div className="public-person-photo">{x.photo_url?<img src={x.photo_url} alt={x.full_name||'EAC member'}/>:<span>{(x.full_name||'EAC').split(' ').map(v=>v[0]).slice(0,2).join('').toUpperCase()}</span>}</div><div className="public-person-info"><h3>{x.full_name||'EAC Member'}</h3><p>{x.membership_type||'Member'}</p></div></Link>)}</div>:<div className="empty-state compact"><Users size={36}/><h2>No members found.</h2><p>Try another name or search term.</p></div>}</div></section><CTA/></>;
-}
+
 
 function PublicMemberProfile(){
   const {id}=useParams(); const [member,setMember]=useState(null); const [loading,setLoading]=useState(true);
