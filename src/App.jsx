@@ -137,10 +137,24 @@ function Header() {
 
   const links = [
     ['Home','/'],
-    ['About','/about', [['About EAC','/about'], ['Vision & Mission','/about'], ['Leadership & Committee','/about']]],
-    ['Academics','/divisions', [['Technical Divisions','/divisions'], ['UAV Laboratory','/uav-lab'], ['Training Programme','/uav-lab']]],
-    ['Research','/projects', [['Projects & Research','/projects'], ['Research Areas','/divisions']]],
-    ['News & Events','/news', [['News & Announcements','/news'], ['Events','/news']]],
+    ['About','/about', [
+      ['About EAC','/about'],
+      ['Vision & Mission','/about'],
+      ['Leadership & Committee','/about']
+    ]],
+    ['Academics','/divisions', [
+      ['Technical Divisions','/divisions'],
+      ['UAV Laboratory','/uav-lab'],
+      ['Training Programme','/uav-lab']
+    ]],
+    ['Research','/projects', [
+      ['Projects & Research','/projects'],
+      ['Research Areas','/divisions']
+    ]],
+    ['News & Events','/news', [
+      ['News & Announcements','/news'],
+      ['Events','/news']
+    ]],
     ['Opportunities','/opportunities'],
     ['Membership','/membership'],
     ['Committee','/committee'],
@@ -148,18 +162,34 @@ function Header() {
     ['Contact','/contact']
   ];
 
-  const searchable=[['About EAC','/about'],['Technical Divisions','/divisions'],['UAV Laboratory','/uav-lab'],['Projects & Research','/projects'],['Opportunities','/opportunities'],['News & Events','/news'],['Committee','/committee'],['Members','/members'],['Membership','/membership'],['Contact','/contact']];
-  const results=searchable.filter(([t])=>t.toLowerCase().includes(query.toLowerCase()));
+  const searchable = [
+    ['About EAC','/about'],
+    ['Technical Divisions','/divisions'],
+    ['UAV Laboratory','/uav-lab'],
+    ['Projects & Research','/projects'],
+    ['Opportunities','/opportunities'],
+    ['News & Events','/news'],
+    ['Committee','/committee'],
+    ['Members','/members'],
+    ['Membership','/membership'],
+    ['Contact','/contact']
+  ];
 
-  useEffect(()=>{
+  const results = searchable.filter(([t]) =>
+    t.toLowerCase().includes(query.toLowerCase())
+  );
+
+  /* Reset menus when changing pages */
+  useEffect(() => {
     setOpenDropdown(null);
     setOpen(false);
     setSearchOpen(false);
     setQuery('');
-    window.scrollTo({top:0, behavior:'smooth'});
-  },[location.pathname]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
 
-  useEffect(()=>{
+  /* Close menus when clicking outside or pressing Escape */
+  useEffect(() => {
     const handlePointerDown = (event) => {
       if (headerRef.current && !headerRef.current.contains(event.target)) {
         setOpenDropdown(null);
@@ -167,6 +197,7 @@ function Header() {
         setOpen(false);
       }
     };
+
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         setOpenDropdown(null);
@@ -174,146 +205,395 @@ function Header() {
         setOpen(false);
       }
     };
+
     document.addEventListener('pointerdown', handlePointerDown);
     document.addEventListener('keydown', handleKeyDown);
+
     return () => {
       document.removeEventListener('pointerdown', handlePointerDown);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  },[]);
+  }, []);
 
-  useEffect(()=>{
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  },[]);
+  /* Detect page scrolling */
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 80);
+    };
 
-  useEffect(()=>{
-    document.body.style.overflow = open && window.innerWidth <= 760 ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  },[open]);
+    handleScroll();
 
-  const closeMenus = () => { setOpenDropdown(null); setSearchOpen(false); setOpen(false); };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  /* Prevent page scrolling when mobile menu is open */
+  useEffect(() => {
+    document.body.style.overflow =
+      open && window.innerWidth <= 760 ? 'hidden' : '';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  const closeMenus = () => {
+    setOpenDropdown(null);
+    setSearchOpen(false);
+    setOpen(false);
+  };
+
   const toggleDropdown = (label) => {
     setSearchOpen(false);
-    setOpenDropdown(current => current === label ? null : label);
+    setOpenDropdown(current =>
+      current === label ? null : label
+    );
   };
+
   const toggleSearch = () => {
     setOpenDropdown(null);
     setSearchOpen(current => !current);
     setOpen(false);
   };
 
-  return <>
-    <style>{`
-      .institutional-header { position: sticky; top: 0; z-index: 1000; }
-      .institutional-header .institutional-top,
-      .institutional-header .institutional-brand-row { transition: max-height .28s ease, opacity .22s ease, padding .28s ease, margin .28s ease; }
+  return (
+    <>
+      <style>{`
 
-      /* At the top of the page the complete EAC header is visible. */
-      .institutional-header .institutional-top { max-height: 80px; opacity: 1; }
-      .institutional-header .institutional-brand-row { max-height: 190px; opacity: 1; }
+        /* =========================================================
+           EAC HEADER
+        ========================================================= */
 
-      /* Once the visitor scrolls, remove the two large header rows completely.
-         display:none is intentional here so their height cannot remain in the layout. */
-      .institutional-header.header-scrolled .institutional-top,
-      .institutional-header.header-scrolled .institutional-brand-row {
-        display: none !important;
-      }
+        .institutional-header {
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          width: 100%;
+        }
 
-      /* Keep only a compact navigation bar visible while scrolling. */
-      .institutional-header.header-scrolled .institutional-nav-bar {
-        box-shadow: 0 8px 24px rgba(0,0,0,.16);
-      }
-      .institutional-header.header-scrolled .nav-main {
-        min-height: 58px !important;
-        height: 58px !important;
-      }
-      .institutional-header.header-scrolled .nav-main nav a,
-      .institutional-header.header-scrolled .nav-main nav .nav-parent {
-        padding-top: 17px !important;
-        padding-bottom: 17px !important;
-      }
-      .institutional-header.header-scrolled .nav-cta {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-      }
+        /*
+         * The large top sections smoothly disappear when scrolling.
+         */
+        .institutional-header .institutional-top,
+        .institutional-header .institutional-brand-row {
+          transition:
+            max-height 0.3s ease,
+            opacity 0.25s ease,
+            padding 0.3s ease,
+            margin 0.3s ease,
+            visibility 0.3s ease;
+        }
 
-      @media (max-width: 760px) {
+        /*
+         * Normal state — full header.
+         */
+        .institutional-header .institutional-top {
+          max-height: 100px;
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .institutional-header .institutional-brand-row {
+          max-height: 220px;
+          opacity: 1;
+          visibility: visible;
+        }
+
+        /*
+         * =========================================================
+         * SCROLLED STATE
+         * =========================================================
+         *
+         * Only the main navigation remains visible.
+         */
+        .institutional-header.header-scrolled {
+          height: 58px !important;
+          min-height: 58px !important;
+        }
+
         .institutional-header.header-scrolled .institutional-top,
         .institutional-header.header-scrolled .institutional-brand-row {
           display: none !important;
+          height: 0 !important;
+          max-height: 0 !important;
+          min-height: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          overflow: hidden !important;
         }
-        .institutional-header.header-scrolled .institutional-nav-bar,
+
+        /*
+         * Compact navigation.
+         */
+        .institutional-header.header-scrolled .institutional-nav-bar {
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          z-index: 9999 !important;
+
+          box-shadow:
+            0 6px 20px rgba(0, 0, 0, 0.18);
+        }
+
         .institutional-header.header-scrolled .nav-main {
-          min-height: 56px !important;
-          height: 56px !important;
+          min-height: 58px !important;
+          height: 58px !important;
         }
-      }
-    `}</style>
-    <header ref={headerRef} className={`site-header institutional-header ${scrolled ? 'header-scrolled' : ''}`} style={scrolled ? {height: '58px'} : undefined}>
-      <div className="institutional-top" style={scrolled ? {display: 'none'} : undefined}>
-        <div className="container institutional-top-inner">
-          <div className="top-affiliation">
-            <span>ETHIOPIAN DEFENCE UNIVERSITY</span><i></i>
-            <span>COLLEGE OF ENGINEERING</span><i></i>
-            <span>AEROSPACE ENGINEERING DEPARTMENT</span>
-          </div>
-          <div className="top-links">
-            <Link to="/about">About EAC</Link><Link to="/contact">Contact</Link><AccountNav/>
-          </div>
-        </div>
-      </div>
 
-      <div className="container nav institutional-brand-row" style={scrolled ? {display: 'none'} : undefined}>
-        <Brand/>
-        <div className="institutional-search-wrap">
-          <button className="search-trigger" onClick={toggleSearch} aria-label="Search website">
-            <Search size={19}/><span>Search everything...</span>
+        .institutional-header.header-scrolled .nav-main nav a,
+        .institutional-header.header-scrolled .nav-main nav .nav-parent {
+          padding-top: 17px !important;
+          padding-bottom: 17px !important;
+        }
+
+        .institutional-header.header-scrolled .nav-cta {
+          padding-top: 10px !important;
+          padding-bottom: 10px !important;
+        }
+
+        /*
+         * =========================================================
+         * MOBILE
+         * =========================================================
+         */
+        @media (max-width: 760px) {
+
+          .institutional-header.header-scrolled {
+            height: 56px !important;
+            min-height: 56px !important;
+          }
+
+          .institutional-header.header-scrolled
+          .institutional-top,
+          .institutional-header.header-scrolled
+          .institutional-brand-row {
+            display: none !important;
+          }
+
+          .institutional-header.header-scrolled
+          .institutional-nav-bar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+          }
+
+          .institutional-header.header-scrolled
+          .nav-main {
+            height: 56px !important;
+            min-height: 56px !important;
+          }
+        }
+
+      `}</style>
+
+      <header
+        ref={headerRef}
+        className={`site-header institutional-header ${
+          scrolled ? 'header-scrolled' : ''
+        }`}
+      >
+
+        {/* =====================================================
+            TOP INSTITUTIONAL BAR
+        ===================================================== */}
+        <div className="institutional-top">
+
+          <div className="container institutional-top-inner">
+
+            <div className="top-affiliation">
+              <span>ETHIOPIAN DEFENCE UNIVERSITY</span>
+              <i></i>
+
+              <span>COLLEGE OF ENGINEERING</span>
+              <i></i>
+
+              <span>AEROSPACE ENGINEERING DEPARTMENT</span>
+            </div>
+
+            <div className="top-links">
+              <Link to="/about">About EAC</Link>
+              <Link to="/contact">Contact</Link>
+              <AccountNav />
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* =====================================================
+            LOGO + SEARCH ROW
+        ===================================================== */}
+        <div className="container nav institutional-brand-row">
+
+          <Brand />
+
+          <div className="institutional-search-wrap">
+
+            <button
+              className="search-trigger"
+              onClick={toggleSearch}
+              aria-label="Search website"
+            >
+              <Search size={19} />
+              <span>Search everything...</span>
+            </button>
+
+            {searchOpen && (
+              <div className="search-panel">
+
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Search EAC..."
+                />
+
+                <div>
+                  {results.map(([t, to]) => (
+                    <Link
+                      key={`${t}-${to}`}
+                      to={to}
+                      onClick={closeMenus}
+                    >
+                      {t}
+                      <ArrowUpRight size={14} />
+                    </Link>
+                  ))}
+
+                  {results.length === 0 && (
+                    <p>No matching page found.</p>
+                  )}
+                </div>
+
+              </div>
+            )}
+
+          </div>
+
+          <button
+            className="menu-btn"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X /> : <Menu />}
           </button>
-          {searchOpen && <div className="search-panel">
-            <input autoFocus value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search EAC..."/>
-            <div>{results.map(([t,to])=><Link key={`${t}-${to}`} to={to} onClick={closeMenus}>{t}<ArrowUpRight size={14}/></Link>)}
-              {results.length===0&&<p>No matching page found.</p>}
-            </div>
-          </div>}
-        </div>
-        <button className="menu-btn" onClick={()=>setOpen(!open)} aria-label="Toggle menu">{open?<X/>:<Menu/>}</button>
-      </div>
 
-      <div className="institutional-nav-bar" style={scrolled ? {position: 'fixed', top: 0, left: 0, right: 0, width: '100%', zIndex: 2000} : undefined}>
-        <div className="container nav nav-main">
-          <nav className={open ? 'open' : ''}>
-            <div className="mobile-menu-search">
-              <Search size={16}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search EAC..." aria-label="Search EAC"/>
-            </div>
-            {links.map(([label,to,drop]) => {
-              if (drop) {
-                const isOpen = openDropdown === label;
-                const isParentActive = location.pathname === to || drop.some(([,dt]) => location.pathname === dt);
-                return <div className={`nav-dropdown ${isOpen ? 'is-open' : ''}`} key={to}>
-                  <button
-                    type="button"
-                    className={`nav-parent ${isParentActive ? 'active' : ''}`}
-                    aria-expanded={isOpen}
-                    onClick={()=>toggleDropdown(label)}
+        </div>
+
+        {/* =====================================================
+            MAIN NAVIGATION
+        ===================================================== */}
+        <div className="institutional-nav-bar">
+
+          <div className="container nav nav-main">
+
+            <nav className={open ? 'open' : ''}>
+
+              <div className="mobile-menu-search">
+                <Search size={16} />
+
+                <input
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Search EAC..."
+                  aria-label="Search EAC"
+                />
+              </div>
+
+              {links.map(([label, to, drop]) => {
+
+                if (drop) {
+
+                  const isOpen =
+                    openDropdown === label;
+
+                  const isParentActive =
+                    location.pathname === to ||
+                    drop.some(([, dt]) =>
+                      location.pathname === dt
+                    );
+
+                  return (
+                    <div
+                      className={`nav-dropdown ${
+                        isOpen ? 'is-open' : ''
+                      }`}
+                      key={to}
+                    >
+
+                      <button
+                        type="button"
+                        className={`nav-parent ${
+                          isParentActive ? 'active' : ''
+                        }`}
+                        aria-expanded={isOpen}
+                        onClick={() =>
+                          toggleDropdown(label)
+                        }
+                      >
+                        {label}
+                      </button>
+
+                      <div
+                        className="dropdown-menu"
+                        aria-hidden={!isOpen}
+                      >
+                        {drop.map(([dl, dt]) => (
+                          <Link
+                            key={`${dl}-${dt}`}
+                            to={dt}
+                            onClick={closeMenus}
+                          >
+                            {dl}
+                            <ChevronRight size={14} />
+                          </Link>
+                        ))}
+                      </div>
+
+                    </div>
+                  );
+                }
+
+                return (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    end={to === '/'}
+                    onClick={closeMenus}
                   >
                     {label}
-                  </button>
-                  <div className="dropdown-menu" aria-hidden={!isOpen}>
-                    {drop.map(([dl,dt])=><Link key={`${dl}-${dt}`} to={dt} onClick={closeMenus}>{dl}<ChevronRight size={14}/></Link>)}
-                  </div>
-                </div>;
-              }
-              return <NavLink key={to} to={to} end={to==='/'} onClick={closeMenus}>{label}</NavLink>;
-            })}
-          </nav>
-          <Link className="nav-cta" to="/membership" onClick={closeMenus}>Join EAC <ArrowUpRight size={15}/></Link>
+                  </NavLink>
+                );
+
+              })}
+
+            </nav>
+
+            <Link
+              className="nav-cta"
+              to="/membership"
+              onClick={closeMenus}
+            >
+              Join EAC
+              <ArrowUpRight size={15} />
+            </Link>
+
+          </div>
+
         </div>
-      </div>
-    </header>
-  </>;
+
+      </header>
+    </>
+  );
 }
 
 function BackToTop(){
