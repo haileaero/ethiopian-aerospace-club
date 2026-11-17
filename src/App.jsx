@@ -164,7 +164,6 @@ function Header() {
     ['Members','/members']
   ];
 
-  // Show My Profile only when a user is logged in.
   if (user) {
     links.push(['My Profile','/dashboard']);
   }
@@ -283,6 +282,13 @@ function Header() {
   return (
     <>
       <style>{`
+        /*
+         * IMPORTANT:
+         * The navigation remains in the normal document flow.
+         * We do NOT switch it to position: fixed while scrolling.
+         * This prevents the page-position jump/vibration.
+         */
+
         .institutional-header {
           position: sticky;
           top: 0;
@@ -292,12 +298,13 @@ function Header() {
         .institutional-header .institutional-top,
         .institutional-header .institutional-brand-row {
           transition:
-            max-height .28s ease,
-            opacity .22s ease,
-            padding .28s ease,
-            margin .28s ease;
+            opacity .18s ease,
+            max-height .22s ease,
+            padding .22s ease,
+            margin .22s ease;
         }
 
+        /* Normal state */
         .institutional-header .institutional-top {
           max-height: 80px;
           opacity: 1;
@@ -308,20 +315,50 @@ function Header() {
           opacity: 1;
         }
 
-        /* Hide the large institutional header after scrolling */
+        /*
+         * Scrolled state.
+         * Keep these rows in the layout transition rather than
+         * suddenly removing them with display:none.
+         */
         .institutional-header.header-scrolled
-          .institutional-top,
-        .institutional-header.header-scrolled
-          .institutional-brand-row {
-          display: none !important;
+          .institutional-top {
+          max-height: 0 !important;
+          opacity: 0 !important;
+          overflow: hidden !important;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+          pointer-events: none !important;
         }
 
-        /* Compact sticky navigation while scrolling */
+        .institutional-header.header-scrolled
+          .institutional-brand-row {
+          max-height: 0 !important;
+          opacity: 0 !important;
+          overflow: hidden !important;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+          pointer-events: none !important;
+        }
+
+        /*
+         * Keep the navigation in normal document flow.
+         * This is the key fix for the vibration.
+         */
+        .institutional-header .institutional-nav-bar {
+          position: relative;
+          width: 100%;
+        }
+
         .institutional-header.header-scrolled
           .institutional-nav-bar {
           box-shadow: 0 8px 24px rgba(0,0,0,.16);
         }
 
+        /* Compact navigation */
         .institutional-header.header-scrolled
           .nav-main {
           min-height: 58px !important;
@@ -347,7 +384,7 @@ function Header() {
             .institutional-top,
           .institutional-header.header-scrolled
             .institutional-brand-row {
-            display: none !important;
+            max-height: 0 !important;
           }
 
           .institutional-header.header-scrolled
@@ -390,7 +427,7 @@ function Header() {
           </div>
         </div>
 
-        {/* LOGO + SEARCH AREA */}
+        {/* LOGO + SEARCH */}
         <div className="container nav institutional-brand-row">
 
           <Brand />
@@ -485,7 +522,7 @@ function Header() {
                       className={`nav-dropdown ${
                         isOpen ? 'is-open' : ''
                       }`}
-                      key={label}
+                      key={to}
                     >
 
                       <button
