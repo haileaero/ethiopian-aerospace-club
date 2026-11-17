@@ -114,735 +114,29 @@
 @media (max-width:850px){.auth-grid{grid-template-columns:1fr}.auth-brand-panel{min-height:auto;padding:40px}.auth-card{padding:28px}.dashboard-grid{grid-template-columns:1fr}.dashboard-card-wide{grid-column:auto}.security-grid{grid-template-columns:1fr}.dashboard-hero{padding:36px 24px;align-items:flex-start;flex-direction:column}.profile-lines{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.auth-page{padding:34px 0}.auth-brand-panel{padding:30px 24px}.auth-brand-panel h1{font-size:42px}.auth-card{border-radius:14px;padding:23px}.form-row{grid-template-columns:1fr!important}.dashboard-hero{border-radius:0;padding:32px 20px}.dashboard-card,.security-panel{padding:20px}.profile-lines{grid-template-columns:1fr}.account-nav{gap:8px}}
 /* =========================================================
-   EAC FINAL RESPONSIVE HEADER + MOBILE POLISH
+   EAC FINAL HEADER SYSTEM
    ========================================================= */
 
-/* ---------------------------------------------------------
-   DESKTOP HEADER
-   --------------------------------------------------------- */
-
-/*
- * The complete header stays in normal document flow.
- * The navigation becomes fixed only after scrolling.
- */
+/* Desktop: keep the header in normal flow. The scroll state
+   hides the upper rows and fixes the navigation without animating
+   the layout dimensions, which reduces scroll vibration. */
 @media (min-width: 761px) {
-
-  .institutional-header {
-    position: relative !important;
-    z-index: 1000;
-  }
-
-  /*
-   * Normal top institutional area
-   */
-  .institutional-header .institutional-top {
-    position: relative;
-    z-index: 1001;
-  }
-
-  /*
-   * Normal logo/search area
-   */
-  .institutional-header .institutional-brand-row {
-    position: relative;
-    z-index: 1001;
-  }
-
-  /*
-   * Navigation remains part of the page at the top.
-   */
-  .institutional-header .institutional-nav-bar {
-    position: relative !important;
-    z-index: 1002;
-    width: 100%;
-  }
-
-  /*
-   * Scrolled state:
-   * only the navigation becomes fixed at the top.
-   */
-  .institutional-header.header-scrolled
-    .institutional-top {
-    display: none !important;
-  }
-
-  .institutional-header.header-scrolled
-    .institutional-brand-row {
-    display: none !important;
-  }
-
-  .institutional-header.header-scrolled
-    .institutional-nav-bar {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 2000;
-    background: #123a64;
-    box-shadow: 0 8px 25px rgba(7,26,43,.18);
-  }
-
-  /*
-   * Keep the navigation compact after scrolling.
-   */
-  .institutional-header.header-scrolled
-    .nav-main {
-    height: 58px !important;
-    min-height: 58px !important;
-  }
-
-  .institutional-header.header-scrolled
-    .nav-main nav a,
-  .institutional-header.header-scrolled
-    .nav-main nav .nav-parent {
-    padding-top: 17px !important;
-    padding-bottom: 17px !important;
-  }
-
-  .institutional-header.header-scrolled
-    .nav-cta {
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-  }
-}
-
-
-/* ---------------------------------------------------------
-   MOBILE HEADER
-   --------------------------------------------------------- */
-
-@media (max-width: 760px) {
-
-  /*
-   * IMPORTANT:
-   * Do not make the whole mobile header sticky.
-   * This prevents the mobile layout from becoming too tall.
-   */
-  .institutional-header {
-    position: relative !important;
-    z-index: 1000;
-  }
-
-  /*
-   * Hide the institutional university strip on phones.
-   */
-  .institutional-top {
-    display: none !important;
-  }
-
-  /*
-   * Compact mobile brand row.
-   */
-  .institutional-brand-row {
-    height: 64px !important;
-    min-height: 64px !important;
-    padding: 0 15px !important;
-    background: #fff;
-  }
-
-  /*
-   * EAC logo
-   */
-  .institutional-brand-row .brand-logo {
-    width: 43px !important;
-    height: 43px !important;
-  }
-
-  /*
-   * EAC name
-   */
-  .institutional-brand-row .brand span strong {
-    font-size: 8px !important;
-    letter-spacing: 1.4px !important;
-  }
-
-  .institutional-brand-row .brand span b {
-    font-size: 12px !important;
-    letter-spacing: 1px !important;
-  }
-
-  .institutional-brand-row .brand span small {
-    font-size: 7px !important;
-  }
-
-  /*
-   * Desktop search disappears.
-   * Search is available inside the mobile menu.
-   */
-  .institutional-search-wrap {
-    display: none !important;
-  }
-
-  /*
-   * Hamburger button.
-   */
-  .institutional-brand-row .menu-btn {
-    display: grid !important;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    margin-left: auto;
-  }
-
-  /*
-   * Main navigation container itself does not consume
-   * vertical space when the mobile menu is closed.
-   */
-  .institutional-nav-bar {
-    display: block !important;
-    position: relative !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    background: transparent !important;
-  }
-
-  .institutional-nav-bar .nav-main {
-    height: 0 !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    position: relative !important;
-  }
-
-  /*
-   * Mobile navigation menu.
-   *
-   * It opens as an overlay instead of pushing the whole page
-   * downward.
-   */
-  .institutional-nav-bar .nav-main nav {
-    display: none !important;
-    position: fixed !important;
-    top: 64px !important;
-    left: 12px !important;
-    right: 12px !important;
-    max-height: calc(100vh - 76px) !important;
-    overflow-y: auto !important;
-
-    background: #fff !important;
-    border: 1px solid #dce5ea !important;
-    border-radius: 0 0 12px 12px !important;
-
-    padding: 12px !important;
-
-    box-shadow:
-      0 20px 50px rgba(7,26,43,.20) !important;
-
-    flex-direction: column !important;
-    align-items: stretch !important;
-
-    z-index: 3000 !important;
-  }
-
-  /*
-   * Open mobile menu.
-   */
-  .institutional-nav-bar .nav-main nav.open {
-    display: flex !important;
-  }
-
-  /*
-   * Mobile search box.
-   */
-  .institutional-nav-bar .mobile-menu-search {
-    display: flex !important;
-    align-items: center;
-    gap: 9px;
-
-    background: #f5f8fa;
-    border: 1px solid #dce5ea;
-    border-radius: 8px;
-
-    padding: 10px 12px;
-    margin-bottom: 8px;
-  }
-
-  .institutional-nav-bar
-    .mobile-menu-search input {
-    width: 100%;
-    min-width: 0;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: #173f69;
-    font-size: 12px;
-  }
-
-  .institutional-nav-bar
-    .mobile-menu-search svg {
-    color: #173f69;
-    flex: 0 0 auto;
-  }
-
-  /*
-   * Main mobile navigation links.
-   */
-  .institutional-nav-bar
-    .nav-main nav > a,
-  .institutional-nav-bar
-    .nav-main .nav-dropdown .nav-parent {
-    width: 100%;
-    min-height: 43px !important;
-    height: 43px !important;
-
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 12px !important;
-
-    background: #fff;
-    color: #173f69;
-
-    border: 0;
-    border-bottom: 1px solid #edf1f4;
-
-    font-size: 11px !important;
-    font-weight: 700;
-  }
-
-  /*
-   * Active/current page.
-   */
-  .institutional-nav-bar
-    .nav-main nav > a.active,
-  .institutional-nav-bar
-    .nav-main .nav-dropdown .nav-parent.active {
-    background: #f1f6f9 !important;
-    color: #0b2239 !important;
-  }
-
-  /*
-   * Dropdown inside mobile menu.
-   */
-  .institutional-nav-bar
-    .nav-main .nav-dropdown {
-    height: auto !important;
-  }
-
-  .institutional-nav-bar
-    .nav-main .dropdown-menu {
-    position: static !important;
-
-    display: none;
-
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-
-    box-shadow: none !important;
-    border: 0 !important;
-    border-left: 2px solid #d7ad63 !important;
-
-    background: #f8fafb !important;
-
-    margin: 0 0 4px !important;
-    padding: 0 !important;
-  }
-
-  .institutional-nav-bar
-    .nav-main .nav-dropdown.is-open
-    .dropdown-menu {
-    display: block !important;
-  }
-
-  .institutional-nav-bar
-    .nav-main .dropdown-menu a {
-    height: 38px !important;
-    min-height: 38px !important;
-    padding: 0 14px 0 17px !important;
-    font-size: 10px !important;
-  }
-
-  .institutional-nav-bar
-    .nav-main .dropdown-menu a svg {
-    display: none !important;
-  }
-
-  /*
-   * Join EAC is already available elsewhere on the mobile
-   * navigation, so don't make it an extra huge block.
-   */
-  .institutional-nav-bar
-    .nav-cta {
-    display: flex !important;
-    margin-top: 8px;
-    justify-content: center;
-    min-height: 43px;
-    font-size: 10px;
-  }
-
-
-  /* =======================================================
-     MOBILE HERO
-     ======================================================= */
-
-  /*
-   * This is the major reduction in vertical length.
-   */
-  .institutional-hero,
-  .hero-overlay {
-    min-height: 0 !important;
-    height: 500px !important;
-  }
-
-  .hero-content {
-    height: 100% !important;
-  }
-
-  .hero-slide-copy {
-    padding:
-      45px 15px 70px !important;
-  }
-
-  .hero-slide-copy h1 {
-    font-size:
-      clamp(34px, 10vw, 46px) !important;
-
-    line-height: .96 !important;
-    letter-spacing: -2px !important;
-
-    max-width: 100% !important;
-
-    margin-top: 15px !important;
-    margin-bottom: 16px !important;
-  }
-
-  .hero-slide-copy p {
-    font-size: 11px !important;
-    line-height: 1.65 !important;
-    max-width: 95% !important;
-  }
-
-  /*
-   * Hero buttons become smaller and sit comfortably
-   * beside each other.
-   */
-  .hero-actions {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 9px !important;
-    margin-top: 22px !important;
-  }
-
-  .hero-actions .button {
-    min-height: 43px !important;
-    padding: 11px 14px !important;
-    font-size: 9px !important;
-    white-space: nowrap;
-  }
-
-  /*
-   * Hero navigation controls.
-   */
-  .hero-controls {
-    right: 15px !important;
-    bottom: 18px !important;
-  }
-
-  .hero-counter {
-    left: 15px !important;
-    bottom: 22px !important;
-  }
-
-  /*
-   * Institutional strip below hero.
-   */
-  .institution-strip .container {
-    display: block !important;
-    padding: 16px 15px !important;
-  }
-
-  .institution-strip .container > div {
-    padding: 9px 0 !important;
-  }
-
-  .institution-strip .container > div strong {
-    font-size: 10px !important;
-  }
-
-  .institution-strip .container > svg {
-    display: none !important;
-  }
-
-
-  /* =======================================================
-     MOBILE GENERAL PAGE SPACING
-     ======================================================= */
-
-  /*
-   * Your original .section uses 100px vertical padding.
-   * That's too much on a phone.
-   */
-  .section {
-    padding:
-      55px 0 !important;
-  }
-
-  .section-heading {
-    display: block !important;
-    margin-bottom: 25px !important;
-  }
-
-  .section-heading h2 {
-    font-size: 28px !important;
-    line-height: 1.08 !important;
-    letter-spacing: -1px !important;
-  }
-
-  .section-heading p {
-    font-size: 11px !important;
-    line-height: 1.75 !important;
-  }
-
-  /*
-   * Welcome section.
-   */
-  .welcome-grid {
-    gap: 22px !important;
-  }
-
-  .welcome-grid h2 {
-    font-size: 29px !important;
-    line-height: 1.1 !important;
-  }
-
-  .lead {
-    font-size: 11px !important;
-    line-height: 1.8 !important;
-  }
-
-  /*
-   * Feature cards.
-   */
-  .feature-grid article {
-    padding:
-      20px 0 !important;
-  }
-
-  .feature-grid h3 {
-    font-size: 14px !important;
-  }
-
-  .feature-grid p {
-    font-size: 10px !important;
-    line-height: 1.7 !important;
-  }
-
-  /*
-   * Page introduction.
-   */
-  .page-intro {
-    padding:
-      45px 0 40px !important;
-  }
-
-  .page-intro h1 {
-    font-size: 38px !important;
-    line-height: .98 !important;
-    letter-spacing: -1.8px !important;
-  }
-
-  .page-intro p {
-    font-size: 11px !important;
-    line-height: 1.75 !important;
-  }
-
-  /*
-   * Generic cards/grids.
-   */
-  .project-grid,
-  .opportunity-grid,
-  .news-grid {
-    gap: 12px !important;
-  }
-
-  .project-art {
-    height: 170px !important;
-  }
-
-  .news-art {
-    height: 150px !important;
-  }
-
-  .project-body,
-  .news-body,
-  .opportunity-card {
-    padding: 18px !important;
-  }
-
-  /*
-   * CTA sections.
-   */
-  .cta-band {
-    padding: 48px 0 !important;
-  }
-
-  .cta-inner {
-    display: block !important;
-  }
-
-  .cta-inner h2 {
-    font-size: 27px !important;
-  }
-
-  .cta-inner p {
-    line-height: 1.7 !important;
-  }
-
-  /*
-   * About / two-column sections.
-   */
-  .two-col {
-    gap: 35px !important;
-  }
-
-  .two-col h2,
-  .vision-grid h2 {
-    font-size: 29px !important;
-  }
-
-  .about-visual {
-    height: 300px !important;
-  }
-
-  /*
-   * Reduce oversized UAV visual.
-   */
-  .uav-home-grid {
-    gap: 30px !important;
-  }
-
-  .uav-home h2 {
-    font-size: 32px !important;
-  }
-
-  .uav-card-art {
-    height: 280px !important;
-  }
-
-  /*
-   * Footer spacing.
-   */
-  .footer-main {
-    padding: 45px 0 !important;
-    gap: 30px !important;
-  }
-
-  /*
-   * Back-to-top button.
-   */
-  .back-to-top {
-    right: 14px !important;
-    bottom: 14px !important;
-    width: 40px !important;
-    height: 40px !important;
-  }
-}
-
-
-/* ---------------------------------------------------------
-   EXTRA SMALL PHONES
-   --------------------------------------------------------- */
-
-@media (max-width: 430px) {
-
-  .institutional-brand-row {
-    height: 60px !important;
-    min-height: 60px !important;
-  }
-
-  .institutional-brand-row .brand-logo {
-    width: 39px !important;
-    height: 39px !important;
-  }
-
-  .institutional-brand-row .brand span b {
-    font-size: 11px !important;
-  }
-
-  .institutional-nav-bar
-    .nav-main nav {
-    top: 60px !important;
-    left: 8px !important;
-    right: 8px !important;
-  }
-
-  .institutional-hero,
-  .hero-overlay {
-    height: 470px !important;
-  }
-
-  .hero-slide-copy {
-    padding-top: 38px !important;
-  }
-
-  .hero-slide-copy h1 {
-    font-size: 34px !important;
-  }
-
-  .hero-slide-copy p {
-    font-size: 10px !important;
-  }
-
-  .hero-actions {
-    gap: 7px !important;
-  }
-
-  .hero-actions .button {
-    padding:
-      10px 11px !important;
-    font-size: 8px !important;
-  }
-
-  .section {
-    padding:
-      45px 0 !important;
-  }
-
-  .page-intro h1 {
-    font-size: 34px !important;
-  }
-
-}
-/* =========================================================
-   EAC HEADER + MOBILE FINAL FIX
-   ========================================================= */
-
-/* ---------------------------------------------------------
-   DESKTOP HEADER COLLAPSE
-   --------------------------------------------------------- */
-
-@media (min-width: 761px) {
-
   .institutional-header {
     position: sticky !important;
     top: 0 !important;
     z-index: 5000 !important;
     width: 100% !important;
     background: #fff !important;
-
-    /* Prevent the header from jumping during scroll */
-    transition:
-      box-shadow 0.35s ease,
-      background-color 0.35s ease !important;
+    overflow-anchor: none !important;
   }
 
-  /*
-   * Keep the upper institutional area in the layout while
-   * it smoothly collapses.
-   */
   .institutional-header .institutional-top {
-    display: block !important;
+    height: 34px !important;
+    min-height: 34px !important;
     max-height: 34px !important;
     overflow: hidden !important;
     opacity: 1 !important;
-
-    transition:
-      max-height 0.45s cubic-bezier(.4,0,.2,1),
-      opacity 0.30s ease,
-      padding 0.45s cubic-bezier(.4,0,.2,1),
-      margin 0.45s cubic-bezier(.4,0,.2,1) !important;
+    transition: opacity .22s ease !important;
   }
 
   .institutional-header .institutional-brand-row {
@@ -851,30 +145,10 @@
     max-height: 104px !important;
     overflow: hidden !important;
     opacity: 1 !important;
-
-    transition:
-      height 0.45s cubic-bezier(.4,0,.2,1),
-      min-height 0.45s cubic-bezier(.4,0,.2,1),
-      max-height 0.45s cubic-bezier(.4,0,.2,1),
-      opacity 0.30s ease,
-      padding 0.45s cubic-bezier(.4,0,.2,1),
-      margin 0.45s cubic-bezier(.4,0,.2,1) !important;
+    transition: opacity .22s ease !important;
   }
 
-  /*
-   * When scrolling, the two upper rows smoothly collapse.
-   * The navigation itself remains visible.
-   */
-  .institutional-header.header-scrolled .institutional-top {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    pointer-events: none !important;
-  }
-
+  .institutional-header.header-scrolled .institutional-top,
   .institutional-header.header-scrolled .institutional-brand-row {
     height: 0 !important;
     min-height: 0 !important;
@@ -887,106 +161,100 @@
     pointer-events: none !important;
   }
 
-  /*
-   * Navigation stays at the top after the upper area collapses.
-   */
   .institutional-header .institutional-nav-bar {
     position: relative !important;
+    display: block !important;
     width: 100% !important;
-    z-index: 5001 !important;
+    height: 65px !important;
+    min-height: 65px !important;
     background: #123a64 !important;
-
-    transition:
-      box-shadow 0.35s ease,
-      background-color 0.35s ease !important;
+    z-index: 5001 !important;
   }
 
-  /*
-   * Give the navigation a subtle shadow only after scrolling.
-   * This makes it visually clear that it has become the top bar.
-   */
-  .institutional-header.header-scrolled
-    .institutional-nav-bar {
-    box-shadow: 0 8px 25px rgba(7, 26, 43, 0.18) !important;
+  .institutional-header .institutional-nav-bar .nav-main {
+    height: 65px !important;
+    min-height: 65px !important;
+  }
+
+  .institutional-header.header-scrolled .institutional-nav-bar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    z-index: 6000 !important;
+    background: #123a64 !important;
+    box-shadow: 0 8px 25px rgba(7,26,43,.18) !important;
+  }
+
+  .institutional-header.header-scrolled .institutional-nav-bar .nav-main {
+    height: 58px !important;
+    min-height: 58px !important;
+  }
+
+  .institutional-header.header-scrolled .nav-main nav a,
+  .institutional-header.header-scrolled .nav-main nav .nav-parent {
+    padding-top: 17px !important;
+    padding-bottom: 17px !important;
+  }
+
+  .institutional-header.header-scrolled .nav-cta {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
 }
 
-
-/* =========================================================
-   MOBILE HEADER
-   ========================================================= */
-
+/* Mobile: compact header stays visible while scrolling. */
 @media (max-width: 760px) {
-
-  /*
-   * Mobile gets its own compact header.
-   * Do NOT collapse the mobile brand row when scrolling.
-   */
-  .institutional-header {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 5000 !important;
+  html, body, #root {
     width: 100% !important;
-    background: #fff !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
 
-  /* No desktop institutional strip on phone */
-  .institutional-header .institutional-top {
+  .institutional-header,
+  .institutional-header.header-scrolled {
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: 5000 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  .institutional-header .institutional-top,
+  .institutional-header.header-scrolled .institutional-top {
     display: none !important;
   }
 
-  /*
-   * Fixed compact mobile brand row.
-   */
-  .institutional-header .institutional-brand-row {
+  .institutional-header .institutional-brand-row,
+  .institutional-header.header-scrolled .institutional-brand-row {
     display: flex !important;
     width: 100% !important;
     height: 64px !important;
     min-height: 64px !important;
     max-height: 64px !important;
-
     padding: 0 15px !important;
     margin: 0 !important;
-
-    opacity: 1 !important;
-    overflow: visible !important;
-
-    background: #fff !important;
-  }
-
-  /*
-   * IMPORTANT:
-   * Do not allow the desktop "header-scrolled" class
-   * to hide the mobile brand row.
-   */
-  .institutional-header.header-scrolled
-    .institutional-brand-row {
-    display: flex !important;
-
-    height: 64px !important;
-    min-height: 64px !important;
-    max-height: 64px !important;
-
-    padding: 0 15px !important;
-    margin: 0 !important;
-
     opacity: 1 !important;
     overflow: visible !important;
     pointer-events: auto !important;
+    background: #fff !important;
   }
 
-  /*
-   * Mobile logo.
-   */
+  .institutional-header .institutional-search-wrap {
+    display: none !important;
+  }
+
   .institutional-header .brand-logo {
     width: 43px !important;
     height: 43px !important;
     flex: 0 0 auto !important;
   }
 
-  /*
-   * Mobile EAC name.
-   */
   .institutional-header .brand span {
     min-width: 0 !important;
   }
@@ -1008,30 +276,16 @@
     white-space: nowrap !important;
   }
 
-  /*
-   * Hide desktop search.
-   */
-  .institutional-header .institutional-search-wrap {
-    display: none !important;
-  }
-
-  /*
-   * Hamburger button.
-   */
   .institutional-header .institutional-brand-row .menu-btn {
     display: grid !important;
     place-items: center !important;
-
     width: 42px !important;
     height: 42px !important;
     min-width: 42px !important;
     min-height: 42px !important;
-
     margin-left: auto !important;
-
     border: 0 !important;
     background: transparent !important;
-
     color: #123a64 !important;
     z-index: 7000 !important;
   }
@@ -1041,481 +295,233 @@
     height: 23px !important;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE NAVIGATION CONTAINER
-     ------------------------------------------------------- */
-
-  /*
-   * The blue desktop navigation bar must not create
-   * extra vertical space on mobile.
-   */
-  .institutional-header .institutional-nav-bar {
+  .institutional-header .institutional-nav-bar,
+  .institutional-header.header-scrolled .institutional-nav-bar {
     display: block !important;
-
     position: relative !important;
-
     width: 100% !important;
+    max-width: 100% !important;
     height: 0 !important;
     min-height: 0 !important;
-
     margin: 0 !important;
     padding: 0 !important;
-
     background: transparent !important;
-
     overflow: visible !important;
   }
 
-  .institutional-header .institutional-nav-bar .nav-main {
+  .institutional-header .institutional-nav-bar .nav-main,
+  .institutional-header.header-scrolled .institutional-nav-bar .nav-main {
     height: 0 !important;
     min-height: 0 !important;
-
     margin: 0 !important;
     padding: 0 !important;
-
     position: relative !important;
   }
 
-  /*
-   * Closed mobile menu.
-   */
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main nav {
+  .institutional-header .institutional-nav-bar .nav-main nav {
     display: none !important;
   }
 
-  /*
-   * OPEN mobile menu.
-   *
-   * It floats below the 64px mobile header instead
-   * of pushing the page downward.
-   */
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main nav.open {
+  .institutional-header .institutional-nav-bar .nav-main nav.open {
     display: flex !important;
-
     position: fixed !important;
-
     top: 64px !important;
     left: 10px !important;
     right: 10px !important;
-
     width: auto !important;
-
+    max-width: none !important;
     max-height: calc(100vh - 76px) !important;
-
     overflow-x: hidden !important;
     overflow-y: auto !important;
-
     flex-direction: column !important;
     align-items: stretch !important;
-
     padding: 12px !important;
     margin: 0 !important;
-
+    box-sizing: border-box !important;
     background: #fff !important;
-
     border: 1px solid #dce5ea !important;
     border-radius: 0 0 12px 12px !important;
-
-    box-shadow:
-      0 20px 55px rgba(7,26,43,.25) !important;
-
+    box-shadow: 0 20px 55px rgba(7,26,43,.25) !important;
     z-index: 6500 !important;
-
-    /*
-     * Prevent the menu from being wider than the phone.
-     */
-    box-sizing: border-box !important;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE SEARCH
-     ------------------------------------------------------- */
-
-  .institutional-header
-    .mobile-menu-search {
+  .institutional-header .mobile-menu-search {
     display: flex !important;
-
     width: 100% !important;
     min-width: 0 !important;
-
+    box-sizing: border-box !important;
     align-items: center !important;
     gap: 8px !important;
-
     padding: 10px 11px !important;
     margin: 0 0 8px !important;
-
     background: #f5f8fa !important;
     border: 1px solid #dce5ea !important;
     border-radius: 8px !important;
-
-    box-sizing: border-box !important;
   }
 
-  .institutional-header
-    .mobile-menu-search input {
+  .institutional-header .mobile-menu-search input {
     width: 100% !important;
     min-width: 0 !important;
-
     border: 0 !important;
     outline: 0 !important;
-
     background: transparent !important;
-
     font-size: 12px !important;
     color: #173f69 !important;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE NAVIGATION LINKS
-     ------------------------------------------------------- */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav > a,
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    .nav-dropdown
-    .nav-parent {
+  .institutional-header .institutional-nav-bar .nav-main nav > a,
+  .institutional-header .institutional-nav-bar .nav-main .nav-dropdown .nav-parent {
     width: 100% !important;
-
     min-height: 43px !important;
     height: 43px !important;
-
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-
     padding: 0 12px !important;
-
     box-sizing: border-box !important;
-
     border: 0 !important;
     border-bottom: 1px solid #edf1f4 !important;
-
     background: #fff !important;
-
     color: #173f69 !important;
-
     font-size: 11px !important;
     font-weight: 800 !important;
-
     white-space: nowrap !important;
   }
 
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav > a:last-of-type {
-    border-bottom: 0 !important;
-  }
-
-  /*
-   * Active page.
-   */
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav > a.active,
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    .nav-dropdown
-    .nav-parent.active {
+  .institutional-header .institutional-nav-bar .nav-main nav > a.active,
+  .institutional-header .institutional-nav-bar .nav-main .nav-dropdown .nav-parent.active {
     background: #f1f6f9 !important;
     color: #0b2239 !important;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE DROPDOWNS
-     ------------------------------------------------------- */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    .nav-dropdown {
+  .institutional-header .institutional-nav-bar .nav-main .nav-dropdown {
     height: auto !important;
   }
 
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    .dropdown-menu {
+  .institutional-header .institutional-nav-bar .nav-main .dropdown-menu {
     position: static !important;
-
     display: none !important;
-
     width: 100% !important;
     min-width: 0 !important;
-
     opacity: 1 !important;
     visibility: visible !important;
-
     transform: none !important;
-
     box-shadow: none !important;
-
     border: 0 !important;
     border-left: 2px solid #d7ad63 !important;
-
     background: #f8fafb !important;
-
     margin: 0 0 4px !important;
     padding: 0 !important;
-
     box-sizing: border-box !important;
   }
 
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    .nav-dropdown.is-open
-    .dropdown-menu {
+  .institutional-header .institutional-nav-bar .nav-main .nav-dropdown.is-open .dropdown-menu {
     display: block !important;
   }
 
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    .dropdown-menu a {
+  .institutional-header .institutional-nav-bar .nav-main .dropdown-menu a {
     display: flex !important;
-
     width: 100% !important;
     height: 38px !important;
     min-height: 38px !important;
-
     align-items: center !important;
-
     padding: 0 14px 0 17px !important;
-
     box-sizing: border-box !important;
-
     font-size: 10px !important;
-
     color: #173f69 !important;
-
     white-space: nowrap !important;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE JOIN EAC
-     ------------------------------------------------------- */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-cta {
+  .institutional-header .institutional-nav-bar .nav-cta {
     display: flex !important;
-
     width: 100% !important;
-
     min-height: 43px !important;
-
     margin: 8px 0 0 !important;
-
     align-items: center !important;
     justify-content: center !important;
-
     font-size: 10px !important;
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE HERO
-     ------------------------------------------------------- */
+  /* Prevent common page children from creating horizontal overflow. */
+  .institutional-header,
+  .institutional-hero,
+  .hero-overlay,
+  .hero-content,
+  .section,
+  .container,
+  img,
+  video,
+  iframe {
+    max-width: 100% !important;
+  }
 
   .institutional-hero,
   .hero-overlay {
     height: 430px !important;
     min-height: 430px !important;
-  }
-
-  .hero-content {
-    width: 100% !important;
-    height: 100% !important;
+    overflow: hidden !important;
   }
 
   .hero-slide-copy {
-    padding: 38px 15px 58px !important;
     max-width: 100% !important;
+    padding: 38px 15px 58px !important;
   }
 
   .hero-slide-copy h1 {
+    max-width: 100% !important;
     font-size: clamp(31px, 9vw, 42px) !important;
     line-height: .98 !important;
     letter-spacing: -1.5px !important;
-
-    max-width: 100% !important;
-
-    margin: 10px 0 14px !important;
   }
 
   .hero-slide-copy p {
     max-width: 95% !important;
-
     font-size: 10px !important;
     line-height: 1.5 !important;
   }
 
   .hero-actions {
-    display: flex !important;
-
     width: 100% !important;
-
     flex-wrap: nowrap !important;
-
     gap: 7px !important;
-
-    margin-top: 17px !important;
   }
 
   .hero-actions .button {
     min-width: 0 !important;
-    min-height: 40px !important;
-
-    padding: 9px 11px !important;
-
-    font-size: 8px !important;
-
     white-space: nowrap !important;
-  }
-
-
-  /* -------------------------------------------------------
-     MOBILE CONTENT SPACING
-     ------------------------------------------------------- */
-
-  .section {
-    padding: 38px 0 !important;
-  }
-
-  .section-heading {
-    margin-bottom: 20px !important;
-  }
-
-  .section-heading h2 {
-    font-size: 26px !important;
-    line-height: 1.08 !important;
-  }
-
-  .section-heading p {
-    font-size: 10px !important;
-    line-height: 1.6 !important;
-  }
-
-  .page-intro {
-    padding: 34px 0 30px !important;
-  }
-
-  .page-intro h1 {
-    font-size: 32px !important;
-    line-height: 1 !important;
-    letter-spacing: -1.2px !important;
-  }
-
-  .page-intro p {
-    font-size: 10px !important;
-    line-height: 1.6 !important;
-  }
-
-  .project-art {
-    height: 145px !important;
-  }
-
-  .news-art {
-    height: 125px !important;
-  }
-
-  .project-body,
-  .news-body,
-  .opportunity-card {
-    padding: 15px !important;
-  }
-
-  .cta-band {
-    padding: 35px 0 !important;
-  }
-
-  .cta-inner h2 {
-    font-size: 25px !important;
-  }
-
-  .footer-main {
-    padding: 34px 0 !important;
-  }
-
-  /*
-   * Smaller back-to-top button.
-   */
-  .back-to-top {
-    right: 14px !important;
-    bottom: 14px !important;
-
-    width: 40px !important;
-    height: 40px !important;
   }
 }
 
-
-/* =========================================================
-   EXTRA SMALL PHONES
-   ========================================================= */
-
 @media (max-width: 430px) {
-
-  .institutional-header
-    .institutional-brand-row,
-
-  .institutional-header.header-scrolled
-    .institutional-brand-row {
+  .institutional-header .institutional-brand-row,
+  .institutional-header.header-scrolled .institutional-brand-row {
     height: 60px !important;
     min-height: 60px !important;
     max-height: 60px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 
-  .institutional-header
-    .brand-logo {
+  .institutional-header .brand-logo {
     width: 39px !important;
     height: 39px !important;
   }
 
-  .institutional-header
-    .brand span b {
+  .institutional-header .brand span b {
     font-size: 11px !important;
   }
 
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
+  .institutional-header .institutional-nav-bar .nav-main nav.open {
     top: 60px !important;
     left: 8px !important;
     right: 8px !important;
+    max-height: calc(100vh - 70px) !important;
   }
 
   .institutional-hero,
   .hero-overlay {
     height: 410px !important;
     min-height: 410px !important;
-  }
-
-  .hero-slide-copy {
-    padding-top: 34px !important;
-  }
-
-  .hero-slide-copy h1 {
-    font-size: 32px !important;
   }
 
   .section {
@@ -1527,577 +533,12 @@
   }
 }
 
-
-/* =========================================================
-   ACCESSIBILITY / SMOOTHNESS
-   ========================================================= */
-
 @media (prefers-reduced-motion: reduce) {
-
+  .institutional-header,
   .institutional-top,
   .institutional-brand-row,
-  .institutional-nav-bar,
-  .institutional-header {
+  .institutional-nav-bar {
     transition: none !important;
   }
-
-  html {
-    scroll-behavior: auto !important;
-  }
-}
-/* =========================================================
-   EAC FINAL HEADER + MOBILE OVERFLOW FIX
-   Add this at the very bottom of styles.css
-   ========================================================= */
-
-
-/* =========================================================
-   1. REMOVE HORIZONTAL PAGE SCROLL
-   ========================================================= */
-
-html,
-body,
-#root {
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important;
-}
-
-body {
-  margin-right: 0 !important;
-}
-
-
-/* =========================================================
-   2. DESKTOP HEADER SCROLL
-   Prevent layout animation from causing vibration
-   ========================================================= */
-
-@media (min-width: 761px) {
-
-  .institutional-header {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 5000 !important;
-    width: 100% !important;
-
-    /* Prevent browser scroll anchoring from fighting
-       the collapsing header */
-    overflow-anchor: none !important;
-  }
-
-  /*
-   * IMPORTANT:
-   * Do not animate the height/max-height of the upper
-   * header rows. Changing their height on every animation
-   * frame can make a sticky header feel like it vibrates.
-   *
-   * Instead, collapse them quickly and animate opacity.
-   */
-
-  .institutional-header .institutional-top {
-    height: 34px !important;
-    min-height: 34px !important;
-    max-height: 34px !important;
-
-    overflow: hidden !important;
-    opacity: 1 !important;
-
-    transition:
-      opacity 0.25s ease !important;
-  }
-
-  .institutional-header .institutional-brand-row {
-    height: 104px !important;
-    min-height: 104px !important;
-    max-height: 104px !important;
-
-    overflow: hidden !important;
-    opacity: 1 !important;
-
-    transition:
-      opacity 0.25s ease !important;
-  }
-
-
-  /*
-   * When scrolling:
-   * remove the upper rows from the visible header
-   * without animating their height.
-   */
-
-  .institutional-header.header-scrolled .institutional-top {
-    height: 0 !important;
-    min-height: 0 !important;
-    max-height: 0 !important;
-
-    opacity: 0 !important;
-
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-
-    pointer-events: none !important;
-
-    transition:
-      opacity 0.15s ease !important;
-  }
-
-  .institutional-header.header-scrolled .institutional-brand-row {
-    height: 0 !important;
-    min-height: 0 !important;
-    max-height: 0 !important;
-
-    opacity: 0 !important;
-
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-
-    pointer-events: none !important;
-
-    transition:
-      opacity 0.15s ease !important;
-  }
-
-
-  /*
-   * Navigation remains visible.
-   */
-
-  .institutional-header .institutional-nav-bar {
-    display: block !important;
-    position: relative !important;
-
-    width: 100% !important;
-
-    height: 65px !important;
-    min-height: 65px !important;
-
-    background: #123a64 !important;
-
-    z-index: 5001 !important;
-  }
-
-  .institutional-header .institutional-nav-bar .nav-main {
-    height: 65px !important;
-    min-height: 65px !important;
-  }
-
-
-  /*
-   * Scrolled navigation becomes slightly shorter.
-   */
-
-  .institutional-header.header-scrolled .institutional-nav-bar,
-  .institutional-header.header-scrolled
-    .institutional-nav-bar .nav-main {
-    height: 58px !important;
-    min-height: 58px !important;
-  }
-}
-
-
-/* =========================================================
-   3. MOBILE HEADER
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-  html,
-  body,
-  #root {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow-x: hidden !important;
-  }
-
-
-  /* Keep the mobile header at the top */
-
-  .institutional-header {
-    position: sticky !important;
-    top: 0 !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    z-index: 5000 !important;
-
-    overflow: visible !important;
-  }
-
-
-  /* Hide the desktop institutional strip */
-
-  .institutional-header .institutional-top,
-  .institutional-header.header-scrolled
-    .institutional-top {
-    display: none !important;
-  }
-
-
-  /*
-   * Keep the logo/brand row visible on mobile.
-   * It must NOT disappear when scrolling.
-   */
-
-  .institutional-header .institutional-brand-row,
-  .institutional-header.header-scrolled
-    .institutional-brand-row {
-
-    display: flex !important;
-
-    height: 64px !important;
-    min-height: 64px !important;
-    max-height: 64px !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    opacity: 1 !important;
-
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-
-    overflow: hidden !important;
-  }
-
-
-  /*
-   * The navigation bar itself takes no additional
-   * vertical space when the mobile menu is closed.
-   */
-
-  .institutional-header .institutional-nav-bar {
-    display: block !important;
-
-    position: relative !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    height: 0 !important;
-    min-height: 0 !important;
-
-    background: transparent !important;
-
-    overflow: visible !important;
-  }
-
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main {
-
-    height: 0 !important;
-    min-height: 0 !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-
-  /* =======================================================
-     MOBILE MENU BUTTON
-     ======================================================= */
-
-  .institutional-header button {
-    max-width: 100% !important;
-  }
-
-
-  /*
-   * Closed menu
-   */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav {
-    display: none !important;
-  }
-
-
-  /*
-   * OPEN MENU
-   *
-   * The important part:
-   * nav.open is taken out of normal page flow and
-   * displayed as a fixed mobile menu.
-   */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
-
-    display: flex !important;
-
-    position: fixed !important;
-
-    top: 64px !important;
-
-    left: 10px !important;
-    right: 10px !important;
-
-    width: auto !important;
-    max-width: none !important;
-
-    height: auto !important;
-
-    max-height: calc(100vh - 76px) !important;
-
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-
-    flex-direction: column !important;
-
-    padding: 10px !important;
-
-    box-sizing: border-box !important;
-
-    background: #123a64 !important;
-
-    border-radius: 0 0 10px 10px !important;
-
-    z-index: 6000 !important;
-
-    box-shadow:
-      0 10px 30px rgba(0, 0, 0, 0.25) !important;
-  }
-
-
-  /*
-   * Mobile menu links
-   */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open a {
-
-    display: flex !important;
-
-    width: 100% !important;
-
-    min-height: 44px !important;
-
-    box-sizing: border-box !important;
-
-    padding: 12px 14px !important;
-
-    align-items: center !important;
-
-    white-space: normal !important;
-
-    text-align: left !important;
-  }
-
-
-  /*
-   * Mobile dropdown menus
-   */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open
-    .dropdown-menu {
-
-    position: static !important;
-
-    width: 100% !important;
-
-    max-width: 100% !important;
-
-    max-height: none !important;
-
-    overflow: visible !important;
-
-    box-shadow: none !important;
-
-    margin: 4px 0 0 0 !important;
-
-    border-radius: 6px !important;
-  }
-}
-
-
-/* =========================================================
-   4. VERY SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 480px) {
-
-  .institutional-header
-    .institutional-brand-row,
-  .institutional-header.header-scrolled
-    .institutional-brand-row {
-
-    height: 60px !important;
-    min-height: 60px !important;
-    max-height: 60px !important;
-
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-  }
-
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
-
-    top: 60px !important;
-
-    left: 7px !important;
-    right: 7px !important;
-
-    max-height: calc(100vh - 70px) !important;
-  }
-}
-
-
-/* =========================================================
-   5. REDUCE MOBILE HERO OVERFLOW
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-  .hero {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: hidden !important;
-  }
-
-  .hero img {
-    max-width: 100% !important;
-  }
-
-  section {
-    max-width: 100% !important;
-  }
-}
-
-
-/* =========================================================
-   6. ACCESSIBILITY
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .institutional-header .institutional-top,
-  .institutional-header .institutional-brand-row {
-    transition: none !important;
-  }
-
-  html {
-    scroll-behavior: auto !important;
-  }
-}
-/* =========================================================
-   MOBILE: KEEP NAVIGATION AVAILABLE WHILE SCROLLING
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-  /* Keep the mobile brand/header visible */
-  .institutional-header.header-scrolled {
-    position: sticky !important;
-    top: 0 !important;
-  }
-
-  .institutional-header.header-scrolled
-    .institutional-brand-row {
-    display: flex !important;
-
-    height: 64px !important;
-    min-height: 64px !important;
-    max-height: 64px !important;
-
-    opacity: 1 !important;
-
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* Keep the navigation container alive */
-  .institutional-header.header-scrolled
-    .institutional-nav-bar {
-    display: block !important;
-
-    height: 0 !important;
-    min-height: 0 !important;
-
-    position: relative !important;
-
-    overflow: visible !important;
-  }
-
-  .institutional-header.header-scrolled
-    .institutional-nav-bar
-    .nav-main {
-    display: block !important;
-
-    height: 0 !important;
-    min-height: 0 !important;
-  }
-
-  /*
-   * The navigation is hidden only when the menu is closed.
-   * When nav.open is present, it must remain visible.
-   */
-  .institutional-header.header-scrolled
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
-    display: flex !important;
-
-    position: fixed !important;
-
-    top: 64px !important;
-    left: 10px !important;
-    right: 10px !important;
-
-    width: auto !important;
-
-    max-height: calc(100vh - 76px) !important;
-
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-
-    flex-direction: column !important;
-
-    z-index: 6000 !important;
-  }
-}
-
-
-/* Small phones */
-@media (max-width: 480px) {
-
-  .institutional-header.header-scrolled
-    .institutional-brand-row {
-    height: 60px !important;
-    min-height: 60px !important;
-    max-height: 60px !important;
-  }
-
-  .institutional-header.header-scrolled
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
-    top: 60px !important;
-
-    left: 7px !important;
-    right: 7px !important;
-
-    max-height: calc(100vh - 70px) !important;
-  }
+  html { scroll-behavior: auto !important; }
 }
