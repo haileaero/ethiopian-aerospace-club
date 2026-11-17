@@ -252,8 +252,8 @@ function Header() {
         }
       }
     `}</style>
-    <header ref={headerRef} className={`site-header institutional-header ${scrolled ? 'header-scrolled' : ''}`}>
-      <div className="institutional-top">
+    <header ref={headerRef} className={`site-header institutional-header ${scrolled ? 'header-scrolled' : ''}`} style={scrolled ? {height: '58px'} : undefined}>
+      <div className="institutional-top" style={scrolled ? {display: 'none'} : undefined}>
         <div className="container institutional-top-inner">
           <div className="top-affiliation">
             <span>ETHIOPIAN DEFENCE UNIVERSITY</span><i></i>
@@ -266,7 +266,7 @@ function Header() {
         </div>
       </div>
 
-      <div className="container nav institutional-brand-row">
+      <div className="container nav institutional-brand-row" style={scrolled ? {display: 'none'} : undefined}>
         <Brand/>
         <div className="institutional-search-wrap">
           <button className="search-trigger" onClick={toggleSearch} aria-label="Search website">
@@ -282,7 +282,7 @@ function Header() {
         <button className="menu-btn" onClick={()=>setOpen(!open)} aria-label="Toggle menu">{open?<X/>:<Menu/>}</button>
       </div>
 
-      <div className="institutional-nav-bar">
+      <div className="institutional-nav-bar" style={scrolled ? {position: 'fixed', top: 0, left: 0, right: 0, width: '100%', zIndex: 2000} : undefined}>
         <div className="container nav nav-main">
           <nav className={open ? 'open' : ''}>
             <div className="mobile-menu-search">
