@@ -142,11 +142,12 @@ function Header() {
     ['News & Events','/news', [['News & Announcements','/news'], ['Events','/news']]],
     ['Opportunities','/opportunities'],
     ['Membership','/membership'],
+    ['Committee','/committee'],
     ['Members','/members'],
     ['Contact','/contact']
   ];
 
-  const searchable=[['About EAC','/about'],['Technical Divisions','/divisions'],['UAV Laboratory','/uav-lab'],['Projects & Research','/projects'],['Opportunities','/opportunities'],['News & Events','/news'],['Membership','/membership'],['Members','/members'],['Contact','/contact']];
+  const searchable=[['About EAC','/about'],['Technical Divisions','/divisions'],['UAV Laboratory','/uav-lab'],['Projects & Research','/projects'],['Opportunities','/opportunities'],['News & Events','/news'],['Committee','/committee'],['Members','/members'],['Membership','/membership'],['Contact','/contact']];
   const results=searchable.filter(([t])=>t.toLowerCase().includes(query.toLowerCase()));
 
   useEffect(()=>{
@@ -383,49 +384,6 @@ function News(){return <><PageIntro eyebrow="NEWS & EVENTS" title="A place for c
 function useFormSubmit(){const [state,setState]=useState({loading:false,success:false,error:''});async function submit(e){e.preventDefault();const form=e.currentTarget;const data=Object.fromEntries(new FormData(form).entries());if(!contactEmail){setState({loading:false,success:false,error:'Email delivery is not configured yet. Add VITE_CONTACT_EMAIL to your deployment environment and redeploy.'});return;}setState({loading:true,success:false,error:''});try{const res=await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(contactEmail)}`,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...data,_subject:`EAC website: ${data.formType||'New message'}`})});if(!res.ok)throw new Error('Submission failed. Please try again or contact the club by email.');setState({loading:false,success:true,error:''});form.reset();}catch(err){setState({loading:false,success:false,error:err.message||'Something went wrong.'});}}return {state,submit};}
 function FormFeedback({state}){return state.success?<div className="form-success"><CheckCircle2/> Your message has been submitted. Thank you.</div>:state.error?<div className="form-error">{state.error}</div>:null}
 
-const memberDirectoryStyles=`
-.member-directory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.member-directory-card{position:relative;display:flex;align-items:center;gap:18px;padding:22px;border:1px solid rgba(20,45,70,.12);border-radius:18px;background:var(--surface,#fff);box-shadow:0 12px 35px rgba(15,35,55,.06);text-decoration:none;color:inherit;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-.member-directory-card:hover{transform:translateY(-3px);box-shadow:0 18px 45px rgba(15,35,55,.11);border-color:rgba(20,45,70,.25)}
-.member-directory-card h3{margin:5px 0 6px;font-size:1.12rem}.member-directory-card p{margin:0 28px 0 0;line-height:1.5}.member-directory-card>svg{margin-left:auto;flex:0 0 auto}.member-directory-avatar,.member-profile-avatar{display:grid;place-items:center;flex:0 0 auto;border-radius:50%;font-weight:800;letter-spacing:.04em;background:linear-gradient(135deg,#0d3b5e,#c59a3d);color:#fff}.member-directory-avatar{width:62px;height:62px;font-size:1.05rem}.member-directory-meta{display:inline-block;margin-top:8px;font-size:.82rem;font-weight:700;opacity:.7}.member-profile-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:30px;align-items:start}.member-profile-card{padding:30px;border:1px solid rgba(20,45,70,.12);border-radius:22px;background:var(--surface,#fff);box-shadow:0 14px 40px rgba(15,35,55,.07)}.member-profile-avatar{width:120px;height:120px;font-size:2rem;margin-bottom:22px}.member-profile-card h2{margin:8px 0 4px}.member-profile-card p{line-height:1.6}.member-handle{opacity:.65}.member-profile-content{padding:8px 0}.member-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.member-info-grid>div{padding:20px;border:1px solid rgba(20,45,70,.1);border-radius:16px;background:var(--surface,#fff)}.member-info-grid span{display:block;font-size:.72rem;font-weight:800;letter-spacing:.1em;opacity:.62;margin-bottom:7px}.member-info-grid strong{font-size:1rem;line-height:1.5}.member-profile-section{margin:22px 0;padding:24px;border:1px solid rgba(20,45,70,.1);border-radius:18px;background:var(--surface,#fff)}.member-profile-section p{line-height:1.8;white-space:pre-line}@media(max-width:900px){.member-directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.member-profile-layout{grid-template-columns:1fr}}@media(max-width:620px){.member-directory-grid{grid-template-columns:1fr}.member-directory-card{padding:18px}.member-info-grid{grid-template-columns:1fr}.member-profile-card{padding:22px}.member-profile-avatar{width:92px;height:92px;font-size:1.6rem}}
-`;
-
-function Members(){
-  const [items,setItems]=useState([]);
-  const [loading,setLoading]=useState(true);
-  useEffect(()=>{
-    supabase.from('public_member_profiles').select('id,full_name,username,membership_type,affiliation,department,year,profession,interests,preferred_contribution,created_at').order('full_name',{ascending:true}).then(({data,error})=>{
-      if(error){console.error('Member directory load error:',error);setItems([])}else setItems(data||[]);
-      setLoading(false);
-    });
-  },[]);
-  return <><><style>{memberDirectoryStyles}</style><PageIntro eyebrow="EAC MEMBERS" title="Meet the EAC community." text="Explore approved member profiles and the people building the Ethiopian Aerospace Club community."/><section className="section"><div className="container">
-    {loading?<div className="empty-state compact"><Users size={36}/><h2>Loading member profiles…</h2></div>:items.length?<div className="member-directory-grid">{items.map(m=><Link className="member-directory-card" to={`/members/${m.id}`} key={m.id}>
-      <div className="member-directory-avatar">{(m.full_name||'EAC Member').split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</div>
-      <div><div className="eyebrow">{m.membership_type||'MEMBER'}</div><h3>{m.full_name||'EAC Member'}</h3><p>{m.profession||m.department||m.affiliation||'EAC member'}</p>{m.year&&<span className="member-directory-meta">{m.year}</span>}</div>
-      <ArrowUpRight size={18}/>
-    </Link>)}</div>:<div className="empty-state compact"><Users size={36}/><h2>No public member profiles yet.</h2><p>Approved member profiles will appear here when they are available.</p></div>}
-  </div></section><CTA/></>;
-}
-
-function MemberProfile(){
-  const {id}=useParams();
-  const [member,setMember]=useState(null);
-  const [loading,setLoading]=useState(true);
-  useEffect(()=>{
-    supabase.from('public_member_profiles').select('id,full_name,username,membership_type,affiliation,department,year,profession,interests,preferred_contribution,created_at').eq('id',id).maybeSingle().then(({data,error})=>{
-      if(error) console.error('Member profile load error:',error);
-      setMember(data||null);setLoading(false);
-    });
-  },[id]);
-  if(loading)return <section className="section"><div className="container"><div className="empty-state compact"><Users size={36}/><h2>Loading member profile…</h2></div></div></section>;
-  if(!member)return <PageIntro eyebrow="MEMBER PROFILE" title="Profile not found." text="This member profile is not currently available for public viewing."/>;
-  return <><style>{memberDirectoryStyles}</style><PageIntro eyebrow="MEMBER PROFILE" title={member.full_name||'EAC Member'} text={member.profession||member.membership_type||'EAC member'}/><section className="section"><div className="container member-profile-layout">
-    <aside className="member-profile-card"><div className="member-profile-avatar">{(member.full_name||'EAC Member').split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</div><div className="eyebrow">{member.membership_type||'MEMBER'}</div><h2>{member.full_name}</h2>{member.username&&<p className="member-handle">@{member.username}</p>}{member.department&&<p><strong>Department</strong><br/>{member.department}</p>}{member.year&&<p><strong>Year / level</strong><br/>{member.year}</p>}</aside>
-    <div className="member-profile-content"><div className="member-info-grid">{member.affiliation&&<div><span>AFFILIATION</span><strong>{member.affiliation}</strong></div>}{member.profession&&<div><span>PROFESSION / ROLE</span><strong>{member.profession}</strong></div>}{member.department&&<div><span>DEPARTMENT</span><strong>{member.department}</strong></div>}{member.year&&<div><span>YEAR / LEVEL</span><strong>{member.year}</strong></div>}</div>{member.interests&&<div className="member-profile-section"><div className="eyebrow">INTERESTS</div><p>{member.interests}</p></div>}{member.preferred_contribution&&<div className="member-profile-section"><div className="eyebrow">PREFERRED CONTRIBUTION</div><p>{member.preferred_contribution}</p></div>}<Link className="button button-primary" to="/members">Back to members <ArrowRight size={16}/></Link></div>
-  </div></section><CTA/></>;
-}
-
 function Membership(){const {state,submit}=useFormSubmit();return <><PageIntro eyebrow="MEMBERSHIP" title="Bring your curiosity. Build what comes next." text="Membership is intended for learners and aerospace enthusiasts who want to participate in technical learning, collaboration and innovation."/><section className="section"><div className="container form-layout"><div className="form-aside"><div className="eyebrow">WHY JOIN EAC?</div><h2>Learn with a community. Grow through practice.</h2><ul className="check-list"><li><CheckCircle2/> Participate in technical discussions and seminars.</li><li><CheckCircle2/> Explore engineering projects and working groups.</li><li><CheckCircle2/> Develop research and communication skills.</li><li><CheckCircle2/> Discover learning and career opportunities.</li></ul><Notice icon={Users}><strong>Membership status</strong><p>This form collects expressions of interest. Membership eligibility, approval and registration procedures should follow university rules and the club's approved constitution.</p></Notice></div><form className="form-card" onSubmit={submit}><input type="hidden" name="formType" value="Membership application"/><h3>Membership interest form</h3><p>Complete the fields below. Required fields are marked.</p><div className="form-row"><label>Full name *<input required name="Full name" placeholder="Your full name"/></label><label>Email address *<input required type="email" name="Email" placeholder="name@example.com"/></label></div><div className="form-row"><label>Institution / organization<input name="Institution" placeholder="University or organization"/></label><label>Department / field of study<input name="Department" placeholder="e.g. Aerospace Engineering"/></label></div><div className="form-row"><label>Study / professional level<select name="Level" defaultValue=""><option value="" disabled>Select one</option><option>Undergraduate student</option><option>Postgraduate student</option><option>Academic staff</option><option>Professional</option><option>Other</option></select></label><label>Area of interest<select name="Interest" defaultValue=""><option value="" disabled>Select an area</option>{divisions.map(d=><option key={d.title}>{d.title}</option>)}<option>Multiple areas</option></select></label></div><label>Why would you like to join?<textarea name="Motivation" rows="4" placeholder="Tell us briefly about your interests..."/></label><label className="consent"><input required type="checkbox" name="Consent" value="I agree to be contacted about EAC membership"/> I agree to be contacted about this membership enquiry. *</label><button className="button button-primary" disabled={state.loading}>{state.loading?'Submitting…':'Submit interest form'} <Send size={16}/></button><FormFeedback state={state}/><p className="form-footnote">Do not submit sensitive personal information. Member data should be handled according to applicable university requirements.</p></form></div></section></>}
 
 function Contact(){const {state,submit}=useFormSubmit();return <><PageIntro eyebrow="CONTACT" title="Let's connect around aerospace." text="Have a question, idea, collaboration proposal or interest in the club? Send a message."/><section className="section"><div className="container contact-layout"><div className="contact-info"><div className="eyebrow">GET IN TOUCH</div><h2>Start a conversation.</h2><p>Use the form to contact the club. Official contact details can be added here after they are approved and established.</p><div className="contact-item"><MapPin/><div><strong>Proposed institutional affiliation</strong><span>Ethiopian Defence University<br/>College of Engineering<br/>Aerospace Engineering Department</span></div></div><div className="contact-item"><Mail/><div><strong>Email</strong><span>{contactEmail||'Club contact email to be configured'}</span></div></div><div className="contact-item"><Globe2/><div><strong>Online presence</strong><span>Official website and social channels can be added after institutional approval.</span></div></div><div className="contact-note">Please do not treat this demonstration site as an official university communication channel until it has been approved.</div></div><form className="form-card" onSubmit={submit}><input type="hidden" name="formType" value="Contact message"/><h3>Send a message</h3><div className="form-row"><label>Your name *<input required name="Name" placeholder="Your name"/></label><label>Email address *<input required type="email" name="Email" placeholder="name@example.com"/></label></div><label>Subject<input name="Subject" placeholder="How can we help?"/></label><label>Message *<textarea required name="Message" rows="6" placeholder="Write your message..."/></label><button className="button button-primary" disabled={state.loading}>{state.loading?'Sending…':'Send message'} <ArrowRight size={16}/></button><FormFeedback state={state}/></form></div></section></>}
@@ -434,6 +392,7 @@ function Admin(){
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
   const [message,setMessage]=useState('');
+  const [uploading,setUploading]=useState('');
   const [data,setData]=useState({
     hero:[],committee:[],news:[],events:[],opportunities:[],projects:[],uav:[],equipment:[],gallery:[],documents:[],social:[],site:{}
   });
@@ -485,18 +444,84 @@ function Admin(){
     if(result.error)notify(`Save failed: ${result.error.message}`);else{await loadAll();notify('Site settings saved.')}
     setSaving(false);
   };
-  const field=(key,index,label,name,type='text')=><label>{label}<input type={type} value={data[key][index][name]??''} onChange={e=>update(key,index,name,type==='checkbox'?e.target.checked:e.target.value)}/></label>;
-  const area=(key,index,label,name,rows=3)=><label>{label}<textarea rows={rows} value={data[key][index][name]??''} onChange={e=>update(key,index,name,e.target.value)}/></label>;
+  const field=(key,index,label,name,type='text')=><label>{label}<input type={type} value={data[key][index][name]??''} onChange={e=>update(key,index,name,e.target.value)}/></label>;
+  const area=(key,index,label,name,rows=3)=><label className={rows>=4?'admin-field-wide':''}>{label}<textarea rows={rows} value={data[key][index][name]??''} onChange={e=>update(key,index,name,e.target.value)}/></label>;
   const select=(key,index,label,name,options)=><label>{label}<select value={String(data[key][index][name]??options[0])} onChange={e=>update(key,index,name,(options.includes(true)||options.includes(false))?e.target.value==='true':e.target.value)}>{options.map(o=><option key={String(o)} value={String(o)}>{String(o)}</option>)}</select></label>;
-  const generic=(key,title,eyebrow,fields,areas=[],selects=[])=> <div><div className="admin-section-title"><div><div className="eyebrow">{eyebrow}</div><h2>{title}</h2><p>Manage approved public content from Supabase.</p></div><button className="button button-primary" onClick={()=>add(key)}>+ Add item</button></div>{data[key].length===0&&<div className="admin-empty"><FileText size={30}/><h3>No items yet</h3><p>Add the first item to publish approved content.</p></div>}{data[key].map((row,i)=><div className="admin-card" key={row.id||`new-${i}`}><div className="admin-card-head"><div><span>ITEM {String(i+1).padStart(2,'0')}</span><h3>{row.title||row.name||row.platform||'New item'}</h3></div><div><button className="button button-primary" onClick={()=>saveRow(key,i)} disabled={saving}>Save</button>{row.id&&<button className="admin-remove" onClick={()=>remove(key,i)}>Remove</button>}</div></div><div className="admin-fields admin-settings-grid">{fields.map(([label,name,type])=>field(key,i,label,name,type))}{selects.map(([label,name,opts])=>select(key,i,label,name,opts))}{areas.map(([label,name,rows])=>area(key,i,label,name,rows))}<label className="consent"><input type="checkbox" checked={Boolean(row.published)} onChange={e=>update(key,i,'published',e.target.checked)}/> Published</label></div></div>)}</div>;
+  const uploadImage=async(key,index,name,file)=>{
+    if(!file)return;
+    if(!file.type.startsWith('image/')){notify('Please select an image file.');return;}
+    if(file.size>8*1024*1024){notify('Image must be 8 MB or smaller.');return;}
+    const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+    const safeBase=file.name.replace(/[^a-zA-Z0-9_-]/g,'-').replace(/-+/g,'-').slice(0,60)||'image';
+    const path=`${key}/${Date.now()}-${safeBase}.${ext}`;
+    setUploading(`${key}-${index}-${name}`);
+    try{
+      const {error}=await supabase.storage.from('eac-media').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});
+      if(error)throw error;
+      const {data:publicData}=supabase.storage.from('eac-media').getPublicUrl(path);
+      update(key,index,name,publicData.publicUrl);
+      notify('Image uploaded successfully. Click Save to publish it.');
+    }catch(error){notify(`Image upload failed: ${error.message}`)}
+    finally{setUploading('')}
+  };
+  const imageField=(key,index,label,name)=> <div className="admin-upload-field"><span className="admin-upload-label">{label}</span><div className="admin-upload-box"><label className="admin-upload-button"><span>{uploading===`${key}-${index}-${name}`?'Uploading…':'Choose image'}</span><input type="file" accept="image/*" onChange={e=>uploadImage(key,index,name,e.target.files?.[0])} disabled={uploading!==''}/></label>{data[key][index][name]?<div className="admin-upload-preview"><img src={data[key][index][name]} alt="Selected"/><div><small>Selected image</small><button type="button" className="admin-upload-remove" onClick={()=>update(key,index,name,'')}>Remove image</button></div></div>:<small className="admin-upload-hint">JPG, PNG, WEBP or other supported image • Max 8 MB</small>}</div></div>;
+  const uploadDocument=async(key,index,name,file)=>{
+    if(!file)return;
+    const allowed=['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','text/plain'];
+    const ext=(file.name.split('.').pop()||'').toLowerCase();
+    const allowedExt=['pdf','doc','docx','xls','xlsx','ppt','pptx','txt'];
+    if(!allowed.includes(file.type)&&!allowedExt.includes(ext)){notify('Please select a supported document file.');return;}
+    if(file.size>15*1024*1024){notify('Document must be 15 MB or smaller.');return;}
+    const safeBase=file.name.replace(/[^a-zA-Z0-9_-]/g,'-').replace(/-+/g,'-').slice(0,70)||'document';
+    const path=`documents/${Date.now()}-${safeBase}.${ext||'bin'}`;
+    setUploading(`${key}-${index}-${name}`);
+    try{
+      const {error}=await supabase.storage.from('eac-media').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type||'application/octet-stream'});
+      if(error)throw error;
+      const {data:publicData}=supabase.storage.from('eac-media').getPublicUrl(path);
+      update(key,index,name,publicData.publicUrl);
+      notify('Document uploaded successfully. Click Save to publish it.');
+    }catch(error){notify(`Document upload failed: ${error.message}`)}
+    finally{setUploading('')}
+  };
+  const documentField=(key,index,label,name)=> <div className="admin-upload-field"><span className="admin-upload-label">{label}</span><div className="admin-upload-box"><label className="admin-upload-button"><span>{uploading===`${key}-${index}-${name}`?'Uploading…':'Choose document'}</span><input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt" onChange={e=>uploadDocument(key,index,name,e.target.files?.[0])} disabled={uploading!==''}/></label>{data[key][index][name]?<div className="admin-file-selected"><FileText size={20}/><div><small>Selected document</small><span title={data[key][index][name]}>{data[key][index][name].split('/').pop()}</span></div><button type="button" className="admin-upload-remove" onClick={()=>update(key,index,name,'')}>Remove file</button></div>:<small className="admin-upload-hint">PDF, Word, Excel, PowerPoint or TXT • Max 15 MB</small>}</div></div>;
+  const renderField=(key,index,def)=>def[1]==='image_url'||def[1]==='photo_url'?imageField(key,index,def[0],def[1]):def[1]==='file_url'?documentField(key,index,def[0],def[1]):field(key,index,...def);
+  const generic=(key,title,eyebrow,fields,areas=[],selects=[])=> <div><div className="admin-section-title"><div><div className="eyebrow">{eyebrow}</div><h2>{title}</h2><p>Manage approved public content from Supabase.</p></div><button className="button button-primary" onClick={()=>add(key)}>+ Add item</button></div>{data[key].length===0&&<div className="admin-empty"><FileText size={30}/><h3>No items yet</h3><p>Add the first item to publish approved content.</p></div>}{data[key].map((row,i)=><div className="admin-card admin-editor-card" key={row.id||`new-${i}`}><div className="admin-card-head"><div><span>ITEM {String(i+1).padStart(2,'0')}</span><h3>{row.title||row.name||row.platform||'New item'}</h3></div><div className="admin-card-actions"><button className="button button-primary" onClick={()=>saveRow(key,i)} disabled={saving}>Save</button>{row.id&&<button className="admin-remove" onClick={()=>remove(key,i)}>Remove</button>}</div></div><div className="admin-fields admin-settings-grid">{fields.map((def,j)=><React.Fragment key={`${def[1]}-${j}`}>{renderField(key,i,def)}</React.Fragment>)}{selects.map(([label,name,opts])=>select(key,i,label,name,opts))}{areas.map(([label,name,rows])=>area(key,i,label,name,rows))}<label className="consent"><input type="checkbox" checked={Boolean(row.published)} onChange={e=>update(key,i,'published',e.target.checked)}/> Published</label></div></div>)}</div>;
+  const committeeEditor=()=> <div><div className="admin-section-title"><div><div className="eyebrow">PEOPLE</div><h2>Committee profiles</h2><p>Add students, staff and advisors using only the fields relevant to their member type.</p></div><button className="button button-primary" onClick={()=>add('committee')}>+ Add member</button></div>{data.committee.length===0&&<div className="admin-empty"><Users size={30}/><h3>No committee members yet</h3><p>Add the first approved member profile.</p></div>}{data.committee.map((row,i)=><div className="admin-card admin-editor-card" key={row.id||`new-${i}`}><div className="admin-card-head"><div><span>MEMBER {String(i+1).padStart(2,'0')}</span><h3>{row.name||'New committee member'}</h3></div><div className="admin-card-actions"><button className="button button-primary" onClick={()=>saveRow('committee',i)} disabled={saving}>Save</button>{row.id&&<button className="admin-remove" onClick={()=>remove('committee',i)}>Remove</button>}</div></div><div className="admin-fields admin-settings-grid"><label>Full name<input value={row.name??''} onChange={e=>update('committee',i,'name',e.target.value)}/></label><label>Member type<select value={row.member_type||'Student'} onChange={e=>{const v=e.target.value;update('committee',i,'member_type',v);if(v!=='Student')update('committee',i,'year','')}}>{['Student','Staff','Lecturer','Advisor','Executive/Committee','Other'].map(o=><option key={o}>{o}</option>)}</select></label><label>Position / title<input value={row.position??''} onChange={e=>update('committee',i,'position',e.target.value)}/></label><label>Department<input value={row.department??''} onChange={e=>update('committee',i,'department',e.target.value)}/></label><label>Technical / professional role<input value={row.technical_role??''} onChange={e=>update('committee',i,'technical_role',e.target.value)}/></label>{row.member_type==='Student'&&<label>Year / level<input value={row.year??''} onChange={e=>update('committee',i,'year',e.target.value)}/></label>}<label>Status<input value={row.status??'Active'} onChange={e=>update('committee',i,'status',e.target.value)}/></label><label>Email<input type="email" value={row.email??''} onChange={e=>update('committee',i,'email',e.target.value)}/></label><label>Phone<input value={row.phone??''} onChange={e=>update('committee',i,'phone',e.target.value)}/></label><label>LinkedIn URL<input value={row.linkedin??''} onChange={e=>update('committee',i,'linkedin',e.target.value)}/></label><label>Telegram URL<input value={row.telegram??''} onChange={e=>update('committee',i,'telegram',e.target.value)}/></label>{imageField('committee',i,'Photo','photo_url')}<label>Display order<input type="number" value={row.sort_order??0} onChange={e=>update('committee',i,'sort_order',Number(e.target.value))}/></label><label className="admin-field-wide">Short biography<textarea rows={4} value={row.bio??''} onChange={e=>update('committee',i,'bio',e.target.value)}/></label><label className="consent"><input type="checkbox" checked={Boolean(row.published)} onChange={e=>update('committee',i,'published',e.target.checked)}/> Published</label></div></div>)}</div>;
   const nav=[['overview','Overview'],['hero','Hero & banners'],['committee','Committee'],['news','News & announcements'],['events','Events'],['opportunities','Opportunities'],['projects','Projects'],['uav','UAV lab'],['equipment','Equipment & facilities'],['gallery','Gallery'],['documents','Documents'],['settings','Site settings'],['social','Social links']];
   if(loading)return <section className="section"><div className="container"><div className="admin-empty"><Settings2 size={30}/><h3>Loading EAC Control Center…</h3></div></div></section>;
-  return <><section className="admin-dashboard-head"><div className="container"><div><div className="eyebrow eyebrow-gold">EAC CONTROL CENTER</div><h1>Website administration</h1><p>Manage approved EAC content, presentation and institutional information from one place.</p></div><div className="admin-head-actions"><Link className="button button-light" to="/">View live website <ExternalLink size={15}/></Link><button className="button button-gold" onClick={loadAll} disabled={saving}>Refresh content</button></div></div></section>
+  return <><style>{`
+    .admin-editor-card{overflow:hidden}
+    .admin-editor-card .admin-card-head{gap:18px;align-items:center}
+    .admin-card-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .admin-editor-card .admin-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 20px;align-items:start}
+    .admin-editor-card .admin-fields>label,.admin-editor-card .admin-upload-field{min-width:0}
+    .admin-editor-card .admin-fields input,.admin-editor-card .admin-fields select,.admin-editor-card .admin-fields textarea{width:100%;box-sizing:border-box}
+    .admin-field-wide{grid-column:1/-1}
+    .admin-upload-field{display:flex;flex-direction:column;gap:7px}
+    .admin-upload-label{font-weight:700;font-size:.78rem;letter-spacing:.02em}
+    .admin-upload-box{border:1px solid #d7e0e8;border-radius:10px;background:#f8fafc;padding:10px}
+    .admin-upload-button{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:8px;background:#123f69;color:#fff;font-weight:700;cursor:pointer;position:relative;overflow:hidden}
+    .admin-upload-button input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;padding:0;border:0}
+    .admin-upload-preview{margin-top:10px;display:flex;align-items:center;gap:12px;padding:8px;background:#fff;border:1px solid #e1e7ed;border-radius:8px}
+    .admin-upload-preview img{width:72px;height:72px;object-fit:cover;border-radius:7px;display:block}
+    .admin-upload-preview small{display:block;color:#667789;margin-bottom:5px}
+    .admin-upload-remove{border:0;background:transparent;color:#b33a32;padding:0;font-weight:700;cursor:pointer}
+    .admin-upload-hint{display:block;color:#718096;font-size:.75rem;line-height:1.4;margin-top:8px}
+    .admin-file-selected{margin-top:10px;display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border:1px solid #e1e7ed;border-radius:8px;min-width:0}
+    .admin-file-selected svg{flex:0 0 auto;color:#123f69}
+    .admin-file-selected>div{min-width:0;flex:1}
+    .admin-file-selected small{display:block;color:#667789;margin-bottom:3px}
+    .admin-file-selected span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;font-weight:600;color:#1d2d3d}
+    .admin-file-selected .admin-upload-remove{flex:0 0 auto}
+    @media(max-width:900px){.admin-editor-card .admin-fields{grid-template-columns:1fr}.admin-field-wide{grid-column:auto}.admin-card-actions{width:100%}}
+    @media(max-width:640px){.admin-editor-card .admin-card-head{align-items:flex-start;flex-direction:column}.admin-card-actions{width:100%}.admin-card-actions .button,.admin-card-actions .admin-remove{min-height:42px}.admin-upload-preview img{width:64px;height:64px}}
+  `}</style><section className="admin-dashboard-head"><div className="container"><div><div className="eyebrow eyebrow-gold">EAC CONTROL CENTER</div><h1>Website administration</h1><p>Manage approved EAC content, presentation and institutional information from one place.</p></div><div className="admin-head-actions"><Link className="button button-light" to="/">View live website <ExternalLink size={15}/></Link><button className="button button-gold" onClick={loadAll} disabled={saving}>Refresh content</button></div></div></section>
   <section className="section admin-section"><div className="container admin-layout"><aside className="admin-sidebar"><div className="admin-profile"><div className="admin-avatar"><Settings2 size={21}/></div><div><strong>EAC Administrator</strong><span>Supabase content management</span></div></div><div className="admin-nav">{nav.map(([id,label])=><button key={id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{label}<ChevronRight size={15}/></button>)}</div><div className="admin-side-note"><ShieldCheck size={17}/><span>Only publish information that has been verified and approved for the club website.</span></div></aside>
   <div className="admin-workspace">{message&&<div className="form-success">{message}</div>}
   {tab==='overview'&&<><div className="admin-welcome"><div><div className="eyebrow">CONTROL CENTER</div><h2>Good to see you.</h2><p>All CMS records are stored in Supabase and can be published for every visitor.</p></div><div className="admin-status"><span></span>Secure account active</div></div><div className="admin-stat-grid">{[['HERO SLIDES',data.hero.length],['COMMITTEE',data.committee.length],['NEWS',data.news.length],['EVENTS',data.events.length],['PROJECTS',data.projects.length],['GALLERY',data.gallery.length],['DOCUMENTS',data.documents.length],['STATUS','READY']].map(([a,b])=><div key={a}><span>{a}</span><strong>{b}</strong><p>Supabase records</p></div>)}</div></>}
   {tab==='hero'&&generic('hero','Hero & banners','HOMEPAGE',[['Small label','label'],['Headline','title'],['Image URL','image_url'],['Display order','sort_order','number']],[],[['Published','published',['true','false']]])}
-  {tab==='committee'&&generic('committee','Committee profiles','PEOPLE',[['Full name','name'],['Position / title','position'],['Department','department'],['Technical / professional role','technical_role'],['Year / level','year'],['Status','status'],['Email','email'],['Phone','phone'],['LinkedIn URL','linkedin'],['Telegram URL','telegram'],['Photo URL','photo_url'],['Display order','sort_order','number']], [['Short biography','bio',4]], [['Member type','member_type',['Student','Staff','Lecturer','Advisor','Executive/Committee','Other']]])}
+  {tab==='committee'&&committeeEditor()}
   {tab==='news'&&generic('news','News & announcements','PUBLICATION',[['Title','title'],['Type','type'],['Image URL','image_url'],['Author / publisher','author'],['Published date/time','published_at','datetime-local'],['Display order','sort_order','number']], [['Summary','summary',2],['Full content','content',6]], [['Publication status','published',['true','false']],['Featured','featured',['true','false']]])}
   {tab==='events'&&generic('events','Events','CALENDAR',[['Title','title'],['Type','type'],['Image URL','image_url'],['Event date','event_date','date'],['Start time','start_time','time'],['End time','end_time','time'],['Venue','venue'],['Location','location'],['Registration URL','registration_url'],['Contact','contact']], [['Summary','summary',2],['Description','description',5]], [['Published','published',['true','false']],['Featured','featured',['true','false']]])}
   {tab==='opportunities'&&generic('opportunities','Opportunities','OPPORTUNITIES',[['Title','title'],['Type','type'],['Image URL','image_url'],['Deadline','deadline','date'],['Organization','organization'],['Location','location'],['Source URL','source_url']], [['Summary','summary',2],['Description','description',5],['Eligibility','eligibility',3]], [['Published','published',['true','false']],['Featured','featured',['true','false']]])}
@@ -526,6 +551,52 @@ function Equipment(){
   return <><PageIntro eyebrow="EQUIPMENT & FACILITIES" title="EAC equipment and facilities." text="Approved equipment, laboratory resources and facilities available to support EAC activities."/><section className="section"><div className="container">{items.length?<div className="feature-grid">{items.map(x=><article key={x.id}><span className="feature-icon"><Wrench/></span><div><div className="eyebrow">{x.category||'EQUIPMENT'}</div><h3>{x.name}</h3><p>{x.description||''}</p><div className="project-meta"><span>{x.status||'Status not specified'}</span><span>{x.quantity||1} • {x.location||''}</span></div></div></article>)}</div>:<div className="empty-state compact"><Wrench size={36}/><h2>Equipment records will appear here.</h2></div>}</div></section><CTA/></>;
 }
 
+function PublicCommittee(){
+  const [items,setItems]=useState([]);
+  useEffect(()=>{supabase.from('committee_members').select('id,name,member_type,position,photo_url,sort_order').eq('published',true).order('sort_order',{ascending:true}).order('name',{ascending:true}).then(({data,error})=>{if(!error)setItems(data||[])})},[]);
+  return <><PageIntro eyebrow="EAC COMMITTEE" title="Meet the Ethiopian Aerospace Club committee." text="The EAC leadership and committee members responsible for guiding the club's activities."/><section className="section"><div className="container"><div className="public-people-grid">{items.length?items.map(x=><article className="public-person-card" key={x.id}><div className="public-person-photo">{x.photo_url?<img src={x.photo_url} alt={x.name||'EAC committee member'}/>:<span>{(x.name||'EAC').split(' ').map(v=>v[0]).slice(0,2).join('').toUpperCase()}</span>}</div><div className="public-person-info"><h3>{x.name}</h3><p>{x.position||x.member_type||'EAC Committee Member'}</p></div></article>):<div className="empty-state compact"><Users size={36}/><h2>Committee profiles will appear here.</h2><p>Approved committee members will be published by the EAC.</p></div>}</div></div></section><CTA/></>;
+}
+
+function PublicMembers(){
+  const [items,setItems]=useState([]); const [query,setQuery]=useState('');
+  useEffect(()=>{supabase.from('public_member_profiles').select('id,full_name,username,membership_type,photo_url,created_at').order('full_name',{ascending:true}).then(({data,error})=>{if(!error)setItems(data||[])})},[]);
+  const filtered=items.filter(x=>`${x.full_name||''} ${x.username||''} ${x.membership_type||''}`.toLowerCase().includes(query.toLowerCase()));
+  return <><PageIntro eyebrow="EAC MEMBERS" title="EAC member directory." text="Meet members of the Ethiopian Aerospace Club. Public profiles show only information approved for publication."/><section className="section"><div className="container"><div className="public-members-toolbar"><div><div className="eyebrow">MEMBER DIRECTORY</div><h2>{items.length} member{items.length===1?'':'s'}</h2></div><label className="public-member-search"><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search members..."/></label></div>{filtered.length?<div className="public-people-grid">{filtered.map(x=><Link className="public-person-card public-member-card" to={`/members/${x.id}`} key={x.id}><div className="public-person-photo">{x.photo_url?<img src={x.photo_url} alt={x.full_name||'EAC member'}/>:<span>{(x.full_name||'EAC').split(' ').map(v=>v[0]).slice(0,2).join('').toUpperCase()}</span>}</div><div className="public-person-info"><h3>{x.full_name||'EAC Member'}</h3><p>{x.membership_type||'Member'}</p></div></Link>)}</div>:<div className="empty-state compact"><Users size={36}/><h2>No members found.</h2><p>Try another name or search term.</p></div>}</div></section><CTA/></>;
+}
+
+function PublicMemberProfile(){
+  const {id}=useParams(); const [member,setMember]=useState(null); const [loading,setLoading]=useState(true);
+  useEffect(()=>{supabase.from('public_member_profiles').select('id,full_name,username,membership_type,affiliation,department,year,profession,interests,preferred_contribution,photo_url,created_at').eq('id',id).maybeSingle().then(({data,error})=>{if(!error)setMember(data||null);setLoading(false)})},[id]);
+  if(loading)return <section className="section"><div className="container"><div className="empty-state compact"><Users size={36}/><h2>Loading member profile...</h2></div></div></section>;
+  if(!member)return <NotFound/>;
+  return <><PageIntro eyebrow="MEMBER PROFILE" title={member.full_name||'EAC Member'} text="Public member profile."/><section className="section"><div className="container"><div className="public-profile-card"><div className="public-profile-photo">{member.photo_url?<img src={member.photo_url} alt={member.full_name||'EAC member'}/>:<span>{(member.full_name||'EAC').split(' ').map(v=>v[0]).slice(0,2).join('').toUpperCase()}</span>}</div><div className="public-profile-body"><div className="eyebrow">{member.membership_type||'MEMBER'}</div><h2>{member.full_name}</h2>{member.username&&<p>@{member.username}</p>}<div className="profile-lines">{[['Affiliation',member.affiliation],['Department',member.department],['Year / level',member.year],['Profession / role',member.profession],['Interests',member.interests],['Preferred contribution',member.preferred_contribution]].filter(([,v])=>v).map(([label,value])=><div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div><Link className="text-link" to="/members">← Back to members</Link></div></div></div></section><CTA/></>;
+}
+
+<style>{`
+    .public-people-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+    .public-person-card{display:block;background:#fff;border:1px solid #dfe7ee;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px rgba(15,47,73,.06);text-decoration:none;color:inherit;transition:transform .2s ease,box-shadow .2s ease}
+    .public-person-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(15,47,73,.12)}
+    .public-person-photo{height:260px;background:#edf3f7;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .public-person-photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .public-person-photo span{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#123f69;color:#fff;font-size:1.6rem;font-weight:800}
+    .public-person-info{padding:18px 18px 20px}
+    .public-person-info h3{margin:0 0 7px;font-size:1.08rem}
+    .public-person-info p{margin:0;color:#657687;font-weight:600}
+    .public-member-card{cursor:pointer}
+    .public-members-toolbar{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:28px}
+    .public-members-toolbar h2{margin:5px 0 0}
+    .public-member-search{display:flex;align-items:center;gap:9px;border:1px solid #d7e0e8;border-radius:10px;background:#fff;padding:0 13px;min-width:280px}
+    .public-member-search input{border:0;outline:0;padding:12px 4px;width:100%;background:transparent}
+    .public-profile-card{display:grid;grid-template-columns:320px 1fr;gap:34px;background:#fff;border:1px solid #dfe7ee;border-radius:18px;padding:28px;box-shadow:0 10px 34px rgba(15,47,73,.07)}
+    .public-profile-photo{height:360px;border-radius:14px;overflow:hidden;background:#edf3f7;display:flex;align-items:center;justify-content:center}
+    .public-profile-photo img{width:100%;height:100%;object-fit:cover}
+    .public-profile-photo span{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#123f69;color:#fff;font-size:2rem;font-weight:800}
+    .public-profile-body h2{margin:6px 0 6px}
+    .public-profile-body>p{color:#657687;margin-top:0}
+    @media(max-width:1000px){.public-people-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.public-profile-card{grid-template-columns:260px 1fr}}
+    @media(max-width:760px){.public-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.public-members-toolbar{align-items:stretch;flex-direction:column}.public-member-search{min-width:0}.public-profile-card{grid-template-columns:1fr;padding:20px}.public-profile-photo{height:300px}}
+    @media(max-width:500px){.public-people-grid{grid-template-columns:1fr}.public-person-photo{height:280px}}
+  `}</style>
 function NotFound(){return <PageIntro eyebrow="404" title="This page is out of orbit." text="The page you are looking for may have moved. Return to the EAC homepage to continue exploring."/>}
 
 export default function App() {
@@ -544,9 +615,10 @@ export default function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/equipment" element={<Equipment />} />
+          <Route path="/committee" element={<PublicCommittee />} />
+          <Route path="/members" element={<PublicMembers />} />
+          <Route path="/members/:id" element={<PublicMemberProfile />} />
           <Route path="/membership" element={<Membership />} />
-          <Route path="/members" element={<Members />} />
-          <Route path="/members/:id" element={<MemberProfile />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
