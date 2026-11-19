@@ -295,7 +295,7 @@
     height: 23px !important;
   }
 
-  .institutional-header .institutional-nav-bar,
+ .institutional-header .institutional-nav-bar,
 .institutional-header.header-scrolled .institutional-nav-bar {
     display: block !important;
     position: relative !important;
@@ -309,14 +309,14 @@
     overflow: visible !important;
 }
 
-  .institutional-header .institutional-nav-bar .nav-main,
-  .institutional-header.header-scrolled .institutional-nav-bar .nav-main {
-    height: 0 !important;
+ .institutional-header .institutional-nav-bar .nav-main,
+.institutional-header.header-scrolled .institutional-nav-bar .nav-main {
+    height: auto !important;
     min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     position: relative !important;
-  }
+}
 
   .institutional-header .institutional-nav-bar .nav-main nav {
     display: none !important;
