@@ -312,7 +312,7 @@
  .institutional-header .institutional-nav-bar .nav-main,
 .institutional-header.header-scrolled .institutional-nav-bar .nav-main {
     height: auto !important;
-    min-height: 0 !important;
+   min-height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     position: relative !important;
