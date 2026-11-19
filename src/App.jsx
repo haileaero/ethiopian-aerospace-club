@@ -251,29 +251,39 @@ function Header() {
    * We never change the navigation to position: fixed.
    */
   useEffect(() => {
-    let ticking = false;
+  let ticking = false;
 
-    const onScroll = () => {
-      if (ticking) return;
+  const onScroll = () => {
+    if (ticking) return;
 
-      ticking = true;
+    ticking = true;
 
-      window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      // Mobile header should NOT use the desktop
+      // "header-scrolled" behavior.
+      if (window.innerWidth <= 760) {
+        setScrolled(false);
+      } else {
         setScrolled(window.scrollY > 80);
-        ticking = false;
-      });
-    };
+      }
 
-    window.addEventListener('scroll', onScroll, {
-      passive: true
+      ticking = false;
     });
+  };
 
-    onScroll();
+  window.addEventListener('scroll', onScroll, {
+    passive: true
+  });
 
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, []);
+  window.addEventListener('resize', onScroll);
+
+  onScroll();
+
+  return () => {
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onScroll);
+  };
+}, []);
 
   /*
    * Lock the page behind the mobile menu.
