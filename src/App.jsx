@@ -259,8 +259,11 @@ function Header() {
     ticking = true;
 
     window.requestAnimationFrame(() => {
-      // Mobile header should NOT use the desktop
-      // "header-scrolled" behavior.
+      /*
+       * Mobile has its own fixed compact header.
+       * Do not apply the desktop "header-scrolled"
+       * state on phones.
+       */
       if (window.innerWidth <= 760) {
         setScrolled(false);
       } else {
