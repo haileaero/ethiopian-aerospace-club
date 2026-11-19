@@ -77,7 +77,7 @@
 .institutional-footer{margin-top:0}.designer-credit{background:#061726;border-top:1px solid rgba(255,255,255,.10);color:#a9bbc7}.designer-credit .container{min-height:86px;display:flex;justify-content:space-between;align-items:center;gap:30px}.designer-credit span{display:block;font:800 7px 'DM Mono';letter-spacing:1.3px;color:#708999}.designer-credit strong{display:block;color:#f0d79f;margin-top:7px;font-size:13px}.designer-contact{display:flex;gap:24px;font:700 8px 'DM Mono'}
 .admin-shell{max-width:1050px}.admin-top{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:35px}.admin-top h2{font-family:Georgia,serif;color:#123a64;font-size:35px}.admin-top p{max-width:680px;line-height:1.8;color:#657d8e}.admin-actions{display:flex;gap:10px}.admin-card{border:1px solid #dce5ea;background:#fff;margin-bottom:20px;box-shadow:0 10px 30px rgba(7,26,43,.05)}.admin-card-head{padding:18px 22px;border-bottom:1px solid #e5ebef;display:flex;justify-content:space-between;align-items:center}.admin-card-head span{font:800 8px 'DM Mono';color:#d19a4d}.admin-card-head h3{margin:7px 0 0;color:#173f69}.admin-remove{border:1px solid #e2caca;background:#fff;color:#9a5252;padding:8px 12px;cursor:pointer}.admin-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:25px;padding:22px}.admin-preview{height:260px;background:#0b2239 center/cover no-repeat;border:1px dashed #aebfc9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#91a6b5}.admin-preview span{font:700 8px 'DM Mono';letter-spacing:1px}.upload-button{display:block;margin-top:10px;background:#123a64;color:#fff;padding:11px 13px;text-align:center;font-weight:800;font-size:11px;cursor:pointer}.upload-button input{display:none}.admin-fields label{display:block;margin-bottom:15px;font-weight:800;font-size:10px;color:#36566c}.admin-fields input,.admin-fields textarea{display:block;width:100%;margin-top:7px;border:1px solid #d7e1e7;padding:12px;font:500 13px inherit;background:#fff;color:#173f69}.admin-add{margin:3px 0 30px}.admin-note{display:flex;gap:14px;padding:18px;background:#f3f7f9;border:1px solid #dce5ea;color:#657d8e}.admin-note svg{color:#d19a4d;flex:0 0 auto}.admin-note strong{color:#173f69}.admin-note p{margin:5px 0 0;font-size:11px;line-height:1.7}
 @media(max-width:1000px){.institutional-brand-row{height:86px}.institutional-brand-row .brand-logo{width:60px;height:60px}.institutional-nav-bar .nav-main{height:auto;min-height:60px}.nav-main nav>a,.nav-main .nav-dropdown .nav-parent{padding:0 12px;font-size:11px}.nav-main .nav-cta{display:none}.quick-links .container{grid-template-columns:1fr 1fr}.quick-link-title{padding:18px 20px}.quick-links a{min-height:75px}.research-highlight{grid-template-columns:1fr}.lab-cards{grid-template-columns:1fr}.lab-cards article{border-right:0;border-bottom:1px solid #dce5ea}.lab-cards article:last-child{border-bottom:0}.admin-grid{grid-template-columns:1fr}}
-@media(max-width:760px){.institutional-top{display:none}.institutional-brand-row{height:74px}.institutional-brand-row .brand-logo{width:48px;height:48px}.institutional-brand-row .brand span strong{font-size:8px}.institutional-brand-row .brand span b{font-size:12px}.institutional-search-wrap{display:none}.institutional-nav-bar{display:none}.institutional-header{position:sticky}.institutional-brand-row .menu-btn{display:block}.institutional-hero,.hero-overlay{min-height:550px}.hero-slide-copy{padding:60px 0 100px}.hero-slide-copy h1{font-size:44px;letter-spacing:-2px}.hero-slide-copy p{font-size:13px}.hero-controls{right:18px;bottom:22px}.hero-counter{left:18px;bottom:28px}.hero-empty-note{top:auto;right:18px;bottom:85px;font-size:7px}.quick-links .container{grid-template-columns:1fr 1fr}.quick-link-title{grid-column:1/-1;border-bottom:1px solid #e0e7eb}.quick-links a{padding:0 13px}.welcome-grid{grid-template-columns:1fr;gap:25px}.welcome-grid h2{font-size:34px}.research-highlight{gap:30px}.designer-credit .container{display:block;padding:16px 0}.designer-contact{margin-top:15px;display:block}.designer-contact span{display:block;margin:6px 0}.admin-top{display:block}.admin-actions{margin-top:20px}.admin-grid{padding:15px}.admin-preview{height:210px}.top-links{display:none}}
+@media(max-width:760px){.institutional-hero,.hero-overlay{min-height:550px}.hero-slide-copy{padding:60px 0 100px}.hero-slide-copy h1{font-size:44px;letter-spacing:-2px}.hero-slide-copy p{font-size:13px}.hero-controls{right:18px;bottom:22px}.hero-counter{left:18px;bottom:28px}.hero-empty-note{top:auto;right:18px;bottom:85px;font-size:7px}.quick-links .container{grid-template-columns:1fr 1fr}.quick-link-title{grid-column:1/-1;border-bottom:1px solid #e0e7eb}.quick-links a{padding:0 13px}.welcome-grid{grid-template-columns:1fr;gap:25px}.welcome-grid h2{font-size:34px}.research-highlight{gap:30px}.designer-credit .container{display:block;padding:16px 0}.designer-contact{margin-top:15px;display:block}.designer-contact span{display:block;margin:6px 0}.admin-top{display:block}.admin-actions{margin-top:20px}.admin-grid{padding:15px}.admin-preview{height:210px}.top-links{display:none}}
 
 /* ===== EAC V4 FINAL POLISH ===== */
 .mobile-menu-search{display:none}
@@ -296,18 +296,18 @@
   }
 
   .institutional-header .institutional-nav-bar,
-  .institutional-header.header-scrolled .institutional-nav-bar {
+.institutional-header.header-scrolled .institutional-nav-bar {
     display: block !important;
     position: relative !important;
     width: 100% !important;
     max-width: 100% !important;
-    height: 0 !important;
+    height: auto !important;
     min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     background: transparent !important;
     overflow: visible !important;
-  }
+}
 
   .institutional-header .institutional-nav-bar .nav-main,
   .institutional-header.header-scrolled .institutional-nav-bar .nav-main {
