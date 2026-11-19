@@ -542,3 +542,59 @@
   }
   html { scroll-behavior: auto !important; }
 }
+/* =========================================================
+   FINAL MOBILE MENU VISIBILITY FIX
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  .institutional-header
+  .institutional-nav-bar
+  .nav-main
+  nav.open > a {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    width: 100% !important;
+    min-height: 43px !important;
+    height: 43px !important;
+    color: #173f69 !important;
+    background: #fff !important;
+    z-index: 6501 !important;
+  }
+
+  .institutional-header
+  .institutional-nav-bar
+  .nav-main
+  nav.open > .nav-dropdown {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 6501 !important;
+  }
+
+  .institutional-header
+  .institutional-nav-bar
+  .nav-main
+  nav.open > .nav-dropdown > .nav-parent {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 43px !important;
+    height: 43px !important;
+    color: #173f69 !important;
+    background: #fff !important;
+  }
+
+  .institutional-header
+  .institutional-nav-bar
+  .nav-main
+  nav.open {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
