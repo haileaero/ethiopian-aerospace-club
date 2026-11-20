@@ -289,16 +289,24 @@ function Header() {
    * Lock the page behind the mobile menu.
    */
   useEffect(() => {
-    if (
-      open &&
-      window.matchMedia('(max-width: 760px)').matches
-    ) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    const syncMobileMenu = () => {
+      const isMobile = window.matchMedia('(max-width: 760px)').matches;
+
+      if (!isMobile) {
+        setOpen(false);
+        setOpenDropdown(null);
+        setSearchOpen(false);
+      }
+
+      document.body.style.overflow =
+        isMobile && open ? 'hidden' : '';
+    };
+
+    syncMobileMenu();
+    window.addEventListener('resize', syncMobileMenu);
 
     return () => {
+      window.removeEventListener('resize', syncMobileMenu);
       document.body.style.overflow = '';
     };
   }, [open]);
