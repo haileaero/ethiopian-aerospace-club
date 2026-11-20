@@ -207,7 +207,7 @@ function Header() {
 
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'auto'
     });
   }, [location.pathname]);
 
@@ -251,42 +251,39 @@ function Header() {
    * We never change the navigation to position: fixed.
    */
   useEffect(() => {
-  let ticking = false;
+    let ticking = false;
 
-  const onScroll = () => {
-    if (ticking) return;
+    const updateHeaderState = () => {
+      const isMobile = window.matchMedia('(max-width: 760px)').matches;
+      const nextScrolled = !isMobile && window.scrollY > 90;
 
-    ticking = true;
+      setScrolled((current) =>
+        current === nextScrolled ? current : nextScrolled
+      );
+    };
 
-    window.requestAnimationFrame(() => {
-      /*
-       * Mobile has its own fixed compact header.
-       * Do not apply the desktop "header-scrolled"
-       * state on phones.
-       */
-      if (window.innerWidth <= 760) {
-        setScrolled(false);
-      } else {
-        setScrolled(window.scrollY > 80);
-      }
+    const onScroll = () => {
+      if (ticking) return;
 
-      ticking = false;
-    });
-  };
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        updateHeaderState();
+        ticking = false;
+      });
+    };
 
-  window.addEventListener('scroll', onScroll, {
-    passive: true
-  });
+    const onResize = () => updateHeaderState();
 
-  window.addEventListener('resize', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
 
-  onScroll();
+    updateHeaderState();
 
-  return () => {
-    window.removeEventListener('scroll', onScroll);
-    window.removeEventListener('resize', onScroll);
-  };
-}, []);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
 
   /*
    * Lock the page behind the mobile menu.
@@ -329,15 +326,15 @@ function Header() {
   
 
 
-      return (
+  return (
     <>
-
-<header
-        ref={headerRef}
-        className={`site-header institutional-header ${
-          scrolled ? 'header-scrolled' : ''
-        }`}
-      >
+      <div className={`header-shell ${scrolled ? 'header-shell-scrolled' : ''}`}>
+        <header
+          ref={headerRef}
+          className={`site-header institutional-header ${
+            scrolled ? 'header-scrolled' : ''
+          }`}
+        >
 
         {/* =====================================================
             TOP INSTITUTIONAL BAR
@@ -599,9 +596,10 @@ function Header() {
 
 </div>
 
-</header>
-</>
-);
+        </header>
+      </div>
+    </>
+  );
 }
 function BackToTop(){
   const [visible,setVisible]=useState(false);

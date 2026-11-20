@@ -115,75 +115,43 @@
 @media (max-width:560px){.auth-page{padding:34px 0}.auth-brand-panel{padding:30px 24px}.auth-brand-panel h1{font-size:42px}.auth-card{border-radius:14px;padding:23px}.form-row{grid-template-columns:1fr!important}.dashboard-hero{border-radius:0;padding:32px 20px}.dashboard-card,.security-panel{padding:20px}.profile-lines{grid-template-columns:1fr}.account-nav{gap:8px}}
 
 /* =========================================================
-   EAC FINAL HEADER SYSTEM
-   =========================================================
-   One clean responsive header system.
-   Desktop:
-   - Full institutional bar + brand row at the top.
-   - On scroll, only those two upper rows collapse smoothly.
-   - Navigation remains in the same sticky header; it does NOT
-     switch between relative and fixed positioning.
-   - This avoids the scroll jump/vibration caused by changing
-     positioning and changing the header height at the same time.
-
-   Mobile:
-   - Compact EAC brand row remains visible.
-   - Institutional top strip is hidden.
-   - Menu opens as a fixed panel below the 64px brand row.
+   EAC STABLE RESPONSIVE HEADER
    ========================================================= */
 
-/* ---------------------------------------------------------
-   GLOBAL HEADER SAFETY
-   --------------------------------------------------------- */
+.header-shell {
+  height: 203px;
+  min-height: 203px;
+  transition: height .32s cubic-bezier(.22,.61,.36,1);
+}
+
+.header-shell-scrolled {
+  height: 65px;
+  min-height: 65px;
+}
 
 .institutional-header {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 5000 !important;
+  position: fixed !important;
+  inset: 0 0 auto 0 !important;
   width: 100% !important;
-  max-width: 100% !important;
-  overflow: visible !important;
+  max-width: none !important;
+  z-index: 5000 !important;
   background: #fff !important;
-  overflow-anchor: none !important;
+  overflow: visible !important;
+  border-bottom: 1px solid rgba(18,51,76,.10) !important;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
-
-/* The old inline style in App.jsx must not force the whole
-   header to 58px when scrolled. */
-.institutional-header.header-scrolled {
-  height: auto !important;
-}
-
-/* ---------------------------------------------------------
-   DESKTOP
-   --------------------------------------------------------- */
 
 @media (min-width: 761px) {
-
-  /* Upper institutional strip */
   .institutional-header .institutional-top {
-    display: block !important;
     height: 34px !important;
     min-height: 34px !important;
     max-height: 34px !important;
     overflow: hidden !important;
     opacity: 1 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-
-    transition:
-      max-height .36s ease,
-      opacity .28s ease,
-      padding-top .36s ease,
-      padding-bottom .36s ease,
-      margin-top .36s ease,
-      margin-bottom .36s ease !important;
-
-    will-change: max-height, opacity;
+    transition: max-height .30s ease, opacity .20s ease !important;
   }
 
-  /* Logo / search row */
   .institutional-header .institutional-brand-row {
     display: flex !important;
     height: 104px !important;
@@ -191,132 +159,69 @@
     max-height: 104px !important;
     overflow: hidden !important;
     opacity: 1 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-
-    transition:
-      max-height .42s ease,
-      opacity .30s ease,
-      padding-top .42s ease,
-      padding-bottom .42s ease,
-      margin-top .42s ease,
-      margin-bottom .42s ease !important;
-
-    will-change: max-height, opacity;
+    transition: max-height .32s ease, opacity .20s ease !important;
   }
 
-  /* Smoothly collapse the upper two rows.
-     Do NOT use display:none: display:none cannot animate. */
   .institutional-header.header-scrolled .institutional-top,
   .institutional-header.header-scrolled .institutional-brand-row {
-    display: block !important;
     max-height: 0 !important;
-    height: auto !important;
     min-height: 0 !important;
-
+    height: 0 !important;
     opacity: 0 !important;
-
     padding-top: 0 !important;
     padding-bottom: 0 !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
-
     pointer-events: none !important;
   }
 
-  .institutional-header.header-scrolled .institutional-brand-row {
-    display: flex !important;
-  }
-
-  /* Navigation NEVER changes from relative to fixed.
-     Because the entire header is sticky, the nav naturally
-     reaches the browser top when the upper rows collapse. */
-  .institutional-header .institutional-nav-bar,
-  .institutional-header.header-scrolled .institutional-nav-bar {
+  .institutional-header .institutional-nav-bar {
     position: relative !important;
     display: block !important;
     width: 100% !important;
-    max-width: 100% !important;
     height: 65px !important;
     min-height: 65px !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #123a64 !important;
     z-index: 5001 !important;
-
-    transition:
-      box-shadow .25s ease !important;
   }
 
-  .institutional-header .institutional-nav-bar .nav-main,
-  .institutional-header.header-scrolled .institutional-nav-bar .nav-main {
+  .institutional-header .institutional-nav-bar .nav-main {
     height: 65px !important;
     min-height: 65px !important;
   }
 
-  /* Subtle shadow when the compact nav is at the top. */
   .institutional-header.header-scrolled .institutional-nav-bar {
-    box-shadow: 0 8px 25px rgba(7,26,43,.18) !important;
-  }
-
-  /* Keep normal desktop nav sizing stable.
-     A stable height prevents the second jump during scroll. */
-  .institutional-header.header-scrolled .nav-main nav a,
-  .institutional-header.header-scrolled .nav-main nav .nav-parent {
-    padding-top: 17px !important;
-    padding-bottom: 17px !important;
-  }
-
-  .institutional-header.header-scrolled .nav-cta {
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-  }
-
-  /* Never allow a desktop navigation element to create
-     horizontal page overflow. */
-  .institutional-header,
-  .institutional-header .institutional-nav-bar,
-  .institutional-header .nav-main {
-    max-width: 100% !important;
+    box-shadow: 0 8px 26px rgba(7,26,43,.16) !important;
   }
 }
 
-/* ---------------------------------------------------------
-   MOBILE
-   --------------------------------------------------------- */
-
 @media (max-width: 760px) {
-
-  html,
-  body,
-  #root {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow-x: hidden !important;
+  .header-shell,
+  .header-shell-scrolled {
+    height: 64px !important;
+    min-height: 64px !important;
   }
 
-  /* Mobile keeps only the compact EAC brand row sticky. */
   .institutional-header,
   .institutional-header.header-scrolled {
-    position: sticky !important;
+    position: fixed !important;
     top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    z-index: 5000 !important;
+    height: 64px !important;
+    min-height: 64px !important;
     background: #fff !important;
     overflow: visible !important;
   }
 
-  /* No university strip on phones. */
   .institutional-header .institutional-top,
   .institutional-header.header-scrolled .institutional-top {
     display: none !important;
   }
 
-  /* Compact mobile brand row. */
   .institutional-header .institutional-brand-row,
   .institutional-header.header-scrolled .institutional-brand-row {
     display: flex !important;
@@ -336,7 +241,6 @@
     display: none !important;
   }
 
-  /* Logo */
   .institutional-header .brand-logo {
     width: 43px !important;
     height: 43px !important;
@@ -364,7 +268,6 @@
     white-space: nowrap !important;
   }
 
-  /* Menu button */
   .institutional-header .institutional-brand-row .menu-btn {
     display: grid !important;
     place-items: center !important;
@@ -379,20 +282,10 @@
     z-index: 7000 !important;
   }
 
-  .institutional-header .institutional-brand-row .menu-btn svg {
-    width: 23px !important;
-    height: 23px !important;
-  }
-
-  /* The navigation wrapper itself is zero-height when closed.
-     The open menu is position:fixed, so it is independent of
-     this wrapper's height. */
   .institutional-header .institutional-nav-bar,
   .institutional-header.header-scrolled .institutional-nav-bar {
-    display: block !important;
     position: relative !important;
     width: 100% !important;
-    max-width: 100% !important;
     height: 0 !important;
     min-height: 0 !important;
     margin: 0 !important;
@@ -411,13 +304,10 @@
     overflow: visible !important;
   }
 
-  /* Closed menu */
   .institutional-header .institutional-nav-bar .nav-main nav {
     display: none !important;
   }
 
-  /* Open mobile menu.
-     It is independent of the zero-height nav wrapper. */
   .institutional-header .institutional-nav-bar .nav-main nav.open {
     display: flex !important;
     position: fixed !important;
@@ -427,40 +317,29 @@
     width: auto !important;
     max-width: none !important;
     max-height: calc(100vh - 76px) !important;
-
     overflow-x: hidden !important;
     overflow-y: auto !important;
-
     flex-direction: column !important;
     align-items: stretch !important;
-
     padding: 12px !important;
     margin: 0 !important;
-
     box-sizing: border-box !important;
-
     background: #fff !important;
     border: 1px solid #dce5ea !important;
     border-radius: 0 0 12px 12px !important;
-
-    box-shadow: 0 20px 55px rgba(7,26,43,.25) !important;
-
+    box-shadow: 0 20px 55px rgba(7,26,43,.22) !important;
     z-index: 6500 !important;
   }
 
-  /* Search inside mobile menu */
   .institutional-header .mobile-menu-search {
     display: flex !important;
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-
     align-items: center !important;
     gap: 8px !important;
-
     padding: 10px 11px !important;
     margin: 0 0 8px !important;
-
     background: #f5f8fa !important;
     border: 1px solid #dce5ea !important;
     border-radius: 8px !important;
@@ -476,26 +355,20 @@
     color: #173f69 !important;
   }
 
-  /* Main mobile links */
   .institutional-header .institutional-nav-bar .nav-main nav > a,
   .institutional-header .institutional-nav-bar .nav-main .nav-dropdown .nav-parent {
     width: 100% !important;
     min-height: 43px !important;
     height: 43px !important;
-
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-
     padding: 0 12px !important;
     box-sizing: border-box !important;
-
     border: 0 !important;
     border-bottom: 1px solid #edf1f4 !important;
-
     background: #fff !important;
     color: #173f69 !important;
-
     font-size: 11px !important;
     font-weight: 800 !important;
     white-space: nowrap !important;
@@ -507,7 +380,6 @@
     color: #0b2239 !important;
   }
 
-  /* Dropdowns */
   .institutional-header .institutional-nav-bar .nav-main .nav-dropdown {
     height: auto !important;
     min-height: 0 !important;
@@ -516,24 +388,17 @@
   .institutional-header .institutional-nav-bar .nav-main .dropdown-menu {
     position: static !important;
     display: none !important;
-
     width: 100% !important;
     min-width: 0 !important;
-
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
-
     box-shadow: none !important;
     border: 0 !important;
     border-left: 2px solid #d7ad63 !important;
-
     background: #f8fafb !important;
-
     margin: 0 0 4px !important;
     padding: 0 !important;
-
-    box-sizing: border-box !important;
   }
 
   .institutional-header .institutional-nav-bar .nav-main .nav-dropdown.is-open .dropdown-menu {
@@ -545,93 +410,43 @@
     width: 100% !important;
     height: 38px !important;
     min-height: 38px !important;
-
     align-items: center !important;
-
     padding: 0 14px 0 17px !important;
     box-sizing: border-box !important;
-
     font-size: 10px !important;
     color: #173f69 !important;
     white-space: nowrap !important;
   }
 
-  /* CTA */
   .institutional-header .institutional-nav-bar .nav-cta {
     display: flex !important;
     width: 100% !important;
     min-height: 43px !important;
-
     margin: 8px 0 0 !important;
-
     align-items: center !important;
     justify-content: center !important;
-
     font-size: 10px !important;
   }
 
-  /* Prevent common page children from creating horizontal overflow. */
-  .institutional-header,
-  .institutional-hero,
-  .hero-overlay,
-  .hero-content,
-  .section,
-  .container,
-  img,
-  video,
-  iframe {
-    max-width: 100% !important;
-  }
-
-  /* Mobile hero */
-  .institutional-hero,
-  .hero-overlay {
-    height: 430px !important;
-    min-height: 430px !important;
-    overflow: hidden !important;
-  }
-
-  .hero-slide-copy {
-    max-width: 100% !important;
-    padding: 38px 15px 58px !important;
-  }
-
-  .hero-slide-copy h1 {
-    max-width: 100% !important;
-    font-size: clamp(31px, 9vw, 42px) !important;
-    line-height: .98 !important;
-    letter-spacing: -1.5px !important;
-  }
-
-  .hero-slide-copy p {
-    max-width: 95% !important;
-    font-size: 10px !important;
-    line-height: 1.5 !important;
-  }
-
-  .hero-actions {
+  html, body, #root {
     width: 100% !important;
-    flex-wrap: nowrap !important;
-    gap: 7px !important;
-  }
-
-  .hero-actions .button {
-    min-width: 0 !important;
-    white-space: nowrap !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
 }
 
-/* ---------------------------------------------------------
-   SMALL PHONES
-   --------------------------------------------------------- */
-
 @media (max-width: 430px) {
-
+  .header-shell,
+  .header-shell-scrolled,
+  .institutional-header,
+  .institutional-header.header-scrolled,
   .institutional-header .institutional-brand-row,
   .institutional-header.header-scrolled .institutional-brand-row {
     height: 60px !important;
     min-height: 60px !important;
-    max-height: 60px !important;
+  }
+
+  .institutional-header .institutional-brand-row {
     padding-left: 10px !important;
     padding-right: 10px !important;
   }
@@ -651,28 +466,380 @@
     right: 8px !important;
     max-height: calc(100vh - 70px) !important;
   }
+}
 
-  .institutional-hero,
-  .hero-overlay {
-    height: 410px !important;
-    min-height: 410px !important;
+/* =========================================================
+   COMPACT PROFESSIONAL PAGE RHYTHM
+   ========================================================= */
+
+.section {
+  padding: 64px 0;
+}
+
+.section-heading {
+  margin-bottom: 26px;
+}
+
+.section-heading h2 {
+  font-size: clamp(28px, 3.2vw, 38px);
+}
+
+.section-heading p {
+  margin-top: 9px;
+}
+
+.page-intro {
+  padding: 0;
+}
+
+.page-intro-grid {
+  min-height: 330px;
+}
+
+.page-intro-copy {
+  padding: 50px 0 46px;
+}
+
+.page-intro h1 {
+  font-size: clamp(38px, 5vw, 58px);
+  margin-bottom: 14px;
+}
+
+.two-col,
+.uav-home-grid {
+  gap: 48px;
+}
+
+.two-col h2,
+.vision-grid h2 {
+  font-size: clamp(28px, 3.5vw, 38px);
+}
+
+.feature-grid article {
+  padding: 25px 22px 25px 0;
+}
+
+.feature-grid article+article {
+  padding-left: 22px;
+}
+
+.dark-division {
+  min-height: 180px;
+  padding: 23px;
+}
+
+.dark-division h3 {
+  margin: 38px 0 8px;
+}
+
+/* Compact modern content cards */
+.project-grid,
+.opportunity-grid,
+.news-grid,
+.public-people-grid,
+.public-members-grid {
+  gap: 16px !important;
+}
+
+.project-card,
+.opportunity-card,
+.news-grid article,
+.public-person-card,
+.public-member-card,
+.public-committee-card,
+.admin-card,
+.settings-card {
+  border-radius: 12px !important;
+}
+
+.project-card,
+.opportunity-card,
+.news-grid article {
+  min-height: 0 !important;
+}
+
+.project-card .project-body,
+.opportunity-card,
+.news-body {
+  padding: 18px !important;
+}
+
+.project-card .project-art {
+  height: 150px !important;
+  min-height: 150px !important;
+}
+
+.project-card h3,
+.opportunity-card h3,
+.news-body h3 {
+  margin: 7px 0 7px !important;
+  font-size: 16px !important;
+  line-height: 1.25 !important;
+}
+
+.project-card p,
+.opportunity-card p,
+.news-body p {
+  font-size: 10.5px !important;
+  line-height: 1.65 !important;
+}
+
+.opportunity-card {
+  padding: 18px !important;
+}
+
+.opportunity-card .opp-icon {
+  width: 27px !important;
+  height: 27px !important;
+  margin-bottom: 12px !important;
+}
+
+.opportunity-fields {
+  gap: 6px !important;
+  margin: 12px 0 !important;
+}
+
+.news-art {
+  height: 120px !important;
+}
+
+.news-body {
+  min-height: 0 !important;
+}
+
+.project-meta {
+  margin-top: 12px !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.project-lifecycle {
+  margin-top: 20px;
+}
+
+.project-lifecycle>div {
+  min-height: 125px;
+  padding: 17px 14px;
+}
+
+.project-lifecycle strong {
+  margin: 16px 0 6px;
+}
+
+.project-lifecycle p {
+  line-height: 1.55;
+}
+
+/* Keep visual cards useful without making them dominate the page. */
+.about-visual {
+  height: 340px;
+}
+
+.uav-card-art {
+  height: 300px;
+}
+
+.empty-state {
+  padding: 30px 24px !important;
+}
+
+/* Compact admin/member dashboard cards too. */
+.dashboard-page {
+  padding-bottom: 50px;
+}
+
+.dashboard-grid {
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.dashboard-card {
+  min-height: 0;
+  padding: 20px;
+  gap: 14px;
+}
+
+.security-panel {
+  margin-top: 18px;
+  padding: 22px;
+}
+
+/* Reduce section spacing progressively on smaller screens. */
+@media (max-width: 900px) {
+  .section {
+    padding: 50px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 22px;
+  }
+
+  .page-intro-grid {
+    min-height: 285px;
+  }
+
+  .page-intro-copy {
+    padding: 42px 0 38px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-grid article,
+  .feature-grid article+article {
+    border-left: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 20px 0;
+  }
+
+  .feature-grid article:last-child {
+    border-bottom: 0;
+  }
+
+  .project-grid,
+  .opportunity-grid,
+  .news-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .container {
+    width: min(100% - 30px, 1180px);
+  }
+
+  .section {
+    padding: 42px 0;
+  }
+
+  .section-heading {
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .section-heading h2 {
+    font-size: 28px;
+  }
+
+  .section-heading .text-link {
+    margin-top: 12px;
+  }
+
+  .page-intro-grid {
+    min-height: 0;
+    grid-template-columns: 1fr !important;
+  }
+
+  .page-intro-copy {
+    padding: 36px 0 28px;
+  }
+
+  .page-intro-art {
+    height: 150px;
+    margin-bottom: 18px;
+  }
+
+  .page-intro h1 {
+    font-size: 34px;
+    letter-spacing: -1.8px;
+  }
+
+  .page-intro p {
+    font-size: 11.5px;
+    line-height: 1.75;
+  }
+
+  .two-col,
+  .uav-home-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px;
+  }
+
+  .two-col h2,
+  .vision-grid h2,
+  .uav-home h2 {
+    font-size: 28px;
+  }
+
+  .about-visual {
+    height: 275px;
+  }
+
+  .uav-card-art {
+    height: 250px;
+  }
+
+  .project-grid,
+  .opportunity-grid,
+  .news-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .project-card .project-art {
+    height: 135px !important;
+    min-height: 135px !important;
+  }
+
+  .project-card .project-body,
+  .opportunity-card,
+  .news-body {
+    padding: 16px !important;
+  }
+
+  .project-card h3,
+  .opportunity-card h3,
+  .news-body h3 {
+    font-size: 15px !important;
+  }
+
+  .project-lifecycle {
+    grid-template-columns: 1fr !important;
+  }
+
+  .project-lifecycle>div {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid #ffffff18;
+  }
+
+  .project-lifecycle>div:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .container {
+    width: calc(100% - 20px);
   }
 
   .section {
     padding: 34px 0 !important;
   }
 
+  .page-intro-copy {
+    padding: 30px 0 24px;
+  }
+
   .page-intro h1 {
     font-size: 30px !important;
   }
+
+  .project-card .project-art {
+    height: 120px !important;
+    min-height: 120px !important;
+  }
 }
 
-/* Respect users who prefer reduced motion. */
 @media (prefers-reduced-motion: reduce) {
+  .header-shell,
   .institutional-header,
   .institutional-top,
   .institutional-brand-row,
-  .institutional-nav-bar {
+  .institutional-nav-bar,
+  .project-card,
+  .opportunity-card,
+  .news-grid article {
     transition: none !important;
   }
 
@@ -680,4 +847,3 @@
     scroll-behavior: auto !important;
   }
 }
-
