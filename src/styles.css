@@ -2297,3 +2297,12 @@ body.dark-theme .search-box input::placeholder {
     border-color: #31506a !important;
   }
 }
+/* =========================================================
+   EAC V5 — HIDE DAY/NIGHT TOGGLE ON MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .institutional-header .header-actions {
+    display: none !important;
+  }
+}
