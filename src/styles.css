@@ -1346,3 +1346,45 @@ body.dark-theme
     display: none !important;
   }
 }
+/* =========================================================
+   EAC V5 — DARK MODE TEXT CORRECTION
+   ========================================================= */
+
+/* Keep the large hero/page-intro areas readable */
+body.dark-theme .hero h1,
+body.dark-theme .page-hero h1,
+body.dark-theme .page-intro h1,
+body.dark-theme .hero h2,
+body.dark-theme .page-hero h2,
+body.dark-theme .page-intro h2 {
+  color: #0d2943 !important;
+}
+
+body.dark-theme .hero p,
+body.dark-theme .page-hero p,
+body.dark-theme .page-intro p {
+  color: #607b91 !important;
+}
+
+body.dark-theme .hero .eyebrow,
+body.dark-theme .page-hero .eyebrow,
+body.dark-theme .page-intro .eyebrow {
+  color: #17658f !important;
+}
+
+/* Keep light hero background */
+body.dark-theme .hero,
+body.dark-theme .page-hero,
+body.dark-theme .page-intro {
+  background: #eef4f7 !important;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+body.dark-theme .institutional-brand-row img {
+  background: transparent !important;
+  border: none !important;
+}
