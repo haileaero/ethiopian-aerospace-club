@@ -406,7 +406,16 @@ useEffect(() => {
 
           <Brand />
 
-        <div className="mobile-auth-action">
+       <div className="mobile-auth-actions">
+
+  <Link
+    className="mobile-signin-btn"
+    to="/login"
+    onClick={closeMenus}
+  >
+    Sign in
+  </Link>
+
   <Link
     className="mobile-join-btn"
     to="/membership"
@@ -414,6 +423,7 @@ useEffect(() => {
   >
     Join
   </Link>
+
 </div>
 
 

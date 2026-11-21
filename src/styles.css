@@ -2392,3 +2392,131 @@ body.dark-theme .search-box input::placeholder {
     width: 40px !important;
   }
 }
+/* =========================================================
+   EAC V5 — MOBILE SIGN IN + JOIN
+   ========================================================= */
+
+.mobile-auth-actions {
+  display: none;
+}
+
+@media (max-width: 760px) {
+
+  /* Hide desktop Day/Night control on mobile */
+  .institutional-header .header-actions {
+    display: none !important;
+  }
+
+  /* Mobile authentication buttons */
+  .institutional-header .mobile-auth-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-left: auto !important;
+    margin-right: 8px !important;
+    flex: 0 0 auto !important;
+    z-index: 7000 !important;
+  }
+
+  /* Sign in */
+  .institutional-header .mobile-signin-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 62px !important;
+    height: 36px !important;
+    padding: 0 11px !important;
+
+    background: transparent !important;
+    color: #0b2239 !important;
+
+    border: 1px solid #0b2239 !important;
+    border-radius: 6px !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: .4px !important;
+
+    white-space: nowrap !important;
+    text-decoration: none !important;
+  }
+
+  /* Join */
+  .institutional-header .mobile-join-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 56px !important;
+    height: 36px !important;
+    padding: 0 11px !important;
+
+    background: #0b2239 !important;
+    color: #ffffff !important;
+
+    border: 1px solid #0b2239 !important;
+    border-radius: 6px !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: .4px !important;
+
+    white-space: nowrap !important;
+    text-decoration: none !important;
+  }
+
+  .institutional-header .mobile-signin-btn:hover {
+    background: #edf3f7 !important;
+  }
+
+  .institutional-header .mobile-join-btn:hover {
+    background: #2e769e !important;
+    border-color: #2e769e !important;
+  }
+
+  /* Keep logo, buttons and menu properly aligned */
+  .institutional-header .institutional-brand-row {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .institutional-header .institutional-brand-row .brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .institutional-header .institutional-brand-row .menu-btn {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    margin-left: 0 !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 430px) {
+
+  .institutional-header .mobile-auth-actions {
+    gap: 4px !important;
+    margin-right: 5px !important;
+  }
+
+  .institutional-header .mobile-signin-btn {
+    min-width: 54px !important;
+    height: 34px !important;
+    padding: 0 9px !important;
+    font-size: 8px !important;
+  }
+
+  .institutional-header .mobile-join-btn {
+    min-width: 50px !important;
+    height: 34px !important;
+    padding: 0 9px !important;
+    font-size: 8px !important;
+  }
+
+  .institutional-header .institutional-brand-row .menu-btn {
+    flex-basis: 40px !important;
+    width: 40px !important;
+  }
+}
