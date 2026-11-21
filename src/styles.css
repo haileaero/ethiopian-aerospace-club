@@ -971,3 +971,88 @@ body {
     overflow: hidden;
   }
 }
+/* =========================================================
+   EAC V5 — DESKTOP DROPDOWN MENU FIX
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  .institutional-nav-bar {
+    position: relative !important;
+    z-index: 5000 !important;
+  }
+
+  .institutional-nav-bar .nav-main {
+    position: relative !important;
+    z-index: 5001 !important;
+  }
+
+  .institutional-nav-bar .nav-main nav {
+    position: relative !important;
+    z-index: 5002 !important;
+  }
+
+  .institutional-nav-bar .nav-dropdown {
+    position: relative !important;
+    z-index: 5003 !important;
+  }
+
+  .institutional-nav-bar .nav-dropdown .nav-parent {
+    position: relative !important;
+    z-index: 5004 !important;
+
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  /* Show dropdown when React adds .is-open */
+  .institutional-nav-bar
+  .nav-dropdown.is-open
+  .dropdown-menu {
+    display: block !important;
+
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+
+    min-width: 240px !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    transform: translateY(0) !important;
+
+    pointer-events: auto !important;
+
+    z-index: 99999 !important;
+
+    background: #ffffff !important;
+  }
+
+  .institutional-nav-bar
+  .nav-dropdown.is-open
+  .dropdown-menu a {
+    display: flex !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    color: #173f69 !important;
+    background: #ffffff !important;
+
+    pointer-events: auto !important;
+
+    padding: 13px 16px !important;
+  }
+
+  .institutional-nav-bar
+  .nav-dropdown.is-open
+  .dropdown-menu a:hover {
+    background: #f2f7fa !important;
+    color: #0c2944 !important;
+  }
+}
