@@ -833,3 +833,141 @@ body {
     display: none;
   }
 }
+/* =========================================================
+   EAC MOBILE HEADER / NAVIGATION — FINAL STRUCTURE FIX
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  .header-shell {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .site-header,
+  .institutional-header {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+  }
+
+  /* Mobile brand/header row */
+  .institutional-brand-row {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-left: 18px;
+    padding-right: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Keep logo from becoming oversized */
+  .institutional-brand-row .brand {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .institutional-brand-row .brand img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Hamburger / X */
+  .menu-btn {
+    display: flex !important;
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    position: relative;
+    z-index: 1002;
+  }
+
+  /* Mobile navigation bar */
+  .institutional-nav-bar {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    z-index: 1000;
+    overflow: visible !important;
+  }
+
+  .institutional-nav-bar .nav-main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0;
+    display: block;
+  }
+
+  /* CLOSED */
+  .institutional-nav-bar nav {
+    display: none !important;
+  }
+
+  /* OPEN */
+  .institutional-nav-bar nav.open {
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    background: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Search inside mobile menu */
+  .mobile-menu-search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 18px;
+    background: #ffffff;
+  }
+
+  .mobile-menu-search input {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Menu links */
+  .institutional-nav-bar nav.open > a,
+  .institutional-nav-bar nav.open .nav-link {
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    padding: 16px 20px;
+    white-space: normal;
+  }
+
+  /* Hide desktop Join EAC button in mobile header */
+  .institutional-nav-bar .nav-main > .nav-cta {
+    display: none !important;
+  }
+
+  /* Make sure the hero doesn't create horizontal overflow */
+  .hero,
+  .hero-section,
+  .page-hero {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
