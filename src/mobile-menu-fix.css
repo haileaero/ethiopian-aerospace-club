@@ -1,0 +1,238 @@
+/* =========================================================
+   EAC V5 — MOBILE MENU FIX
+   This file is loaded last so it overrides older mobile CSS.
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  /* Prevent the entire site from becoming wider than the phone */
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden !important;
+  }
+
+  /* Header */
+  .header-shell,
+  .site-header,
+  .institutional-header {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Logo row */
+  .institutional-brand-row {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    padding: 12px 18px !important;
+  }
+
+  /* Brand */
+  .institutional-brand-row .brand {
+    min-width: 0 !important;
+    max-width: calc(100% - 60px) !important;
+    flex: 1 1 auto !important;
+  }
+
+  .institutional-brand-row .brand img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Hamburger / X button */
+  .menu-btn {
+    display: flex !important;
+
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: relative !important;
+    z-index: 10010 !important;
+
+    background: transparent !important;
+    border: 0 !important;
+
+    cursor: pointer !important;
+  }
+
+  .menu-btn svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  /* Navigation bar */
+  .institutional-nav-bar {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    position: relative !important;
+    z-index: 10000 !important;
+
+    overflow: visible !important;
+  }
+
+  .institutional-nav-bar .nav-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  /*
+   * CLOSED MENU
+   */
+  .institutional-nav-bar nav {
+    display: none !important;
+  }
+
+  /*
+   * OPEN MENU
+   */
+  .institutional-nav-bar nav.open {
+    display: flex !important;
+
+    flex-direction: column !important;
+    align-items: stretch !important;
+
+    position: absolute !important;
+
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    max-height: calc(100vh - 80px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: #ffffff !important;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,.18) !important;
+
+    z-index: 10005 !important;
+  }
+
+  /*
+   * Search at top of mobile menu
+   */
+  .institutional-nav-bar nav.open .mobile-menu-search {
+    display: block !important;
+
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    padding: 18px !important;
+
+    background: #ffffff !important;
+  }
+
+  .institutional-nav-bar nav.open .mobile-menu-search input {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    height: 48px !important;
+
+    box-sizing: border-box !important;
+
+    padding: 0 15px !important;
+
+    border: 1px solid #d7e0e8 !important;
+    border-radius: 6px !important;
+  }
+
+  /*
+   * Navigation links
+   */
+  .institutional-nav-bar nav.open a {
+    display: flex !important;
+
+    width: 100% !important;
+    min-height: 52px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+
+    padding: 15px 22px !important;
+
+    white-space: normal !important;
+
+    text-decoration: none !important;
+
+    color: #0d2d4c !important;
+
+    background: #ffffff !important;
+
+    border-bottom: 1px solid #e7edf2 !important;
+  }
+
+  .institutional-nav-bar nav.open a:hover,
+  .institutional-nav-bar nav.open a:focus {
+    background: #f3f7fa !important;
+  }
+
+  /*
+   * Hide desktop Join EAC button on mobile.
+   * The mobile navigation already contains the required links.
+   */
+  .institutional-nav-bar .nav-main > .nav-cta {
+    display: none !important;
+  }
+
+  /*
+   * Make the hero/page start normally.
+   */
+  .hero,
+  .hero-section,
+  .page-hero {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /*
+   * Remove accidental horizontal overflow from common containers.
+   */
+  .container,
+  .section,
+  .page {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
