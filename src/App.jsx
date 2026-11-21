@@ -406,34 +406,14 @@ useEffect(() => {
 
           <Brand />
 
-         <div className="header-actions">
-
-  <button
-    type="button"
-    className="theme-toggle"
-    onClick={() => setDarkMode((current) => !current)}
-    aria-label={
-      darkMode
-        ? 'Switch to day mode'
-        : 'Switch to night mode'
-    }
-    title={
-      darkMode
-        ? 'Switch to day mode'
-        : 'Switch to night mode'
-    }
+        <div className="mobile-auth-action">
+  <Link
+    className="mobile-join-btn"
+    to="/membership"
+    onClick={closeMenus}
   >
-    {darkMode ? (
-      <Sun size={20} />
-    ) : (
-      <Moon size={20} />
-    )}
-
-    <span>
-      {darkMode ? 'Day' : 'Night'}
-    </span>
-  </button>
-
+    Join
+  </Link>
 </div>
 
 

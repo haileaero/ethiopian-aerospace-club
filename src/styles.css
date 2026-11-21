@@ -2306,3 +2306,89 @@ body.dark-theme .search-box input::placeholder {
     display: none !important;
   }
 }
+/* =========================================================
+   EAC V5 — MOBILE HEADER JOIN BUTTON
+   ========================================================= */
+
+.mobile-auth-action {
+  display: none;
+}
+
+@media (max-width: 760px) {
+
+  /* Hide Day/Night button from mobile */
+  .institutional-header .header-actions {
+    display: none !important;
+  }
+
+  /* Show Join button beside the hamburger */
+  .institutional-header .mobile-auth-action {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-left: auto !important;
+    margin-right: 8px !important;
+    z-index: 7000 !important;
+  }
+
+  .institutional-header .mobile-join-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 62px !important;
+    height: 36px !important;
+    padding: 0 13px !important;
+
+    background: #0b2239 !important;
+    color: #ffffff !important;
+
+    border: 1px solid #0b2239 !important;
+    border-radius: 6px !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: .5px !important;
+
+    white-space: nowrap !important;
+    text-decoration: none !important;
+  }
+
+  .institutional-header .mobile-join-btn:hover {
+    background: #2e769e !important;
+    border-color: #2e769e !important;
+  }
+
+  /* Make room for logo + Join + hamburger */
+  .institutional-header .institutional-brand-row {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .institutional-header .institutional-brand-row .brand {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .institutional-header .institutional-brand-row .menu-btn {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    margin-left: 0 !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 430px) {
+
+  .institutional-header .mobile-join-btn {
+    min-width: 56px !important;
+    height: 34px !important;
+    padding: 0 11px !important;
+    font-size: 8px !important;
+  }
+
+  .institutional-header .institutional-brand-row .menu-btn {
+    flex-basis: 40px !important;
+    width: 40px !important;
+  }
+}
