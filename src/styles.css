@@ -680,4 +680,60 @@
     scroll-behavior: auto !important;
   }
 }
+/* =========================================================
+   EAC MEMBER PROFILE EDIT FORM — RESPONSIVE FIX
+   ========================================================= */
 
+.profile-edit-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.profile-edit-grid > label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+}
+
+.profile-edit-grid > label input,
+.profile-edit-grid > label select {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: 46px !important;
+  padding: 0 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* Phone and email should remain normal grid items */
+.profile-edit-grid > label {
+  grid-column: auto !important;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .profile-edit-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .profile-edit-grid > label {
+    width: 100% !important;
+  }
+
+  .profile-edit-grid > label input,
+  .profile-edit-grid > label select {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
