@@ -2231,3 +2231,69 @@ body.dark-theme .search-box input::placeholder {
     min-height: 58px !important;
   }
 }
+/* =========================================================
+   EAC V5 — MOBILE DAY / NIGHT TOGGLE FIX
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  /* Keep the theme controls visible in the mobile header */
+  .institutional-header .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10020 !important;
+  }
+
+  /* Mobile theme button */
+  .institutional-header .theme-toggle {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 78px !important;
+    width: auto !important;
+    height: 40px !important;
+
+    padding: 0 12px !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    position: relative !important;
+    z-index: 10021 !important;
+
+    cursor: pointer !important;
+  }
+
+  .institutional-header .theme-toggle span {
+    display: inline !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Make sure the icon remains visible */
+  .institutional-header .theme-toggle svg {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Night mode button */
+  body:not(.dark-theme) .institutional-header .theme-toggle {
+    background: #ffffff !important;
+    color: #123451 !important;
+    border-color: #d8e1e7 !important;
+  }
+
+  /* Day mode button */
+  body.dark-theme .institutional-header .theme-toggle {
+    background: #102f49 !important;
+    color: #f2c15c !important;
+    border-color: #31506a !important;
+  }
+}
