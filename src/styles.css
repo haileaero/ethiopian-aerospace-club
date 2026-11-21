@@ -2000,3 +2000,103 @@ body.dark-theme .institutional-nav-bar .nav-dropdown.is-open .dropdown-menu a:ho
     max-width: 100% !important;
   }
 }
+
+/* =========================================================
+   MEMBERS + COMMITTEE CARD CONTRAST FIX
+   Targeted fix: keep public profile cards readable in Day/Night mode.
+   ========================================================= */
+
+/* Public member/committee cards use a light surface by design. */
+.public-member-card,
+.public-committee-card {
+  background: #ffffff !important;
+  border: 1px solid #dfe7ed !important;
+  color: #17344d !important;
+}
+
+.public-member-card h1,
+.public-member-card h2,
+.public-member-card h3,
+.public-member-card h4,
+.public-committee-card h1,
+.public-committee-card h2,
+.public-committee-card h3,
+.public-committee-card h4 {
+  color: #17344d !important;
+}
+
+.public-member-card p,
+.public-member-card span,
+.public-member-card small,
+.public-committee-card p,
+.public-committee-card span,
+.public-committee-card small {
+  color: #65798a !important;
+}
+
+.public-member-card a,
+.public-committee-card a {
+  color: #2e769e !important;
+}
+
+/* The global dark-theme rules previously turned text inside these
+   light cards white. Override that inheritance only for these cards. */
+body.dark-theme .public-member-card,
+body.dark-theme .public-committee-card {
+  background: #ffffff !important;
+  border-color: #dfe7ed !important;
+  color: #17344d !important;
+}
+
+body.dark-theme .public-member-card h1,
+body.dark-theme .public-member-card h2,
+body.dark-theme .public-member-card h3,
+body.dark-theme .public-member-card h4,
+body.dark-theme .public-committee-card h1,
+body.dark-theme .public-committee-card h2,
+body.dark-theme .public-committee-card h3,
+body.dark-theme .public-committee-card h4 {
+  color: #17344d !important;
+}
+
+body.dark-theme .public-member-card p,
+body.dark-theme .public-member-card span,
+body.dark-theme .public-member-card small,
+body.dark-theme .public-committee-card p,
+body.dark-theme .public-committee-card span,
+body.dark-theme .public-committee-card small {
+  color: #65798a !important;
+}
+
+body.dark-theme .public-member-card a,
+body.dark-theme .public-committee-card a {
+  color: #2e769e !important;
+}
+
+/* Member-directory search control */
+body.dark-theme .search-box {
+  background: #0d2b43 !important;
+  border-color: #31506a !important;
+  color: #dbe6ed !important;
+}
+
+body.dark-theme .search-box svg {
+  color: #9db4c4 !important;
+}
+
+body.dark-theme .search-box input {
+  background: transparent !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+body.dark-theme .search-box input::placeholder {
+  color: #91a5b4 !important;
+}
+
+@media (max-width: 760px) {
+  .public-member-card,
+  .public-committee-card {
+    width: 100%;
+  }
+}
