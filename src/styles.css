@@ -737,3 +737,99 @@
     max-width: 100% !important;
   }
 }
+/* =========================================================
+   EAC HEADER / DESKTOP NAVIGATION OVERFLOW FIX
+   ========================================================= */
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Keep the main navigation inside the viewport */
+.institutional-nav-bar {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.institutional-nav-bar .nav-main {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+/* Navigation takes the available space */
+.institutional-nav-bar .nav-main nav {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+/* Reduce excessive horizontal spacing */
+.institutional-nav-bar .nav-main nav a {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  padding-left: 14px;
+  padding-right: 14px;
+  font-size: 15px;
+}
+
+/* Keep Join EAC inside the header */
+.institutional-nav-bar .nav-main .nav-cta {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  margin-left: 6px;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1200px) and (min-width: 761px) {
+  .institutional-nav-bar .nav-main nav a {
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 13px;
+  }
+
+  .institutional-nav-bar .nav-main .nav-cta {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .institutional-nav-bar .nav-main {
+    display: block;
+    width: 100%;
+  }
+
+  .institutional-nav-bar .nav-main nav {
+    display: none;
+  }
+
+  .institutional-nav-bar .nav-main nav.open {
+    display: flex;
+  }
+
+  .institutional-nav-bar .nav-main .nav-cta {
+    display: none;
+  }
+}
