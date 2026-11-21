@@ -2520,3 +2520,136 @@ body.dark-theme .search-box input::placeholder {
     width: 40px !important;
   }
 }
+/* =========================================================
+   EAC V5 — MEMBER DASHBOARD MOBILE PROFILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  /* Prevent the dashboard from becoming wider than the phone */
+  .member-dashboard,
+  .member-dashboard * {
+    box-sizing: border-box !important;
+  }
+
+  .member-dashboard {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Profile information section */
+  .member-profile,
+  .profile-card,
+  .dashboard-profile,
+  .member-information {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Any two-column profile layout becomes one column */
+  .member-profile,
+  .profile-card,
+  .dashboard-profile,
+  .member-information {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Profile photo */
+  .member-profile img,
+  .profile-card img,
+  .dashboard-profile img {
+    max-width: 100% !important;
+  }
+
+  /* Text must wrap instead of extending outside the phone */
+  .member-profile *,
+  .profile-card *,
+  .dashboard-profile *,
+  .member-information * {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .member-dashboard {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .member-profile,
+  .profile-card,
+  .dashboard-profile,
+  .member-information {
+    width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
+/* =========================================================
+   EAC V5 — MEMBER DASHBOARD PROFILE MOBILE LAYOUT
+   ========================================================= */
+
+.member-profile-layout {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+
+  .member-profile-layout {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    gap: 22px !important;
+  }
+
+  .member-profile-layout > div {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Profile photo */
+  .member-profile-layout > div:first-child {
+    align-items: center !important;
+  }
+
+  /* Profile information */
+  .member-profile-layout .profile-lines {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .member-profile-layout .profile-lines > div {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .member-profile-layout .profile-lines strong {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 500px) {
+
+  .member-profile-layout {
+    gap: 18px !important;
+  }
+
+  .member-profile-layout > div:first-child {
+    width: 100% !important;
+  }
+}

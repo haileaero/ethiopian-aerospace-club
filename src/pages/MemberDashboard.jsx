@@ -644,17 +644,16 @@ export default function MemberDashboard() {
                 /* =========================
                    NORMAL PROFILE DISPLAY
                 ========================= */
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns:
-                      'minmax(180px,220px) 1fr',
-                    gap: '24px',
-                    alignItems: 'start',
-                    marginBottom: '24px',
-                    marginTop: '10px',
-                  }}
-                >
+               <div
+  className="member-profile-layout"
+  style={{
+    display:'grid',
+    gridTemplateColumns:'minmax(180px,220px) 1fr',
+    gap:'24px',
+    alignItems:'start',
+    marginBottom:'24px',
+  }}
+>
 
                   {/* PHOTO */}
                   <div
