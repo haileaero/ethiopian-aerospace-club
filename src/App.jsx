@@ -943,6 +943,105 @@ export default function App() {
     .public-profile-body>p{color:#657687;margin-top:0}
     @media(max-width:1000px){.public-people-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.public-profile-card{grid-template-columns:260px 1fr}}
     @media(max-width:760px){.public-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.public-members-toolbar,.public-directory-count{align-items:stretch;flex-direction:column}.public-member-search{min-width:0}.public-profile-card{grid-template-columns:1fr;padding:20px}.public-profile-photo{height:300px}}
+   /* =========================================================
+   EAC V5 — MOBILE MEMBER PROFILE FIX
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  .public-profile-card {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    grid-template-columns: none !important;
+
+    gap: 24px !important;
+    padding: 18px !important;
+
+    overflow: hidden !important;
+  }
+
+  .public-profile-photo {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 300px !important;
+
+    box-sizing: border-box !important;
+
+    flex: 0 0 auto !important;
+  }
+
+  .public-profile-photo img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover !important;
+  }
+
+  .public-profile-body {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .public-profile-body h2 {
+    font-size: 1.7rem !important;
+    line-height: 1.2 !important;
+
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .profile-lines {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+  }
+
+  .profile-lines > div {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-lines span,
+  .profile-lines strong {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 500px) {
+
+  .public-profile-card {
+    padding: 15px !important;
+    gap: 20px !important;
+  }
+
+  .public-profile-photo {
+    height: 260px !important;
+  }
+
+  .public-profile-body h2 {
+    font-size: 1.5rem !important;
+  }
+}
     @media(max-width:500px){.public-people-grid{grid-template-columns:1fr}.public-person-photo,.public-committee-card .public-person-photo{height:260px}}
   `}</style>
       <Header />
