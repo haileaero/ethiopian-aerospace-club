@@ -12,7 +12,7 @@ import {
   Cpu, ShieldCheck, Globe2, ExternalLink, CheckCircle2, Factory, Code2,
   ClipboardCheck, Boxes, Target, Microscope, Download, Search, Filter,
   Clock3, FileText, Award, Building2, CircleHelp, Layers3, Settings2,
-  Gauge, Radar, Presentation, PenTool, BoxesIcon
+  Gauge, Radar, Presentation, PenTool, BoxesIcon, Sun, Moon
 } from 'lucide-react';
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -128,10 +128,22 @@ function AccountNav(){
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [scrolled, setScrolled] = useState(false);
+const [openDropdown, setOpenDropdown] = useState(null);
+const [searchOpen, setSearchOpen] = useState(false);
+const [query, setQuery] = useState('');
+const [scrolled, setScrolled] = useState(false);
+
+const [darkMode, setDarkMode] = useState(() => {
+  return localStorage.getItem('eac-theme') === 'dark';
+});
+useEffect(() => {
+  document.body.classList.toggle('dark-theme', darkMode);
+
+  localStorage.setItem(
+    'eac-theme',
+    darkMode ? 'dark' : 'light'
+  );
+}, [darkMode]);
 
   const location = useLocation();
   const headerRef = useRef(null);
@@ -394,64 +406,35 @@ function Header() {
 
           <Brand />
 
-          <div className="institutional-search-wrap">
+         <div className="header-actions">
 
-            <button
-              className="search-trigger"
-              onClick={toggleSearch}
-              aria-label="Search website"
-            >
+  <button
+    type="button"
+    className="theme-toggle"
+    onClick={() => setDarkMode((current) => !current)}
+    aria-label={
+      darkMode
+        ? 'Switch to day mode'
+        : 'Switch to night mode'
+    }
+    title={
+      darkMode
+        ? 'Switch to day mode'
+        : 'Switch to night mode'
+    }
+  >
+    {darkMode ? (
+      <Sun size={20} />
+    ) : (
+      <Moon size={20} />
+    )}
 
-              <Search size={19} />
+    <span>
+      {darkMode ? 'Day' : 'Night'}
+    </span>
+  </button>
 
-              <span>
-                Search everything...
-              </span>
-
-            </button>
-
-
-            {searchOpen && (
-
-              <div className="search-panel">
-
-                <input
-                  autoFocus
-                  value={query}
-                  onChange={(e) =>
-                    setQuery(e.target.value)
-                  }
-                  placeholder="Search EAC..."
-                />
-
-                <div>
-
-                  {results.map(([text, to]) => (
-
-                    <Link
-                      key={`${text}-${to}`}
-                      to={to}
-                      onClick={closeMenus}
-                    >
-                      {text}
-                      <ArrowUpRight size={14} />
-                    </Link>
-
-                  ))}
-
-                  {results.length === 0 && (
-                    <p>
-                      No matching page found.
-                    </p>
-                  )}
-
-                </div>
-
-              </div>
-
-            )}
-
-          </div>
+</div>
 
 
           {/* MOBILE MENU BUTTON */}

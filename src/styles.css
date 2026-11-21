@@ -1141,3 +1141,208 @@ body {
     background: #eef4f8 !important;
   }
 }
+/* =========================================================
+   EAC V5 — DAY / NIGHT MODE
+   ========================================================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Theme button */
+
+.theme-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+
+  min-width: 92px !important;
+  height: 46px !important;
+
+  padding: 0 16px !important;
+
+  border: 1px solid #d8e1e7 !important;
+  border-radius: 999px !important;
+
+  background: #ffffff !important;
+  color: #123451 !important;
+
+  font-family: inherit !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+
+  cursor: pointer !important;
+
+  transition:
+    background .25s ease,
+    color .25s ease,
+    border-color .25s ease,
+    transform .2s ease !important;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.theme-toggle svg {
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+body.dark-theme {
+  background: #071a2b !important;
+  color: #e7eef4 !important;
+}
+
+body.dark-theme .site-header,
+body.dark-theme .institutional-header {
+  background: #071a2b !important;
+  color: #ffffff !important;
+}
+
+body.dark-theme .institutional-brand-row {
+  background: #071a2b !important;
+}
+
+body.dark-theme .institutional-nav-bar {
+  background: #0b2a45 !important;
+}
+
+body.dark-theme .institutional-nav-bar nav a,
+body.dark-theme .institutional-nav-bar nav .nav-parent {
+  color: #ffffff !important;
+}
+
+body.dark-theme .theme-toggle {
+  background: #102f49 !important;
+  border-color: #31506a !important;
+  color: #f2c15c !important;
+}
+
+
+/* Main page areas */
+
+body.dark-theme .section,
+body.dark-theme .section-soft,
+body.dark-theme .page,
+body.dark-theme main {
+  background-color: #071a2b !important;
+}
+
+body.dark-theme .section-heading h2,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4 {
+  color: #f4f7fa !important;
+}
+
+body.dark-theme p,
+body.dark-theme li,
+body.dark-theme label {
+  color: #b9c7d2;
+}
+
+
+/* Cards */
+
+body.dark-theme .card,
+body.dark-theme .feature-card,
+body.dark-theme .project-card,
+body.dark-theme .form-card,
+body.dark-theme .admin-card,
+body.dark-theme .profile-card,
+body.dark-theme .public-profile-card {
+  background: #0d2b43 !important;
+  border-color: #28465c !important;
+}
+
+
+/* Inputs */
+
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  background: #102f49 !important;
+  color: #ffffff !important;
+  border-color: #3b5870 !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+  color: #91a5b4 !important;
+}
+
+
+/* Dropdown menus */
+
+body.dark-theme
+.institutional-nav-bar
+.nav-dropdown.is-open
+.dropdown-menu {
+  background: #102f49 !important;
+  border-color: #31506a !important;
+}
+
+body.dark-theme
+.institutional-nav-bar
+.nav-dropdown.is-open
+.dropdown-menu a {
+  background: #102f49 !important;
+  color: #ffffff !important;
+}
+
+body.dark-theme
+.institutional-nav-bar
+.nav-dropdown.is-open
+.dropdown-menu a:hover {
+  background: #173d59 !important;
+}
+
+
+/* Mobile menu */
+
+@media (max-width: 760px) {
+
+  body.dark-theme
+  .institutional-nav-bar nav.open {
+    background: #071a2b !important;
+  }
+
+  body.dark-theme
+  .institutional-nav-bar nav.open a {
+    background: #071a2b !important;
+    color: #ffffff !important;
+    border-color: #29465c !important;
+  }
+
+  body.dark-theme
+  .institutional-nav-bar nav.open
+  .mobile-menu-search {
+    background: #071a2b !important;
+  }
+
+  body.dark-theme
+  .institutional-nav-bar nav.open
+  .mobile-menu-search input {
+    background: #102f49 !important;
+    color: #ffffff !important;
+  }
+}
+
+
+/* Hide the old large desktop search area */
+
+@media (min-width: 761px) {
+  .institutional-search-wrap {
+    display: none !important;
+  }
+}
