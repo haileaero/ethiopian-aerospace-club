@@ -2100,3 +2100,40 @@ body.dark-theme .search-box input::placeholder {
     width: 100%;
   }
 }
+
+/* =========================================================
+   V5 SCROLLING HEADER FIX — KEEP NAVIGATION VISIBLE
+   The React header is wrapped by .header-shell. The wrapper must
+   participate in the sticky positioning; otherwise the sticky
+   child (.institutional-header) can stop at the wrapper boundary.
+   ========================================================= */
+.header-shell {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 5000 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+
+.header-shell .institutional-header {
+  position: relative !important;
+  top: auto !important;
+  z-index: 5001 !important;
+}
+
+@media (max-width: 760px) {
+  .header-shell {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 5000 !important;
+    overflow: visible !important;
+  }
+
+  .header-shell .institutional-header,
+  .header-shell .institutional-header.header-scrolled {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
