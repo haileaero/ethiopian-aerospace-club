@@ -2137,3 +2137,54 @@ body.dark-theme .search-box input::placeholder {
   }
 }
 
+/* =========================================================
+   FINAL V5 HEADER SCROLL FIX
+   ========================================================= */
+
+.header-shell {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 6000 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+
+.header-shell .institutional-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 6001 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Desktop: navigation remains at the top after scrolling */
+@media (min-width: 761px) {
+  .header-shell {
+    position: sticky !important;
+    top: 0 !important;
+  }
+
+  .header-shell .institutional-header {
+    position: sticky !important;
+    top: 0 !important;
+  }
+
+  .header-shell .institutional-header .institutional-nav-bar {
+    position: relative !important;
+    z-index: 6002 !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .header-shell {
+    position: sticky !important;
+    top: 0 !important;
+  }
+
+  .header-shell .institutional-header {
+    position: sticky !important;
+    top: 0 !important;
+  }
+}
