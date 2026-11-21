@@ -1056,3 +1056,88 @@ body {
     color: #0c2944 !important;
   }
 }
+/* =========================================================
+   EAC V5 - DESKTOP DROPDOWN FIX ONLY
+   Mobile dropdown/menu is intentionally untouched.
+   ========================================================= */
+
+@media (min-width: 761px) {
+
+  /* Allow dropdowns to extend outside the navigation bar */
+  .institutional-nav-bar,
+  .institutional-nav-bar .nav-main,
+  .institutional-nav-bar nav {
+    overflow: visible !important;
+  }
+
+  /* Keep navigation above the hero */
+  .institutional-nav-bar {
+    position: relative !important;
+    z-index: 1000 !important;
+  }
+
+  .institutional-nav-bar .nav-main {
+    position: relative !important;
+    z-index: 1001 !important;
+  }
+
+  /* Dropdown parent */
+  .institutional-nav-bar .nav-dropdown {
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  /*
+     IMPORTANT:
+     React adds .is-open when the desktop item is clicked.
+  */
+  .institutional-nav-bar
+  .nav-dropdown.is-open
+  .dropdown-menu {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+
+    min-width: 230px !important;
+
+    background: #ffffff !important;
+
+    z-index: 99999 !important;
+
+    pointer-events: auto !important;
+
+    transform: none !important;
+  }
+
+  /* Dropdown links */
+  .institutional-nav-bar
+  .nav-dropdown.is-open
+  .dropdown-menu a {
+    display: block !important;
+
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    padding: 13px 18px !important;
+
+    color: #0d2d4c !important;
+    background: #ffffff !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    pointer-events: auto !important;
+
+    text-decoration: none !important;
+  }
+
+  .institutional-nav-bar
+  .nav-dropdown.is-open
+  .dropdown-menu a:hover {
+    background: #eef4f8 !important;
+  }
+}
