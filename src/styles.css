@@ -1346,45 +1346,657 @@ body.dark-theme
     display: none !important;
   }
 }
+
+
 /* =========================================================
-   EAC V5 — DARK MODE TEXT CORRECTION
+   EAC V5 — FINAL RESPONSIVE + DAY/NIGHT OVERRIDES
+   ---------------------------------------------------------
+   This block is intentionally last. The V5 stylesheet contains
+   several older responsive rules; these final rules provide one
+   authoritative result without changing the React/Supabase logic.
    ========================================================= */
 
-/* Keep the large hero/page-intro areas readable */
-body.dark-theme .hero h1,
-body.dark-theme .page-hero h1,
+/* ------------------------------
+   DESKTOP DROPDOWNS
+   ------------------------------ */
+@media (min-width: 761px) {
+  .institutional-nav-bar,
+  .institutional-nav-bar .nav-main,
+  .institutional-nav-bar nav,
+  .institutional-nav-bar .nav-dropdown {
+    overflow: visible !important;
+  }
+
+  .institutional-nav-bar {
+    position: relative !important;
+    z-index: 5000 !important;
+  }
+
+  .institutional-nav-bar .nav-dropdown .nav-parent {
+    position: relative !important;
+    z-index: 5002 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  .institutional-nav-bar .nav-dropdown.is-open .dropdown-menu {
+    display: block !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    min-width: 230px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    z-index: 99999 !important;
+  }
+
+  .institutional-nav-bar .nav-dropdown.is-open .dropdown-menu a {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* ------------------------------
+   MOBILE HEADER + MENU
+   ------------------------------ */
+@media (max-width: 760px) {
+  html, body, #root {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .institutional-header,
+  .institutional-header.header-scrolled {
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: 5000 !important;
+    background: #fff !important;
+    overflow: visible !important;
+  }
+
+  .institutional-header .institutional-top {
+    display: none !important;
+  }
+
+  .institutional-header .institutional-brand-row,
+  .institutional-header.header-scrolled .institutional-brand-row {
+    display: flex !important;
+    width: 100% !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    padding: 0 14px !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    pointer-events: auto !important;
+  }
+
+  .institutional-header .institutional-search-wrap {
+    display: none !important;
+  }
+
+  .institutional-header .brand-logo {
+    width: 43px !important;
+    height: 43px !important;
+    flex: 0 0 43px !important;
+  }
+
+  .institutional-header .brand span {
+    min-width: 0 !important;
+  }
+
+  .institutional-header .brand span strong {
+    font-size: 8px !important;
+    letter-spacing: 1.4px !important;
+    white-space: nowrap !important;
+  }
+
+  .institutional-header .brand span b {
+    font-size: 12px !important;
+    letter-spacing: 1px !important;
+    white-space: nowrap !important;
+  }
+
+  .institutional-header .brand span small {
+    font-size: 7px !important;
+    white-space: nowrap !important;
+  }
+
+  .institutional-header .menu-btn {
+    display: grid !important;
+    place-items: center !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    margin-left: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #123a64 !important;
+    position: relative !important;
+    z-index: 7001 !important;
+  }
+
+  .institutional-header .institutional-nav-bar,
+  .institutional-header.header-scrolled .institutional-nav-bar {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  .institutional-header .institutional-nav-bar .nav-main,
+  .institutional-header.header-scrolled .institutional-nav-bar .nav-main {
+    position: relative !important;
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .institutional-header .institutional-nav-bar .nav-main nav {
+    display: none !important;
+  }
+
+  .institutional-header .institutional-nav-bar .nav-main nav.open {
+    display: flex !important;
+    position: fixed !important;
+    top: 64px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: calc(100vh - 74px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    background: #fff !important;
+    border: 1px solid #dce5ea !important;
+    border-radius: 0 0 12px 12px !important;
+    box-shadow: 0 20px 55px rgba(7,26,43,.25) !important;
+    z-index: 6500 !important;
+  }
+
+  .institutional-header .mobile-menu-search {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 11px !important;
+    margin: 0 0 8px !important;
+    background: #f5f8fa !important;
+    border: 1px solid #dce5ea !important;
+    border-radius: 8px !important;
+  }
+
+  .institutional-header .mobile-menu-search input {
+    width: 100% !important;
+    min-width: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+    background: transparent !important;
+    color: #173f69 !important;
+  }
+
+  .institutional-header .institutional-nav-bar .nav-main nav.open > a,
+  .institutional-header .institutional-nav-bar .nav-main nav.open .nav-dropdown .nav-parent {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    min-height: 43px !important;
+    height: 43px !important;
+    box-sizing: border-box !important;
+    padding: 0 12px !important;
+    background: #fff !important;
+    color: #173f69 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #edf1f4 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+  }
+
+  .institutional-header .nav-dropdown {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .institutional-header .nav-dropdown .dropdown-menu {
+    position: static !important;
+    display: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 0 4px !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    border-left: 2px solid #d7ad63 !important;
+    background: #f8fafb !important;
+  }
+
+  .institutional-header .nav-dropdown.is-open .dropdown-menu {
+    display: block !important;
+  }
+
+  .institutional-header .nav-dropdown .dropdown-menu a {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    box-sizing: border-box !important;
+    padding: 0 14px 0 17px !important;
+    color: #173f69 !important;
+    font-size: 10px !important;
+    white-space: nowrap !important;
+  }
+
+  .institutional-header .institutional-nav-bar .nav-cta {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 43px !important;
+    margin: 8px 0 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Keep the actual hero below the header instead of being pushed
+     sideways or creating a second horizontal scrollbar. */
+  .institutional-hero,
+  .hero-overlay,
+  .hero-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .institutional-header .institutional-brand-row,
+  .institutional-header.header-scrolled .institutional-brand-row {
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .institutional-header .brand-logo {
+    width: 39px !important;
+    height: 39px !important;
+    flex-basis: 39px !important;
+  }
+
+  .institutional-header .brand span b {
+    font-size: 11px !important;
+  }
+
+  .institutional-header .menu-btn {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+  }
+
+  .institutional-header .institutional-nav-bar .nav-main nav.open {
+    top: 60px !important;
+    left: 7px !important;
+    right: 7px !important;
+    max-height: calc(100vh - 70px) !important;
+  }
+}
+
+/* ------------------------------
+   DAY / NIGHT MODE
+   ------------------------------ */
+body.dark-theme {
+  background: #071a2b !important;
+  color: #e7eef4 !important;
+}
+
+body.dark-theme .institutional-header,
+body.dark-theme .site-header {
+  background: #071a2b !important;
+  color: #fff !important;
+}
+
+body.dark-theme .institutional-top {
+  background: #061726 !important;
+}
+
+body.dark-theme .institutional-brand-row {
+  background: #071a2b !important;
+}
+
+/* The logo file contains a white square. Multiplying the image over
+   the dark header removes the visible white box while preserving the
+   colored emblem much better than a filter. */
+body.dark-theme .institutional-brand-row .brand-logo,
+body.dark-theme .institutional-brand-row img {
+  background: transparent !important;
+  border: 0 !important;
+  mix-blend-mode: multiply !important;
+}
+
+body.dark-theme .institutional-brand-row .brand {
+  color: #fff !important;
+}
+
+body.dark-theme .institutional-brand-row .brand span strong,
+body.dark-theme .institutional-brand-row .brand span b,
+body.dark-theme .institutional-brand-row .brand span small {
+  color: #fff !important;
+}
+
+body.dark-theme .institutional-brand-row .brand span small {
+  color: #d7ad63 !important;
+}
+
+body.dark-theme .institutional-nav-bar {
+  background: #0b2a45 !important;
+}
+
+body.dark-theme .institutional-nav-bar nav > a,
+body.dark-theme .institutional-nav-bar .nav-parent {
+  color: #fff !important;
+}
+
+body.dark-theme .institutional-nav-bar nav > a:hover,
+body.dark-theme .institutional-nav-bar .nav-parent:hover,
+body.dark-theme .institutional-nav-bar nav > a.active,
+body.dark-theme .institutional-nav-bar .nav-parent.active {
+  background: #123b5c !important;
+  color: #fff !important;
+}
+
+body.dark-theme .theme-toggle {
+  background: #102f49 !important;
+  border-color: #31506a !important;
+  color: #f2c15c !important;
+}
+
+/* Main page background and headings */
+body.dark-theme main,
+body.dark-theme .page {
+  background: #071a2b !important;
+  color: #e7eef4 !important;
+}
+
+body.dark-theme .section,
+body.dark-theme .section-soft {
+  background: #071a2b !important;
+}
+
+body.dark-theme .section-heading h2,
+body.dark-theme .section h1,
+body.dark-theme .section h2,
+body.dark-theme .section h3,
+body.dark-theme .section h4 {
+  color: #f4f7fa !important;
+}
+
+body.dark-theme .section p,
+body.dark-theme .section li,
+body.dark-theme .section label {
+  color: #b9c7d2 !important;
+}
+
+/* Page introductions must stay readable in night mode.
+   The previous rule made these backgrounds light while their text
+   inherited the night-mode colors, causing the washed-out headings. */
+body.dark-theme .page-intro,
+body.dark-theme .page-hero {
+  background: #0b263d !important;
+  color: #f4f7fa !important;
+  border-color: #24455d !important;
+}
+
 body.dark-theme .page-intro h1,
+body.dark-theme .page-hero h1,
+body.dark-theme .page-intro h2,
+body.dark-theme .page-hero h2 {
+  color: #f7fafc !important;
+}
+
+body.dark-theme .page-intro p,
+body.dark-theme .page-hero p {
+  color: #b9c9d5 !important;
+}
+
+body.dark-theme .page-intro .eyebrow,
+body.dark-theme .page-hero .eyebrow {
+  color: #d7ad63 !important;
+}
+
+/* Home / institutional hero */
+body.dark-theme .institutional-hero {
+  color: #fff !important;
+}
+
+body.dark-theme .hero-slide-copy h1,
+body.dark-theme .hero-slide-copy h2 {
+  color: #fff !important;
+}
+
+body.dark-theme .hero-slide-copy p {
+  color: #dbe6ed !important;
+}
+
+/* Older generic hero classes used on other V5 pages */
+body.dark-theme .hero h1,
 body.dark-theme .hero h2,
-body.dark-theme .page-hero h2,
-body.dark-theme .page-intro h2 {
-  color: #0d2943 !important;
+body.dark-theme .hero h3,
+body.dark-theme .hero .hero-slide-copy h1 {
+  color: #fff !important;
 }
 
 body.dark-theme .hero p,
-body.dark-theme .page-hero p,
-body.dark-theme .page-intro p {
-  color: #607b91 !important;
+body.dark-theme .hero .hero-slide-copy p {
+  color: #c9d7e0 !important;
 }
 
 body.dark-theme .hero .eyebrow,
-body.dark-theme .page-hero .eyebrow,
-body.dark-theme .page-intro .eyebrow {
-  color: #17658f !important;
+body.dark-theme .hero-slide-copy .eyebrow {
+  color: #d7ad63 !important;
 }
 
-/* Keep light hero background */
-body.dark-theme .hero,
-body.dark-theme .page-hero,
-body.dark-theme .page-intro {
-  background: #eef4f7 !important;
+/* Cards, forms and dashboard surfaces */
+body.dark-theme .card,
+body.dark-theme .feature-card,
+body.dark-theme .project-card,
+body.dark-theme .form-card,
+body.dark-theme .admin-card,
+body.dark-theme .profile-card,
+body.dark-theme .public-profile-card,
+body.dark-theme .dashboard-card,
+body.dark-theme .security-panel,
+body.dark-theme .admin-sidebar,
+body.dark-theme .admin-welcome,
+body.dark-theme .admin-stat-grid > div,
+body.dark-theme .admin-empty,
+body.dark-theme .division-explorer,
+body.dark-theme .opportunity-card,
+body.dark-theme .news-grid article,
+body.dark-theme .search-box,
+body.dark-theme .quick-links {
+  background: #0d2b43 !important;
+  border-color: #28465c !important;
 }
 
+body.dark-theme .card h1,
+body.dark-theme .card h2,
+body.dark-theme .card h3,
+body.dark-theme .form-card h3,
+body.dark-theme .admin-card h3,
+body.dark-theme .admin-welcome h2,
+body.dark-theme .admin-section-title h2,
+body.dark-theme .admin-empty h3,
+body.dark-theme .opportunity-card h3,
+body.dark-theme .news-body h3 {
+  color: #f4f7fa !important;
+}
 
-/* =========================================================
-   LOGO
-   ========================================================= */
+body.dark-theme .card p,
+body.dark-theme .form-card > p,
+body.dark-theme .admin-welcome p,
+body.dark-theme .admin-section-title p,
+body.dark-theme .admin-empty p,
+body.dark-theme .opportunity-card p,
+body.dark-theme .news-body p {
+  color: #b9c7d2 !important;
+}
 
-body.dark-theme .institutional-brand-row img {
-  background: transparent !important;
-  border: none !important;
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+  background: #102f49 !important;
+  color: #fff !important;
+  border-color: #3b5870 !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+  color: #91a5b4 !important;
+}
+
+body.dark-theme .dropdown-menu,
+body.dark-theme .institutional-nav-bar .nav-dropdown.is-open .dropdown-menu {
+  background: #102f49 !important;
+  border-color: #31506a !important;
+}
+
+body.dark-theme .dropdown-menu a,
+body.dark-theme .institutional-nav-bar .nav-dropdown.is-open .dropdown-menu a {
+  background: #102f49 !important;
+  color: #fff !important;
+}
+
+body.dark-theme .dropdown-menu a:hover,
+body.dark-theme .institutional-nav-bar .nav-dropdown.is-open .dropdown-menu a:hover {
+  background: #173d59 !important;
+  color: #fff !important;
+}
+
+/* Mobile night menu */
+@media (max-width: 760px) {
+  body.dark-theme .institutional-header,
+  body.dark-theme .institutional-header .institutional-brand-row {
+    background: #071a2b !important;
+  }
+
+  body.dark-theme .institutional-header .menu-btn {
+    color: #f2c15c !important;
+  }
+
+  body.dark-theme .institutional-header .institutional-nav-bar .nav-main nav.open {
+    background: #071a2b !important;
+    border-color: #29465c !important;
+  }
+
+  body.dark-theme .institutional-header .mobile-menu-search {
+    background: #102f49 !important;
+    border-color: #31506a !important;
+  }
+
+  body.dark-theme .institutional-header .mobile-menu-search input {
+    color: #fff !important;
+  }
+
+  body.dark-theme .institutional-header .nav-main nav.open > a,
+  body.dark-theme .institutional-header .nav-main nav.open .nav-dropdown .nav-parent {
+    background: #071a2b !important;
+    color: #fff !important;
+    border-color: #29465c !important;
+  }
+
+  body.dark-theme .institutional-header .nav-dropdown .dropdown-menu {
+    background: #0d2b43 !important;
+    border-left-color: #d7ad63 !important;
+  }
+
+  body.dark-theme .institutional-header .nav-dropdown .dropdown-menu a {
+    background: #0d2b43 !important;
+    color: #dbe6ed !important;
+  }
+
+  body.dark-theme .institutional-header .nav-dropdown .dropdown-menu a:hover {
+    background: #173d59 !important;
+    color: #fff !important;
+  }
+}
+
+/* ------------------------------
+   MEMBER PROFILE EDIT FORM
+   ------------------------------ */
+.profile-edit-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.profile-edit-grid > label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.profile-edit-grid > label input,
+.profile-edit-grid > label select,
+.profile-edit-grid > label textarea {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  height: 46px !important;
+  padding: 0 14px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 760px) {
+  .profile-edit-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .profile-edit-grid > label,
+  .profile-edit-grid > label input,
+  .profile-edit-grid > label select,
+  .profile-edit-grid > label textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
