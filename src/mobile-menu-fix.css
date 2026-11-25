@@ -2,12 +2,10 @@
    EAC V5 — MOBILE MENU FIX
    ========================================================= */
 
-/* =========================================================
-   MOBILE ONLY
-   ========================================================= */
-
+/* Mobile only */
 @media (max-width: 760px) {
 
+  /* Prevent horizontal page movement */
   html,
   body {
     width: 100%;
@@ -15,490 +13,282 @@
     overflow-x: hidden !important;
   }
 
-  /* -------------------------------------------------------
-     MOBILE HEADER
-  ------------------------------------------------------- */
-
+  /* Keep the mobile header above page content */
   .institutional-header {
-    width: 100%;
-    max-width: 100%;
-    position: relative;
-    z-index: 6000;
+    position: relative !important;
+    z-index: 6000 !important;
   }
 
-  .institutional-header .institutional-top {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .institutional-header .institutional-brand-row {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .institutional-header .institutional-nav-bar {
-    width: 100%;
-    max-width: 100%;
-    position: relative;
-    z-index: 6000;
+  .institutional-nav-bar {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: 6100 !important;
     overflow: visible !important;
   }
 
-  .institutional-header .institutional-nav-bar .nav-main {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    padding: 0 !important;
-    display: block;
-    position: relative;
-  }
-
-  /* =======================================================
-     IMPORTANT:
-     When the mobile menu is open, stop the MAIN PAGE from
-     scrolling. The menu itself will be allowed to scroll.
-  ======================================================= */
-
-  body:has(
-    .institutional-header
-    .institutional-nav-bar
-    nav.open
-  ) {
-    overflow: hidden !important;
-    touch-action: none !important;
-  }
-
-  html:has(
-    .institutional-header
-    .institutional-nav-bar
-    nav.open
-  ) {
-    overflow: hidden !important;
-  }
-
-  /* =======================================================
-     CLOSED MENU
-  ======================================================= */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav {
-    display: none !important;
-  }
-
-  /* =======================================================
-     OPEN MENU
-
-     IMPORTANT:
-     This is NOT fixed.
-
-     It remains attached to the mobile navigation bar,
-     while the page behind it is prevented from scrolling.
-  ======================================================= */
-
-  .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
-
-    display: flex !important;
-
-    position: absolute !important;
-
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-
+  .institutional-nav-bar .nav-main {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
 
-    max-height: calc(100vh - 70px) !important;
+  /* -------------------------------------------------------
+     CLOSED MOBILE MENU
+     ------------------------------------------------------- */
 
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
+  .institutional-header .institutional-nav-bar nav {
+    display: none !important;
+  }
 
-    -webkit-overflow-scrolling: touch !important;
+  /* -------------------------------------------------------
+     OPEN MOBILE MENU
+     ------------------------------------------------------- */
 
-    overscroll-behavior: contain !important;
+  .institutional-header
+  .institutional-nav-bar
+  .nav-main
+  nav.open {
+    display: flex !important;
+
+    /*
+      FIX:
+      Keep the menu attached to the screen instead of allowing
+      the page scroll to move it away.
+    */
+    position: fixed !important;
+
+    top: 64px !important;
+    left: 10px !important;
+    right: 10px !important;
+
+    width: auto !important;
+    max-width: none !important;
+
+    max-height: calc(100vh - 76px) !important;
 
     flex-direction: column !important;
     align-items: stretch !important;
 
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
     box-sizing: border-box !important;
 
-    padding: 12px !important;
     margin: 0 !important;
+    padding: 12px !important;
 
     background: #ffffff !important;
 
     border: 1px solid #dce5ea !important;
-
     border-radius: 0 0 12px 12px !important;
 
-    box-shadow:
-      0 18px 45px rgba(7, 26, 43, 0.24) !important;
+    box-shadow: 0 20px 55px rgba(7, 26, 43, 0.25) !important;
 
     z-index: 6500 !important;
+
+    /*
+      Makes scrolling inside the menu work smoothly on phones.
+    */
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
   }
 
-  /* =======================================================
-     MOBILE SEARCH
-  ======================================================= */
-
-  .institutional-header
-    .mobile-menu-search {
-
-    display: block !important;
-
+  /* Mobile search area */
+  .mobile-menu-search {
     width: 100% !important;
     max-width: 100% !important;
-
     box-sizing: border-box !important;
 
-    padding: 6px 4px 14px !important;
+    padding: 8px 6px 14px !important;
 
-    flex-shrink: 0 !important;
+    background: transparent !important;
   }
 
-  .institutional-header
-    .mobile-menu-search input {
-
-    display: block !important;
-
+  .mobile-menu-search input {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
 
     box-sizing: border-box !important;
-
-    min-height: 42px !important;
-
-    padding: 10px 13px !important;
-
-    background: #ffffff !important;
-
-    color: #17212b !important;
-
-    border: 1px solid #d7e0e5 !important;
-
-    border-radius: 7px !important;
-
-    outline: none !important;
   }
 
+  /* Main navigation links */
   .institutional-header
-    .mobile-menu-search
-    input:focus {
-    border-color: #1b6ca8 !important;
+  .institutional-nav-bar
+  nav.open > a,
+  .institutional-header
+  .institutional-nav-bar
+  nav.open > div {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  /* =======================================================
-     MOBILE NAVIGATION ITEMS
-  ======================================================= */
-
+  /*
+    Make dropdown content usable inside the scrollable
+    mobile navigation.
+  */
   .institutional-header
-    .institutional-nav-bar
-    nav.open
-    > a,
-  .institutional-header
-    .institutional-nav-bar
-    nav.open
-    > div {
-
+  .institutional-nav-bar
+  nav.open
+  .nav-dropdown {
     width: 100% !important;
     max-width: 100% !important;
-
-    box-sizing: border-box !important;
   }
 
   .institutional-header
-    .institutional-nav-bar
-    nav.open
-    .nav-link {
-
-    width: 100% !important;
-
-    box-sizing: border-box !important;
-  }
-
-  /* =======================================================
-     MOBILE DROPDOWNS
-  ======================================================= */
-
-  .institutional-header
-    .institutional-nav-bar
-    nav.open
-    .nav-dropdown {
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    box-sizing: border-box !important;
-  }
-
-  .institutional-header
-    .institutional-nav-bar
-    nav.open
-    .dropdown-menu {
-
+  .institutional-nav-bar
+  nav.open
+  .nav-dropdown
+  .dropdown-menu {
     position: static !important;
 
     width: 100% !important;
     max-width: 100% !important;
 
-    min-width: 0 !important;
-
     box-sizing: border-box !important;
-
-    margin: 4px 0 8px !important;
 
     box-shadow: none !important;
 
     border-radius: 8px !important;
 
-    overflow: visible !important;
+    margin-top: 4px !important;
   }
 
-  /* =======================================================
+  /* -------------------------------------------------------
      MOBILE AUTH BUTTONS
-  ======================================================= */
+     ------------------------------------------------------- */
 
-  .institutional-header
-    .mobile-auth-actions {
-
+  .mobile-auth-actions {
     width: 100% !important;
 
     display: flex !important;
-
     flex-direction: column !important;
 
-    gap: 8px !important;
+    gap: 10px !important;
 
-    padding: 10px 4px 6px !important;
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+
+    border-top: 1px solid #dce5ea !important;
 
     box-sizing: border-box !important;
-
-    flex-shrink: 0 !important;
   }
 
-  .institutional-header
-    .mobile-auth-actions
-    a,
-  .institutional-header
-    .mobile-auth-actions
-    button {
-
+  .mobile-signin-btn,
+  .mobile-join-btn,
+  .mobile-signout-btn {
     width: 100% !important;
 
-    min-height: 42px !important;
+    min-height: 44px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 
     box-sizing: border-box !important;
 
-    display: flex !important;
-
-    align-items: center !important;
-
-    justify-content: center !important;
-
-    text-align: center !important;
-
-    border-radius: 7px !important;
-
-    font-weight: 600 !important;
+    border-radius: 8px !important;
 
     text-decoration: none !important;
+
+    font-weight: 700 !important;
 
     cursor: pointer !important;
   }
 
-  /* -------------------------------------------------------
-     SIGN IN
-  ------------------------------------------------------- */
-
-  .institutional-header
-    .mobile-signin-btn {
-
+  .mobile-signin-btn {
     background: #ffffff !important;
-
+    border: 1px solid #0b3554 !important;
     color: #0b3554 !important;
-
-    border: 1px solid #0b3554 !important;
   }
 
-  /* -------------------------------------------------------
-     JOIN
-  ------------------------------------------------------- */
-
-  .institutional-header
-    .mobile-join-btn {
-
+  .mobile-join-btn {
     background: #0b3554 !important;
-
-    color: #ffffff !important;
-
     border: 1px solid #0b3554 !important;
+    color: #ffffff !important;
+  }
+
+  .mobile-signout-btn {
+    background: #ffffff !important;
+    border: 1px solid #b42318 !important;
+    color: #b42318 !important;
   }
 
   /* -------------------------------------------------------
-     SIGN OUT
-  ------------------------------------------------------- */
-
-  .institutional-header
-    .mobile-signout-btn {
-
-    background: #ffffff !important;
-
-    color: #9b2020 !important;
-
-    border: 1px solid #d9b4b4 !important;
-  }
-
-  /* =======================================================
-     MOBILE MENU SCROLLBAR
-  ======================================================= */
-
-  .institutional-header
-    .institutional-nav-bar
-    nav.open::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  .institutional-header
-    .institutional-nav-bar
-    nav.open::-webkit-scrollbar-thumb {
-
-    background: rgba(11, 53, 84, 0.35);
-
-    border-radius: 10px;
-  }
-
-  /* =======================================================
      DARK MODE
-  ======================================================= */
+     ------------------------------------------------------- */
 
   body.dark-theme
-    .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
+  .institutional-header
+  .institutional-nav-bar
+  .nav-main
+  nav.open {
+    background: #101820 !important;
 
-    background: #101923 !important;
+    border-color: #33424d !important;
 
-    border-color: #293b4a !important;
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55) !important;
+  }
 
-    box-shadow:
-      0 20px 55px rgba(0, 0, 0, 0.55) !important;
+  body.dark-theme .mobile-menu-search {
+    background: transparent !important;
   }
 
   body.dark-theme
-    .institutional-header
-    .mobile-menu-search {
-
-    background: #101923 !important;
-  }
-
-  body.dark-theme
-    .institutional-header
-    .mobile-menu-search
-    input {
-
-    background: #17232e !important;
-
-    color: #f2f6f8 !important;
-
-    border-color: #344957 !important;
-  }
-
-  body.dark-theme
-    .institutional-header
-    .mobile-signin-btn {
-
-    background: #17232e !important;
-
+  .mobile-menu-search
+  input {
+    background: #18232c !important;
     color: #ffffff !important;
-
-    border-color: #5b7180 !important;
+    border-color: #40515d !important;
   }
 
   body.dark-theme
-    .institutional-header
-    .mobile-signout-btn {
-
-    background: #17232e !important;
-
-    color: #ffb4b4 !important;
-
-    border-color: #704545 !important;
+  .institutional-header
+  .institutional-nav-bar
+  nav.open
+  .dropdown-menu {
+    background: #18232c !important;
+    border-color: #40515d !important;
   }
 
-  body.dark-theme
-    .institutional-header
-    .institutional-nav-bar
-    nav.open
-    a,
-  body.dark-theme
-    .institutional-header
-    .institutional-nav-bar
-    nav.open
-    button {
-
-    color: #f2f6f8 !important;
+  body.dark-theme .mobile-auth-actions {
+    border-top-color: #33424d !important;
   }
 
-  body.dark-theme
-    .institutional-header
-    .institutional-nav-bar
-    nav.open
-    .dropdown-menu {
-
-    background: #17232e !important;
-
-    border-color: #344957 !important;
+  body.dark-theme .mobile-signin-btn {
+    background: #18232c !important;
+    border-color: #607381 !important;
+    color: #ffffff !important;
   }
 
-  body.dark-theme
-    .institutional-header
-    .institutional-nav-bar
-    nav.open
-    .dropdown-menu
-    a {
+  body.dark-theme .mobile-join-btn {
+    background: #1d5f91 !important;
+    border-color: #1d5f91 !important;
+    color: #ffffff !important;
+  }
 
-    color: #f2f6f8 !important;
+  body.dark-theme .mobile-signout-btn {
+    background: #18232c !important;
+    border-color: #d95c54 !important;
+    color: #ffb4ae !important;
   }
 }
 
-
-/* =========================================================
-   VERY SMALL PHONES
-   ========================================================= */
-
+/* Small phones */
 @media (max-width: 500px) {
-
   .institutional-header
-    .institutional-nav-bar
-    .nav-main
-    nav.open {
+  .institutional-nav-bar
+  .nav-main
+  nav.open {
+    top: 58px !important;
+    left: 6px !important;
+    right: 6px !important;
 
-    max-height: calc(100vh - 60px) !important;
+    max-height: calc(100vh - 68px) !important;
 
     padding: 10px !important;
-  }
-
-  .institutional-header
-    .mobile-menu-search {
-
-    padding-left: 4px !important;
-    padding-right: 4px !important;
-  }
-
-  .institutional-header
-    .mobile-auth-actions {
-
-    padding-left: 4px !important;
-    padding-right: 4px !important;
   }
 }
