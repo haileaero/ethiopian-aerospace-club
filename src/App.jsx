@@ -148,7 +148,7 @@ useEffect(() => {
   const location = useLocation();
   const headerRef = useRef(null);
 
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const links = [
     ['Home', '/'],
@@ -407,23 +407,36 @@ useEffect(() => {
           <Brand />
 
        <div className="mobile-auth-actions">
+  {!user ? (
+    <>
+      <Link
+        className="mobile-signin-btn"
+        to="/login"
+        onClick={closeMenus}
+      >
+        Sign in
+      </Link>
 
-  <Link
-    className="mobile-signin-btn"
-    to="/login"
-    onClick={closeMenus}
-  >
-    Sign in
-  </Link>
-
-  <Link
-    className="mobile-join-btn"
-    to="/membership"
-    onClick={closeMenus}
-  >
-    Join
-  </Link>
-
+      <Link
+        className="mobile-join-btn"
+        to="/membership"
+        onClick={closeMenus}
+      >
+        Join
+      </Link>
+    </>
+  ) : (
+    <button
+      type="button"
+      className="mobile-signout-btn"
+      onClick={async () => {
+        await signOut();
+        closeMenus();
+      }}
+    >
+      Sign out
+    </button>
+  )}
 </div>
 
 

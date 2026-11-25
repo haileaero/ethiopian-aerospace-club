@@ -2653,3 +2653,44 @@ body.dark-theme .search-box input::placeholder {
     width: 100% !important;
   }
 }
+/* =========================================================
+   EAC V5 — MOBILE SIGN OUT BUTTON
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .institutional-header .mobile-signout-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 68px !important;
+    height: 36px !important;
+    padding: 0 12px !important;
+
+    background: #0b2239 !important;
+    color: #ffffff !important;
+
+    border: 1px solid #0b2239 !important;
+    border-radius: 6px !important;
+
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: .4px !important;
+
+    white-space: nowrap !important;
+    cursor: pointer !important;
+  }
+
+  .institutional-header .mobile-signout-btn:hover {
+    background: #2e769e !important;
+    border-color: #2e769e !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .institutional-header .mobile-signout-btn {
+    min-width: 60px !important;
+    height: 34px !important;
+    padding: 0 10px !important;
+    font-size: 8px !important;
+  }
+}
