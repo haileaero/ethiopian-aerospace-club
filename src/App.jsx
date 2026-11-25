@@ -12,7 +12,7 @@ import {
   Cpu, ShieldCheck, Globe2, ExternalLink, CheckCircle2, Factory, Code2,
   ClipboardCheck, Boxes, Target, Microscope, Download, Search, Filter,
   Clock3, FileText, Award, Building2, CircleHelp, Layers3, Settings2,
-  Gauge, Radar, Presentation, PenTool, BoxesIcon
+  Gauge, Radar, Presentation, PenTool, BoxesIcon, Sun, Moon
 } from 'lucide-react';
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -128,15 +128,27 @@ function AccountNav(){
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [scrolled, setScrolled] = useState(false);
+const [openDropdown, setOpenDropdown] = useState(null);
+const [searchOpen, setSearchOpen] = useState(false);
+const [query, setQuery] = useState('');
+const [scrolled, setScrolled] = useState(false);
+
+const [darkMode, setDarkMode] = useState(() => {
+  return localStorage.getItem('eac-theme') === 'dark';
+});
+useEffect(() => {
+  document.body.classList.toggle('dark-theme', darkMode);
+
+  localStorage.setItem(
+    'eac-theme',
+    darkMode ? 'dark' : 'light'
+  );
+}, [darkMode]);
 
   const location = useLocation();
   const headerRef = useRef(null);
 
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const links = [
     ['Home', '/'],
@@ -251,29 +263,42 @@ function Header() {
    * We never change the navigation to position: fixed.
    */
   useEffect(() => {
-    let ticking = false;
+  let ticking = false;
 
-    const onScroll = () => {
-      if (ticking) return;
+  const onScroll = () => {
+    if (ticking) return;
 
-      ticking = true;
+    ticking = true;
 
-      window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      /*
+       * Mobile has its own fixed compact header.
+       * Do not apply the desktop "header-scrolled"
+       * state on phones.
+       */
+      if (window.innerWidth <= 760) {
+        setScrolled(false);
+      } else {
         setScrolled(window.scrollY > 80);
-        ticking = false;
-      });
-    };
+      }
 
-    window.addEventListener('scroll', onScroll, {
-      passive: true
+      ticking = false;
     });
+  };
 
-    onScroll();
+  window.addEventListener('scroll', onScroll, {
+    passive: true
+  });
 
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, []);
+  window.addEventListener('resize', onScroll);
+
+  onScroll();
+
+  return () => {
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onScroll);
+  };
+}, []);
 
   /*
    * Lock the page behind the mobile menu.
@@ -381,64 +406,38 @@ function Header() {
 
           <Brand />
 
-          <div className="institutional-search-wrap">
+       <div className="mobile-auth-actions">
+  {!user ? (
+    <>
+      <Link
+        className="mobile-signin-btn"
+        to="/login"
+        onClick={closeMenus}
+      >
+        Sign in
+      </Link>
 
-            <button
-              className="search-trigger"
-              onClick={toggleSearch}
-              aria-label="Search website"
-            >
-
-              <Search size={19} />
-
-              <span>
-                Search everything...
-              </span>
-
-            </button>
-
-
-            {searchOpen && (
-
-              <div className="search-panel">
-
-                <input
-                  autoFocus
-                  value={query}
-                  onChange={(e) =>
-                    setQuery(e.target.value)
-                  }
-                  placeholder="Search EAC..."
-                />
-
-                <div>
-
-                  {results.map(([text, to]) => (
-
-                    <Link
-                      key={`${text}-${to}`}
-                      to={to}
-                      onClick={closeMenus}
-                    >
-                      {text}
-                      <ArrowUpRight size={14} />
-                    </Link>
-
-                  ))}
-
-                  {results.length === 0 && (
-                    <p>
-                      No matching page found.
-                    </p>
-                  )}
-
-                </div>
-
-              </div>
-
-            )}
-
-          </div>
+      <Link
+        className="mobile-join-btn"
+        to="/membership"
+        onClick={closeMenus}
+      >
+        Join
+      </Link>
+    </>
+  ) : (
+    <button
+      type="button"
+      className="mobile-signout-btn"
+      onClick={async () => {
+        await signOut();
+        closeMenus();
+      }}
+    >
+      Sign out
+    </button>
+  )}
+</div>
 
 
           {/* MOBILE MENU BUTTON */}
@@ -722,7 +721,7 @@ function Admin(){
   const [message,setMessage]=useState('');
   const [uploading,setUploading]=useState('');
   const [data,setData]=useState({
-    hero:[],committee:[],members:[],news:[],events:[],opportunities:[],projects:[],uav:[],equipment:[],gallery:[],documents:[],social:[],site:{}
+    hero:[],committee:[],news:[],events:[],opportunities:[],projects:[],uav:[],equipment:[],gallery:[],documents:[],social:[],site:{}
   });
   const tables=['hero','committee','news','events','opportunities','projects','uav','equipment','gallery','documents','social'];
   const tableMap={hero:'hero_slides',committee:'committee_members',news:'news_announcements',events:'events',opportunities:'opportunities',projects:'projects',uav:'uav_lab',equipment:'equipment_facilities',gallery:'gallery',documents:'documents',social:'social_links'};
@@ -744,8 +743,6 @@ function Admin(){
     const results=await Promise.all(tables.map(k=>supabase.from(tableMap[k]).select('*').order('sort_order',{ascending:true}).order('id',{ascending:false})));
     const next={...data};
     tables.forEach((k,i)=>{next[k]=results[i].error?[]:(results[i].data||[])});
-    const members=await supabase.from('public_member_profiles').select('id,full_name,username,membership_type,affiliation,department,year,profession,photo_url,created_at').order('full_name',{ascending:true});
-    next.members=members.error?[]:(members.data||[]);
     const site=await supabase.from('site_settings').select('*').limit(1).maybeSingle();
     next.site=site.data||{};
     setData(next);setLoading(false);
@@ -767,18 +764,6 @@ function Admin(){
     if(id){setSaving(true);const result=await supabase.from(tableMap[key]).delete().eq('id',id);if(result.error){notify(`Delete failed: ${result.error.message}`);setSaving(false);return;}setSaving(false)}
     setData(d=>({...d,[key]:d[key].filter((_,i)=>i!==index)}));notify('Removed.');
   };
-  const removeMember=async(index)=>{
-    const member=data.members[index];
-    if(!member?.id)return;
-    if(!window.confirm(`Delete ${member.full_name||'this member'}? This will remove the member profile.`))return;
-    setSaving(true);
-    const result=await supabase.from('profiles').delete().eq('id',member.id);
-    if(result.error){notify(`Delete failed: ${result.error.message}`);setSaving(false);return;}
-    setData(d=>({...d,members:d.members.filter((_,i)=>i!==index)}));
-    notify('Member deleted successfully.');
-    setSaving(false);
-  };
-  const membersEditor=()=> <div><div className="admin-section-title"><div><div className="eyebrow">PEOPLE</div><h2>Registered members</h2><p>Manage registered EAC member profiles.</p></div></div>{data.members.length===0&&<div className="admin-empty"><Users size={30}/><h3>No members found</h3><p>Registered member profiles will appear here.</p></div>}{data.members.map((row,i)=><div className="admin-card admin-editor-card" key={row.id}><div className="admin-card-head"><div><span>MEMBER {String(i+1).padStart(2,'0')}</span><h3>{row.full_name||'EAC member'}</h3><small>{row.membership_type||'Member'}{row.username?` • @${row.username}`:''}</small></div><div className="admin-card-actions"><button type="button" className="admin-remove" onClick={()=>removeMember(i)} disabled={saving}>Delete</button></div></div><div className="admin-fields admin-settings-grid"><label>Full name<input value={row.full_name??''} readOnly/></label><label>Membership type<input value={row.membership_type??''} readOnly/></label><label>Affiliation<input value={row.affiliation??''} readOnly/></label><label>Department<input value={row.department??''} readOnly/></label><label>Year / level<input value={row.year??''} readOnly/></label><label>Profession / role<input value={row.profession??''} readOnly/></label></div></div>)}</div>;
   const saveSite=async()=>{
     setSaving(true);
     const row={tagline:data.site.tagline||'',email:data.site.email||'',phone:data.site.phone||'',location:data.site.location||''};
@@ -830,7 +815,7 @@ function Admin(){
   const renderField=(key,index,def)=>def[1]==='image_url'||def[1]==='photo_url'?imageField(key,index,def[0],def[1]):def[1]==='file_url'?documentField(key,index,def[0],def[1]):field(key,index,...def);
   const generic=(key,title,eyebrow,fields,areas=[],selects=[])=> <div><div className="admin-section-title"><div><div className="eyebrow">{eyebrow}</div><h2>{title}</h2><p>Manage approved public content from Supabase.</p></div><button className="button button-primary" onClick={()=>add(key)}>+ Add item</button></div>{data[key].length===0&&<div className="admin-empty"><FileText size={30}/><h3>No items yet</h3><p>Add the first item to publish approved content.</p></div>}{data[key].map((row,i)=><div className="admin-card admin-editor-card" key={row.id||`new-${i}`}><div className="admin-card-head"><div><span>ITEM {String(i+1).padStart(2,'0')}</span><h3>{row.title||row.name||row.platform||'New item'}</h3></div><div className="admin-card-actions"><button className="button button-primary" onClick={()=>saveRow(key,i)} disabled={saving}>Save</button>{row.id&&<button className="admin-remove" onClick={()=>remove(key,i)}>Remove</button>}</div></div><div className="admin-fields admin-settings-grid">{fields.map((def,j)=><React.Fragment key={`${def[1]}-${j}`}>{renderField(key,i,def)}</React.Fragment>)}{selects.map(([label,name,opts])=>select(key,i,label,name,opts))}{areas.map(([label,name,rows])=>area(key,i,label,name,rows))}<label className="consent"><input type="checkbox" checked={Boolean(row.published)} onChange={e=>update(key,i,'published',e.target.checked)}/> Published</label></div></div>)}</div>;
   const committeeEditor=()=> <div><div className="admin-section-title"><div><div className="eyebrow">PEOPLE</div><h2>Committee profiles</h2><p>Add students, staff and advisors using only the fields relevant to their member type.</p></div><button className="button button-primary" onClick={()=>add('committee')}>+ Add member</button></div>{data.committee.length===0&&<div className="admin-empty"><Users size={30}/><h3>No committee members yet</h3><p>Add the first approved member profile.</p></div>}{data.committee.map((row,i)=><div className="admin-card admin-editor-card" key={row.id||`new-${i}`}><div className="admin-card-head"><div><span>MEMBER {String(i+1).padStart(2,'0')}</span><h3>{row.name||'New committee member'}</h3></div><div className="admin-card-actions"><button className="button button-primary" onClick={()=>saveRow('committee',i)} disabled={saving}>Save</button>{row.id&&<button className="admin-remove" onClick={()=>remove('committee',i)}>Remove</button>}</div></div><div className="admin-fields admin-settings-grid"><label>Full name<input value={row.name??''} onChange={e=>update('committee',i,'name',e.target.value)}/></label><label>Member type<select value={row.member_type||'Student'} onChange={e=>{const v=e.target.value;update('committee',i,'member_type',v);if(v!=='Student')update('committee',i,'year','')}}>{['Student','Staff','Lecturer','Advisor','Executive/Committee','Other'].map(o=><option key={o}>{o}</option>)}</select></label><label>Position / title<input value={row.position??''} onChange={e=>update('committee',i,'position',e.target.value)}/></label><label>Department<input value={row.department??''} onChange={e=>update('committee',i,'department',e.target.value)}/></label><label>Technical / professional role<input value={row.technical_role??''} onChange={e=>update('committee',i,'technical_role',e.target.value)}/></label>{row.member_type==='Student'&&<label>Year / level<input value={row.year??''} onChange={e=>update('committee',i,'year',e.target.value)}/></label>}<label>Status<input value={row.status??'Active'} onChange={e=>update('committee',i,'status',e.target.value)}/></label><label>Email<input type="email" value={row.email??''} onChange={e=>update('committee',i,'email',e.target.value)}/></label><label>Phone<input value={row.phone??''} onChange={e=>update('committee',i,'phone',e.target.value)}/></label><label>LinkedIn URL<input value={row.linkedin??''} onChange={e=>update('committee',i,'linkedin',e.target.value)}/></label><label>Telegram URL<input value={row.telegram??''} onChange={e=>update('committee',i,'telegram',e.target.value)}/></label>{imageField('committee',i,'Photo','photo_url')}<label>Display order<input type="number" value={row.sort_order??0} onChange={e=>update('committee',i,'sort_order',Number(e.target.value))}/></label><label className="admin-field-wide">Short biography<textarea rows={4} value={row.bio??''} onChange={e=>update('committee',i,'bio',e.target.value)}/></label><label className="consent"><input type="checkbox" checked={Boolean(row.published)} onChange={e=>update('committee',i,'published',e.target.checked)}/> Published</label></div></div>)}</div>;
-  const nav=[['overview','Overview'],['hero','Hero & banners'],['committee','Committee'],['members','Members'],['news','News & announcements'],['events','Events'],['opportunities','Opportunities'],['projects','Projects'],['uav','UAV lab'],['equipment','Equipment & facilities'],['gallery','Gallery'],['documents','Documents'],['settings','Site settings'],['social','Social links']];
+  const nav=[['overview','Overview'],['hero','Hero & banners'],['committee','Committee'],['news','News & announcements'],['events','Events'],['opportunities','Opportunities'],['projects','Projects'],['uav','UAV lab'],['equipment','Equipment & facilities'],['gallery','Gallery'],['documents','Documents'],['settings','Site settings'],['social','Social links']];
   if(loading)return <section className="section"><div className="container"><div className="admin-empty"><Settings2 size={30}/><h3>Loading EAC Control Center…</h3></div></div></section>;
   return <><style>{`
     .admin-editor-card{overflow:hidden}
@@ -864,7 +849,6 @@ function Admin(){
   {tab==='overview'&&<><div className="admin-welcome"><div><div className="eyebrow">CONTROL CENTER</div><h2>Good to see you.</h2><p>All CMS records are stored in Supabase and can be published for every visitor.</p></div><div className="admin-status"><span></span>Secure account active</div></div><div className="admin-stat-grid">{[['HERO SLIDES',data.hero.length],['COMMITTEE',data.committee.length],['NEWS',data.news.length],['EVENTS',data.events.length],['PROJECTS',data.projects.length],['GALLERY',data.gallery.length],['DOCUMENTS',data.documents.length],['STATUS','READY']].map(([a,b])=><div key={a}><span>{a}</span><strong>{b}</strong><p>Supabase records</p></div>)}</div></>}
   {tab==='hero'&&generic('hero','Hero & banners','HOMEPAGE',[['Small label','label'],['Headline','title'],['Image URL','image_url'],['Display order','sort_order','number']],[],[['Published','published',['true','false']]])}
   {tab==='committee'&&committeeEditor()}
-  {tab==='members'&&membersEditor()}
   {tab==='news'&&generic('news','News & announcements','PUBLICATION',[['Title','title'],['Type','type'],['Image URL','image_url'],['Author / publisher','author'],['Published date/time','published_at','datetime-local'],['Display order','sort_order','number']], [['Summary','summary',2],['Full content','content',6]], [['Publication status','published',['true','false']],['Featured','featured',['true','false']]])}
   {tab==='events'&&generic('events','Events','CALENDAR',[['Title','title'],['Type','type'],['Image URL','image_url'],['Event date','event_date','date'],['Start time','start_time','time'],['End time','end_time','time'],['Venue','venue'],['Location','location'],['Registration URL','registration_url'],['Contact','contact']], [['Summary','summary',2],['Description','description',5]], [['Published','published',['true','false']],['Featured','featured',['true','false']]])}
   {tab==='opportunities'&&generic('opportunities','Opportunities','OPPORTUNITIES',[['Title','title'],['Type','type'],['Image URL','image_url'],['Deadline','deadline','date'],['Organization','organization'],['Location','location'],['Source URL','source_url']], [['Summary','summary',2],['Description','description',5],['Eligibility','eligibility',3]], [['Published','published',['true','false']],['Featured','featured',['true','false']]])}
@@ -972,6 +956,105 @@ export default function App() {
     .public-profile-body>p{color:#657687;margin-top:0}
     @media(max-width:1000px){.public-people-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.public-profile-card{grid-template-columns:260px 1fr}}
     @media(max-width:760px){.public-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.public-members-toolbar,.public-directory-count{align-items:stretch;flex-direction:column}.public-member-search{min-width:0}.public-profile-card{grid-template-columns:1fr;padding:20px}.public-profile-photo{height:300px}}
+   /* =========================================================
+   EAC V5 — MOBILE MEMBER PROFILE FIX
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  .public-profile-card {
+    display: flex !important;
+    flex-direction: column !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    grid-template-columns: none !important;
+
+    gap: 24px !important;
+    padding: 18px !important;
+
+    overflow: hidden !important;
+  }
+
+  .public-profile-photo {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 300px !important;
+
+    box-sizing: border-box !important;
+
+    flex: 0 0 auto !important;
+  }
+
+  .public-profile-photo img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+
+    object-fit: cover !important;
+  }
+
+  .public-profile-body {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .public-profile-body h2 {
+    font-size: 1.7rem !important;
+    line-height: 1.2 !important;
+
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .profile-lines {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+  }
+
+  .profile-lines > div {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-lines span,
+  .profile-lines strong {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 500px) {
+
+  .public-profile-card {
+    padding: 15px !important;
+    gap: 20px !important;
+  }
+
+  .public-profile-photo {
+    height: 260px !important;
+  }
+
+  .public-profile-body h2 {
+    font-size: 1.5rem !important;
+  }
+}
     @media(max-width:500px){.public-people-grid{grid-template-columns:1fr}.public-person-photo,.public-committee-card .public-person-photo{height:260px}}
   `}</style>
       <Header />
