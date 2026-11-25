@@ -301,6 +301,37 @@ export default function MemberDashboard() {
   };
 
   // -----------------------------
+  // DELETE MEMBERSHIP
+  // -----------------------------
+  const deleteMembership = async () => {
+    if (!user?.id) return;
+
+    const confirmed = window.confirm(
+      'Are you sure you want to delete your EAC membership? This will remove your member profile and cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    setBusy(true);
+    setError('');
+    setMessage('');
+
+    try {
+      const { error: deleteError } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', user.id);
+
+      if (deleteError) throw deleteError;
+
+      await signOut();
+    } catch (e) {
+      setError(e.message || 'Unable to delete your membership.');
+      setBusy(false);
+    }
+  };
+
+  // -----------------------------
   // LOGOUT
   // -----------------------------
   const logout = async () => {
@@ -354,6 +385,19 @@ export default function MemberDashboard() {
             <button className="button button-light" onClick={logout}>
               <LogOut size={16} />
               Sign out
+            </button>
+
+            <button
+              type="button"
+              className="button button-light"
+              onClick={deleteMembership}
+              disabled={busy}
+              style={{
+                borderColor: '#b42318',
+                color: '#b42318',
+              }}
+            >
+              {busy ? 'Deleting…' : 'Delete my membership'}
             </button>
           </div>
         </div>

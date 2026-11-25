@@ -12,7 +12,7 @@ import {
   Cpu, ShieldCheck, Globe2, ExternalLink, CheckCircle2, Factory, Code2,
   ClipboardCheck, Boxes, Target, Microscope, Download, Search, Filter,
   Clock3, FileText, Award, Building2, CircleHelp, Layers3, Settings2,
-  Gauge, Radar, Presentation, PenTool, BoxesIcon, Sun, Moon
+  Gauge, Radar, Presentation, PenTool, BoxesIcon
 } from 'lucide-react';
 
 const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || '';
@@ -128,27 +128,15 @@ function AccountNav(){
 
 function Header() {
   const [open, setOpen] = useState(false);
-const [openDropdown, setOpenDropdown] = useState(null);
-const [searchOpen, setSearchOpen] = useState(false);
-const [query, setQuery] = useState('');
-const [scrolled, setScrolled] = useState(false);
-
-const [darkMode, setDarkMode] = useState(() => {
-  return localStorage.getItem('eac-theme') === 'dark';
-});
-useEffect(() => {
-  document.body.classList.toggle('dark-theme', darkMode);
-
-  localStorage.setItem(
-    'eac-theme',
-    darkMode ? 'dark' : 'light'
-  );
-}, [darkMode]);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
 
   const location = useLocation();
   const headerRef = useRef(null);
 
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const links = [
     ['Home', '/'],
@@ -263,42 +251,29 @@ useEffect(() => {
    * We never change the navigation to position: fixed.
    */
   useEffect(() => {
-  let ticking = false;
+    let ticking = false;
 
-  const onScroll = () => {
-    if (ticking) return;
+    const onScroll = () => {
+      if (ticking) return;
 
-    ticking = true;
+      ticking = true;
 
-    window.requestAnimationFrame(() => {
-      /*
-       * Mobile has its own fixed compact header.
-       * Do not apply the desktop "header-scrolled"
-       * state on phones.
-       */
-      if (window.innerWidth <= 760) {
-        setScrolled(false);
-      } else {
+      window.requestAnimationFrame(() => {
         setScrolled(window.scrollY > 80);
-      }
+        ticking = false;
+      });
+    };
 
-      ticking = false;
+    window.addEventListener('scroll', onScroll, {
+      passive: true
     });
-  };
 
-  window.addEventListener('scroll', onScroll, {
-    passive: true
-  });
+    onScroll();
 
-  window.addEventListener('resize', onScroll);
-
-  onScroll();
-
-  return () => {
-    window.removeEventListener('scroll', onScroll);
-    window.removeEventListener('resize', onScroll);
-  };
-}, []);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
 
   /*
    * Lock the page behind the mobile menu.
@@ -406,38 +381,64 @@ useEffect(() => {
 
           <Brand />
 
-       <div className="mobile-auth-actions">
-  {!user ? (
-    <>
-      <Link
-        className="mobile-signin-btn"
-        to="/login"
-        onClick={closeMenus}
-      >
-        Sign in
-      </Link>
+          <div className="institutional-search-wrap">
 
-      <Link
-        className="mobile-join-btn"
-        to="/membership"
-        onClick={closeMenus}
-      >
-        Join
-      </Link>
-    </>
-  ) : (
-    <button
-      type="button"
-      className="mobile-signout-btn"
-      onClick={async () => {
-        await signOut();
-        closeMenus();
-      }}
-    >
-      Sign out
-    </button>
-  )}
-</div>
+            <button
+              className="search-trigger"
+              onClick={toggleSearch}
+              aria-label="Search website"
+            >
+
+              <Search size={19} />
+
+              <span>
+                Search everything...
+              </span>
+
+            </button>
+
+
+            {searchOpen && (
+
+              <div className="search-panel">
+
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={(e) =>
+                    setQuery(e.target.value)
+                  }
+                  placeholder="Search EAC..."
+                />
+
+                <div>
+
+                  {results.map(([text, to]) => (
+
+                    <Link
+                      key={`${text}-${to}`}
+                      to={to}
+                      onClick={closeMenus}
+                    >
+                      {text}
+                      <ArrowUpRight size={14} />
+                    </Link>
+
+                  ))}
+
+                  {results.length === 0 && (
+                    <p>
+                      No matching page found.
+                    </p>
+                  )}
+
+                </div>
+
+              </div>
+
+            )}
+
+          </div>
 
 
           {/* MOBILE MENU BUTTON */}
@@ -956,105 +957,6 @@ export default function App() {
     .public-profile-body>p{color:#657687;margin-top:0}
     @media(max-width:1000px){.public-people-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.public-profile-card{grid-template-columns:260px 1fr}}
     @media(max-width:760px){.public-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.public-members-toolbar,.public-directory-count{align-items:stretch;flex-direction:column}.public-member-search{min-width:0}.public-profile-card{grid-template-columns:1fr;padding:20px}.public-profile-photo{height:300px}}
-   /* =========================================================
-   EAC V5 — MOBILE MEMBER PROFILE FIX
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-  .public-profile-card {
-    display: flex !important;
-    flex-direction: column !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    box-sizing: border-box !important;
-
-    grid-template-columns: none !important;
-
-    gap: 24px !important;
-    padding: 18px !important;
-
-    overflow: hidden !important;
-  }
-
-  .public-profile-photo {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 300px !important;
-
-    box-sizing: border-box !important;
-
-    flex: 0 0 auto !important;
-  }
-
-  .public-profile-photo img {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
-
-    object-fit: cover !important;
-  }
-
-  .public-profile-body {
-    width: 100% !important;
-    max-width: 100% !important;
-
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-
-  .public-profile-body h2 {
-    font-size: 1.7rem !important;
-    line-height: 1.2 !important;
-
-    max-width: 100% !important;
-    overflow-wrap: anywhere !important;
-  }
-
-  .profile-lines {
-    width: 100% !important;
-    max-width: 100% !important;
-
-    min-width: 0 !important;
-  }
-
-  .profile-lines > div {
-    width: 100% !important;
-    max-width: 100% !important;
-
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  .profile-lines span,
-  .profile-lines strong {
-    max-width: 100% !important;
-    overflow-wrap: anywhere !important;
-    word-break: break-word !important;
-  }
-}
-
-/* Small phones */
-@media (max-width: 500px) {
-
-  .public-profile-card {
-    padding: 15px !important;
-    gap: 20px !important;
-  }
-
-  .public-profile-photo {
-    height: 260px !important;
-  }
-
-  .public-profile-body h2 {
-    font-size: 1.5rem !important;
-  }
-}
     @media(max-width:500px){.public-people-grid{grid-template-columns:1fr}.public-person-photo,.public-committee-card .public-person-photo{height:260px}}
   `}</style>
       <Header />
