@@ -1,11 +1,15 @@
 /* =========================================================
-   EAC V5 — MOBILE MENU FIX
+   EAC V5 - MOBILE MENU FIX ONLY
+   Desktop styles are intentionally NOT included here.
+   Applies only to screens 760px and below.
    ========================================================= */
 
-/* Mobile only */
+
+/* ---------------------------------------------------------
+   MOBILE BASE
+   --------------------------------------------------------- */
 @media (max-width: 760px) {
 
-  /* Prevent horizontal page movement */
   html,
   body {
     width: 100%;
@@ -13,16 +17,17 @@
     overflow-x: hidden !important;
   }
 
-  /* Keep the mobile header above page content */
+  /* Keep the mobile header above the menu */
   .institutional-header {
     position: relative !important;
     z-index: 6000 !important;
   }
 
+  /* Mobile navigation container */
   .institutional-nav-bar {
-    position: relative !important;
     width: 100% !important;
     max-width: 100% !important;
+    position: relative !important;
     z-index: 6100 !important;
     overflow: visible !important;
   }
@@ -35,50 +40,56 @@
     display: block !important;
   }
 
+
   /* -------------------------------------------------------
-     CLOSED MOBILE MENU
+     HIDE NORMAL NAVIGATION WHEN CLOSED
      ------------------------------------------------------- */
 
   .institutional-header .institutional-nav-bar nav {
     display: none !important;
   }
 
+
   /* -------------------------------------------------------
      OPEN MOBILE MENU
      ------------------------------------------------------- */
 
-  .institutional-header
-  .institutional-nav-bar
-  .nav-main
-  nav.open {
+  .institutional-header .institutional-nav-bar .nav-main nav.open {
     display: flex !important;
 
-    /*
-      FIX:
-      Keep the menu attached to the screen instead of allowing
-      the page scroll to move it away.
-    */
     position: fixed !important;
 
+    /*
+      This keeps the menu attached to the top of the
+      mobile viewport while the page is scrolled.
+    */
     top: 64px !important;
     left: 10px !important;
     right: 10px !important;
 
     width: auto !important;
     max-width: none !important;
+    min-width: 0 !important;
 
     max-height: calc(100vh - 76px) !important;
 
     flex-direction: column !important;
     align-items: stretch !important;
 
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
+    margin: 0 !important;
+    padding: 12px !important;
 
     box-sizing: border-box !important;
 
-    margin: 0 !important;
-    padding: 12px !important;
+    /*
+      The page itself should not scroll through the menu.
+      The menu gets its own vertical scrolling.
+    */
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
 
     background: #ffffff !important;
 
@@ -88,23 +99,24 @@
     box-shadow: 0 20px 55px rgba(7, 26, 43, 0.25) !important;
 
     z-index: 6500 !important;
-
-    /*
-      Makes scrolling inside the menu work smoothly on phones.
-    */
-    -webkit-overflow-scrolling: touch !important;
-    overscroll-behavior: contain !important;
   }
 
-  /* Mobile search area */
+
+  /* -------------------------------------------------------
+     MOBILE SEARCH
+     ------------------------------------------------------- */
+
   .mobile-menu-search {
     width: 100% !important;
     max-width: 100% !important;
+
     box-sizing: border-box !important;
 
     padding: 8px 6px 14px !important;
 
     background: transparent !important;
+
+    flex: 0 0 auto !important;
   }
 
   .mobile-menu-search input {
@@ -115,47 +127,74 @@
     box-sizing: border-box !important;
   }
 
-  /* Main navigation links */
-  .institutional-header
-  .institutional-nav-bar
-  nav.open > a,
-  .institutional-header
-  .institutional-nav-bar
-  nav.open > div {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
 
-  /*
-    Make dropdown content usable inside the scrollable
-    mobile navigation.
-  */
+  /* -------------------------------------------------------
+     MOBILE NAV ITEMS
+     ------------------------------------------------------- */
+
   .institutional-header
-  .institutional-nav-bar
-  nav.open
-  .nav-dropdown {
+    .institutional-nav-bar
+    nav.open
+    > a,
+  .institutional-header
+    .institutional-nav-bar
+    nav.open
+    > .nav-dropdown {
     width: 100% !important;
     max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    flex: 0 0 auto !important;
   }
 
+
+  /* -------------------------------------------------------
+     MOBILE DROPDOWN CONTAINERS
+     ------------------------------------------------------- */
+
   .institutional-header
-  .institutional-nav-bar
-  nav.open
-  .nav-dropdown
-  .dropdown-menu {
+    .institutional-nav-bar
+    nav.open
+    .nav-dropdown {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    flex: 0 0 auto !important;
+  }
+
+
+  /* -------------------------------------------------------
+     MOBILE DROPDOWN MENUS
+     
+     On mobile they must open INSIDE the scrolling menu,
+     rather than appearing as desktop floating menus.
+     ------------------------------------------------------- */
+
+  .institutional-header
+    .institutional-nav-bar
+    nav.open
+    .nav-dropdown
+    .dropdown-menu {
     position: static !important;
 
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
 
     box-sizing: border-box !important;
 
-    box-shadow: none !important;
+    margin-top: 4px !important;
 
     border-radius: 8px !important;
 
-    margin-top: 4px !important;
+    box-shadow: none !important;
+
+    overflow: visible !important;
   }
+
 
   /* -------------------------------------------------------
      MOBILE AUTH BUTTONS
@@ -165,6 +204,7 @@
     width: 100% !important;
 
     display: flex !important;
+
     flex-direction: column !important;
 
     gap: 10px !important;
@@ -172,9 +212,11 @@
     margin-top: 12px !important;
     padding-top: 12px !important;
 
+    box-sizing: border-box !important;
+
     border-top: 1px solid #dce5ea !important;
 
-    box-sizing: border-box !important;
+    flex: 0 0 auto !important;
   }
 
   .mobile-signin-btn,
@@ -185,6 +227,7 @@
     min-height: 44px !important;
 
     display: flex !important;
+
     align-items: center !important;
     justify-content: center !important;
 
@@ -199,91 +242,106 @@
     cursor: pointer !important;
   }
 
+
+  /* Sign in */
   .mobile-signin-btn {
     background: #ffffff !important;
     border: 1px solid #0b3554 !important;
     color: #0b3554 !important;
   }
 
+
+  /* Join */
   .mobile-join-btn {
     background: #0b3554 !important;
     border: 1px solid #0b3554 !important;
     color: #ffffff !important;
   }
 
+
+  /* Sign out */
   .mobile-signout-btn {
     background: #ffffff !important;
     border: 1px solid #b42318 !important;
     color: #b42318 !important;
   }
 
+
   /* -------------------------------------------------------
-     DARK MODE
+     DARK MODE - MOBILE MENU
      ------------------------------------------------------- */
 
   body.dark-theme
-  .institutional-header
-  .institutional-nav-bar
-  .nav-main
-  nav.open {
+    .institutional-header
+    .institutional-nav-bar
+    .nav-main
+    nav.open {
     background: #101820 !important;
 
     border-color: #33424d !important;
 
-    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55) !important;
-  }
-
-  body.dark-theme .mobile-menu-search {
-    background: transparent !important;
+    box-shadow:
+      0 20px 55px rgba(0, 0, 0, 0.55) !important;
   }
 
   body.dark-theme
-  .mobile-menu-search
-  input {
+    .mobile-menu-search
+    input {
     background: #18232c !important;
     color: #ffffff !important;
     border-color: #40515d !important;
   }
 
   body.dark-theme
-  .institutional-header
-  .institutional-nav-bar
-  nav.open
-  .dropdown-menu {
+    .institutional-header
+    .institutional-nav-bar
+    nav.open
+    .dropdown-menu {
     background: #18232c !important;
     border-color: #40515d !important;
   }
 
-  body.dark-theme .mobile-auth-actions {
+  body.dark-theme
+    .mobile-auth-actions {
     border-top-color: #33424d !important;
   }
 
-  body.dark-theme .mobile-signin-btn {
+  body.dark-theme
+    .mobile-signin-btn {
     background: #18232c !important;
     border-color: #607381 !important;
     color: #ffffff !important;
   }
 
-  body.dark-theme .mobile-join-btn {
+  body.dark-theme
+    .mobile-join-btn {
     background: #1d5f91 !important;
     border-color: #1d5f91 !important;
     color: #ffffff !important;
   }
 
-  body.dark-theme .mobile-signout-btn {
+  body.dark-theme
+    .mobile-signout-btn {
     background: #18232c !important;
     border-color: #d95c54 !important;
     color: #ffb4ae !important;
   }
+
 }
 
-/* Small phones */
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
 @media (max-width: 500px) {
+
   .institutional-header
-  .institutional-nav-bar
-  .nav-main
-  nav.open {
+    .institutional-nav-bar
+    .nav-main
+    nav.open {
     top: 58px !important;
+
     left: 6px !important;
     right: 6px !important;
 
@@ -291,4 +349,5 @@
 
     padding: 10px !important;
   }
+
 }
